@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-export default function SearchScreen() {
+export default function AnalyticsScreen() {
   return (
     <View
       style={{
@@ -9,7 +9,7 @@ export default function SearchScreen() {
         alignItems: "center",
       }}
     >
-      <Text>Search Screen</Text>
+      <Text>Analytics Screen</Text>
     </View>
   );
 }
