@@ -31,10 +31,11 @@ const convertFontScale = (fontSize: number): number => {
  * Converts width percentage to dp.
  *
  * Example:
- * widthPercentageToDP("50%")
+ * widthPercentageToDP("50")
  */
-const widthPercentageToDP = (widthPercent: string): number => {
-  const elemWidth = parseFloat(widthPercent);
+const widthPercentageToDP = (widthPercent: string | number): number => {
+  const elemWidth =
+    typeof widthPercent === "number" ? widthPercent : parseFloat(widthPercent);
 
   return PixelRatio.roundToNearestPixel((screenWidth * elemWidth) / 100);
 };
@@ -43,10 +44,11 @@ const widthPercentageToDP = (widthPercent: string): number => {
  * Converts height percentage to dp.
  *
  * Example:
- * heightPercentageToDP("25%")
+ * heightPercentageToDP("25")
  */
-const heightPercentageToDP = (heightPercent: string): number => {
-  const elemHeight = parseFloat(heightPercent);
+const heightPercentageToDP = (heightPercent: string | number): number => {
+  const elemHeight =
+    typeof heightPercent === "number" ? heightPercent : parseFloat(heightPercent);
 
   return PixelRatio.roundToNearestPixel((screenHeight * elemHeight) / 100);
 };

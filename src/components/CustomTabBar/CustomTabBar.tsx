@@ -1,8 +1,9 @@
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { Image } from "expo-image";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Images from "../theme/images";
+import { Colors, Images, Responsive } from "@/theme";
+import styles from "./styles";
 
 export default function CustomTabBar({
   state,
@@ -11,7 +12,7 @@ export default function CustomTabBar({
 }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
 
-  // Define tab configuration. As requested, all tabs use home.svg for now.
+  // Define tab configuration.
   const tabConfig: Record<string, { label: string; icon: any }> = {
     "(home)": { label: "Home", icon: Images.home },
     "(discover)": { label: "Discover", icon: Images.discover },
@@ -20,7 +21,12 @@ export default function CustomTabBar({
   };
 
   return (
-    <View style={[styles.container, { bottom: Math.max(insets.bottom, 16) }]}>
+    <View
+      style={[
+        styles.container,
+        { bottom: Math.max(insets.bottom, Responsive.heightPercentageToDP(2)) },
+      ]}
+    >
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const isFocused = state.index === index;
@@ -52,8 +58,8 @@ export default function CustomTabBar({
           });
         };
 
-        const activeColor = "#A13E0E"; // Rust / Brown color from screenshot
-        const inactiveColor = "#7E8B97"; // Cool Gray from screenshot
+        const activeColor = Colors.appColors.primary;
+        const inactiveColor = Colors.appColors.grayMuted;
 
         return (
           <TouchableOpacity
@@ -102,55 +108,3 @@ export default function CustomTabBar({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    position: "absolute",
-    left: 16,
-    right: 16,
-    flexDirection: "row",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 40,
-    height: 76,
-    alignItems: "center",
-    justifyContent: "space-around",
-    paddingHorizontal: 8,
-    // iOS shadow styling
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.08,
-    shadowRadius: 16,
-    // Android elevation styling
-    elevation: 8,
-    borderWidth: 1,
-    borderColor: "rgba(0, 0, 0, 0.04)",
-  },
-  tabButton: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100%",
-  },
-  pillContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 10,
-    paddingHorizontal: 4,
-    borderRadius: 24,
-    // height: 60,
-    // width: 60,
-    alignSelf: "stretch",
-    marginHorizontal: 2,
-  },
-  pillContainerActive: {
-    // backgroundColor: "#FDEEE5",
-  },
-  icon: {
-    width: 22,
-    height: 22,
-    marginBottom: 2,
-  },
-  label: {
-    fontSize: 10,
-  },
-});

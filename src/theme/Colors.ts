@@ -1,13 +1,31 @@
 const appColors = {
-  primary: "#0072A2",
-  secondary: "#15141A",
+  primary: "#FF6600",
+  secondary: "#1A1A1A",
+  tertiary: "#585F6C",
   white: "#ffffff",
   black: "#000000",
-  appGray: "#F0F3F6",
-  grayB5: "#B5C3D0",
-  yellowF5: "#F59E00",
+  background: "#F8F9FA",
+  borderLight: "#E1E3E4",
+  borderPeach: "#E3BFB1",
+  grayMuted: "#7E8B97",
+  grayDark: "#5A4136",
+  grayLight: "#EDEEEF",
+  bookmarkInactive: "#C8C6C5",
+
+  // Brand colors
+  brandStripe: "#635BFF",
+  brandAirbnb: "#FF5A5F",
+  brandOpenAI: "#000000",
+
+  // Stat chart / Google brand colors
+  brandBlue: "#4285F4",
+  brandGreen: "#34A853",
+  brandYellow: "#FBBC05",
+  brandRed: "#EA4335",
 };
+
 const opacityColors = {
+  blackOpacity4: "rgba(0, 0, 0, 0.04)",
   blackOpacity10: "rgba(0, 0, 0, 0.1)",
   blackOpacity20: "rgba(0, 0, 0, 0.2)",
   blackOpacity30: "rgba(0, 0, 0, 0.3)",
@@ -26,6 +44,7 @@ const opacityColors = {
   whiteOpacity70: "rgba(255, 255, 255, 0.7)",
   whiteOpacity80: "rgba(255, 255, 255, 0.8)",
 };
+
 const defaults = {
   TRANSPARENT: "#00000000",
   NAVY: "#001f3f",
