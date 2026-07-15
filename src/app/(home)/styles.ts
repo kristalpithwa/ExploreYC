@@ -76,9 +76,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Colors.appColors.white,
     borderRadius: Responsive.widthPercentageToDP(7.5),
-    borderWidth: 1,
-    borderColor: Colors.appColors.borderPeach,
-    height: Responsive.heightPercentageToDP(7),
+    height: Responsive.heightPercentageToDP(6),
     paddingHorizontal: Responsive.widthPercentageToDP(4.3),
     // Shadow
     shadowColor: Colors.appColors.black,
@@ -88,15 +86,16 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   searchIcon: {
-    width: Responsive.widthPercentageToDP(5.3),
-    height: Responsive.heightPercentageToDP(2.5),
-    marginRight: Responsive.widthPercentageToDP(2.7),
+    tintColor: Colors.appColors.tertiary,
+    width: Responsive.widthPercentageToDP(5),
+    height: Responsive.heightPercentageToDP(2),
+    marginRight: Responsive.widthPercentageToDP(2),
   },
   searchInput: {
     flex: 1,
     fontFamily: Fonts.regular,
-    fontSize: Responsive.convertFontScale(15),
     color: Colors.appColors.secondary,
+    fontSize: Responsive.convertFontScale(14),
   },
   sectionContainer: {
     marginTop: Responsive.heightPercentageToDP(3.5),
@@ -106,7 +105,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: Responsive.heightPercentageToDP(2),
+    marginTop: Responsive.heightPercentageToDP(3.5),
+    paddingHorizontal: Responsive.widthPercentageToDP(5.3),
   },
   sectionTitle: {
     fontFamily: Fonts.bold,
@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     height: Responsive.heightPercentageToDP(1.75),
   },
   horizontalScrollContent: {
+    paddingLeft: Responsive.widthPercentageToDP(5.3),
     paddingRight: Responsive.widthPercentageToDP(5.3),
     gap: Responsive.widthPercentageToDP(4.3),
   },
@@ -308,14 +309,16 @@ const styles = StyleSheet.create({
     marginTop: Responsive.heightPercentageToDP(1),
   },
   statCard: {
-    width: Responsive.widthPercentageToDP(46),
+    width: Responsive.widthPercentageToDP(42),
     flexGrow: 1,
     backgroundColor: Colors.appColors.white,
     borderRadius: Responsive.widthPercentageToDP(5.3),
-    padding: Responsive.widthPercentageToDP(4.3),
+    padding: Responsive.widthPercentageToDP(4),
     alignItems: "center",
     borderWidth: 1,
     borderColor: Colors.appColors.borderLight,
+    marginBottom: Responsive.heightPercentageToDP(2),
+    marginRight: Responsive.widthPercentageToDP(3.2),
     // Shadow
     shadowColor: Colors.appColors.black,
     shadowOffset: { width: 0, height: Responsive.heightPercentageToDP(0.5) },
