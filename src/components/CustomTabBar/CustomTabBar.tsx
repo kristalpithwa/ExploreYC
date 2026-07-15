@@ -1,8 +1,8 @@
+import { Colors, Images, Responsive } from "@/theme";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { Image } from "expo-image";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Colors, Images, Responsive } from "@/theme";
 import styles from "./styles";
 
 export default function CustomTabBar({
@@ -73,12 +73,7 @@ export default function CustomTabBar({
             activeOpacity={0.7}
             style={styles.tabButton}
           >
-            <View
-              style={[
-                styles.pillContainer,
-                isFocused && styles.pillContainerActive,
-              ]}
-            >
+            <View style={styles.pillContainer}>
               <Image
                 source={config.icon}
                 style={[
