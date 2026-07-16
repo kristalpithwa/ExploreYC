@@ -54,3 +54,21 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+## Map Integration
+
+This app integrates a full-screen interactive map on the Discover page using:
+- **SDK:** [@maplibre/maplibre-react-native](https://github.com/maplibre/maplibre-react-native) (open-source map renderer).
+- **Map Tiles & Styles:** [OpenFreeMap](https://openfreemap.org/) (a completely free, open-source tile server).
+
+### OpenFreeMap Details
+OpenFreeMap provides fully open-source vector map tiles under the OpenStreetMap database license.
+- **Cost:** 100% free, with no usage limits, no API keys, and no sign-ups required.
+- **Current Style:** The app uses the **Bright** theme (`https://tiles.openfreemap.org/styles/bright`).
+- **Other Styles Available:**
+  - **Liberty (Clean & detailed):** `https://tiles.openfreemap.org/styles/liberty`
+  - **Positron (Light/Minimalist):** `https://tiles.openfreemap.org/styles/positron`
+  - **Dark Matter (Dark mode):** `https://tiles.openfreemap.org/styles/dark`
+
+To change the map style, edit the `mapStyle` prop in the `Map` component inside [discover.tsx](file:///Users/enliven/Workspace/ExploreYC/src/app/(discover)/discover.tsx).
+

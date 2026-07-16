@@ -8,7 +8,12 @@ import {
   ScrollView,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Map, Camera, ViewAnnotation, type CameraRef } from "@maplibre/maplibre-react-native";
+import {
+  Map,
+  Camera,
+  ViewAnnotation,
+  type CameraRef,
+} from "@maplibre/maplibre-react-native";
 import { Colors, Fonts, Responsive } from "@/theme";
 
 interface Startup {
@@ -134,25 +139,25 @@ export default function DiscoverScreen() {
     });
   };
 
-  const initialViewState = useMemo(() => ({
-    center: SF_CENTER,
-    zoom: DEFAULT_ZOOM,
-  }), []);
+  const initialViewState = useMemo(
+    () => ({
+      center: SF_CENTER,
+      zoom: DEFAULT_ZOOM,
+    }),
+    [],
+  );
 
   return (
     <View style={styles.container}>
       {/* Maplibre Map View */}
       <Map
         style={styles.map}
-        mapStyle="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
+        mapStyle="https://tiles.openfreemap.org/styles/bright"
         logo={false}
         attribution={false}
         onPress={() => setSelectedStartup(null)}
       >
-        <Camera
-          ref={cameraRef}
-          initialViewState={initialViewState}
-        />
+        <Camera ref={cameraRef} initialViewState={initialViewState} />
 
         {/* Startup Pins */}
         {filteredStartups.map((startup) => (
@@ -168,7 +173,9 @@ export default function DiscoverScreen() {
                 selectedStartup?.id === startup.id && styles.pinOuterSelected,
               ]}
             >
-              <View style={[styles.pinInner, { backgroundColor: startup.logoBg }]}>
+              <View
+                style={[styles.pinInner, { backgroundColor: startup.logoBg }]}
+              >
                 <Text style={styles.pinText}>{startup.logo}</Text>
               </View>
             </View>
@@ -279,9 +286,7 @@ export default function DiscoverScreen() {
             </Pressable>
           </View>
 
-          <Text style={styles.startupDesc}>
-            {selectedStartup.description}
-          </Text>
+          <Text style={styles.startupDesc}>{selectedStartup.description}</Text>
 
           <View style={styles.cardActions}>
             <Pressable
