@@ -5,7 +5,7 @@ export default function TabLayout() {
   return (
     <Tabs
       initialRouteName="(home)"
-      tabBar={(props) => <CustomTabBar {...props} />}
+      tabBar={(props) => <CustomTabBar {...props as any} />}
       screenOptions={{
         headerShown: false,
       }}

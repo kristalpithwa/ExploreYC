@@ -1,25 +1,36 @@
 import { View, Text, FlatList, Pressable, TextInput } from "react-native";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 
 import {
   countries,
   industries,
   statistics,
   trendingStartups,
-} from "@/data/data";
+} from "@/data/home";
 
 import styles from "./styles";
 import { Colors, Images, Responsive } from "@/theme";
 
 export default function HomeScreen() {
+  const router = useRouter();
   const insets = useSafeAreaInsets();
 
   // Render Methods
 
-  const renderTrendingStartups = ({ item: startup }) => {
+  const renderTrendingStartups = ({ item: startup }: { item: any }) => {
     return (
-      <View key={startup.id} style={styles.startupCard}>
+      <Pressable
+        key={startup.id}
+        style={styles.startupCard}
+        onPress={() =>
+          router.push({
+            pathname: "/(home)/companyDetails",
+            params: { id: startup.id },
+          })
+        }
+      >
         <View style={styles.cardHeader}>
           <View style={styles.cardHeaderLeft}>
             <View
@@ -66,11 +77,11 @@ export default function HomeScreen() {
             />
           </Pressable>
         </View>
-      </View>
+      </Pressable>
     );
   };
 
-  const renderYCStatistic = ({ item: stat }) => {
+  const renderYCStatistic = ({ item: stat }: { item: any }) => {
     return (
       <View style={styles.statCard}>
         <Image
@@ -84,7 +95,13 @@ export default function HomeScreen() {
     );
   };
 
-  const renderCountryPill = ({ item: country, index }) => {
+  const renderCountryPill = ({
+    item: country,
+    index,
+  }: {
+    item: any;
+    index: number;
+  }) => {
     const isActive = index === 0; // USA active
     return (
       <Pressable
@@ -107,7 +124,7 @@ export default function HomeScreen() {
     );
   };
 
-  const renderIndustryCard = ({ item: ind }) => {
+  const renderIndustryCard = ({ item: ind }: { item: any }) => {
     return (
       <View style={styles.industryCard}>
         <Text style={styles.industryEmoji}>{ind.emoji}</Text>

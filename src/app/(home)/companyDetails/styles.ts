@@ -1,0 +1,448 @@
+import { StyleSheet, Platform } from "react-native";
+import { Colors, Fonts, Responsive } from "@/theme";
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: Colors.appColors.background,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  heroContainer: {
+    height: Responsive.heightPercentageToDP(26),
+    width: "100%",
+    backgroundColor: Colors.appColors.borderLight,
+    position: "relative",
+  },
+  heroImage: {
+    width: "100%",
+    height: "100%",
+  },
+  floatingHeader: {
+    position: "absolute",
+    left: Responsive.widthPercentageToDP(5.3),
+    right: Responsive.widthPercentageToDP(5.3),
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  circleBtn: {
+    width: Responsive.widthPercentageToDP(10.7),
+    height: Responsive.heightPercentageToDP(5),
+    borderRadius: Responsive.widthPercentageToDP(5.3),
+    backgroundColor: "rgba(255, 255, 255, 0.85)",
+    justifyContent: "center",
+    alignItems: "center",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
+  },
+  backBtnText: {
+    fontSize: Responsive.convertFontScale(20),
+    color: Colors.appColors.secondary,
+    fontWeight: "bold",
+    marginTop: -3,
+  },
+  shareBtnText: {
+    fontSize: Responsive.convertFontScale(16),
+    color: Colors.appColors.secondary,
+    fontWeight: "bold",
+  },
+  identityContainer: {
+    paddingHorizontal: Responsive.widthPercentageToDP(5.3),
+    alignItems: "center",
+    marginTop: -Responsive.heightPercentageToDP(6.5),
+    zIndex: 10,
+    marginBottom: Responsive.heightPercentageToDP(2.5),
+  },
+  logoOuter: {
+    width: Responsive.widthPercentageToDP(25.6),
+    height: Responsive.heightPercentageToDP(11.8),
+    borderRadius: Responsive.widthPercentageToDP(6.4),
+    backgroundColor: Colors.appColors.white,
+    padding: Responsive.widthPercentageToDP(1),
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: Responsive.heightPercentageToDP(1.5),
+    borderWidth: 4,
+    borderColor: Colors.appColors.white,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
+  },
+  logoInner: {
+    width: "100%",
+    height: "100%",
+    borderRadius: Responsive.widthPercentageToDP(4.8),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  logoText: {
+    color: Colors.appColors.white,
+    fontSize: Responsive.convertFontScale(32),
+    fontWeight: "bold",
+  },
+  companyName: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(24),
+    color: Colors.appColors.secondary,
+    marginBottom: Responsive.heightPercentageToDP(1),
+  },
+  metaRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: Responsive.widthPercentageToDP(2.1),
+    marginBottom: Responsive.heightPercentageToDP(1.25),
+  },
+  badge: {
+    paddingHorizontal: Responsive.widthPercentageToDP(2.7),
+    paddingVertical: Responsive.heightPercentageToDP(0.5),
+    backgroundColor: Colors.appColors.grayLight,
+    borderRadius: Responsive.widthPercentageToDP(1.6),
+    borderWidth: 1,
+    borderColor: Colors.appColors.borderLight,
+  },
+  badgeText: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(12),
+    color: Colors.appColors.tertiary,
+  },
+  locationContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  locationText: {
+    fontFamily: Fonts.regular,
+    fontSize: Responsive.convertFontScale(12),
+    color: Colors.appColors.tertiary,
+  },
+  hiringBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#E6F4EA",
+    paddingHorizontal: Responsive.widthPercentageToDP(2.1),
+    paddingVertical: Responsive.heightPercentageToDP(0.5),
+    borderRadius: Responsive.widthPercentageToDP(3.2),
+    gap: Responsive.widthPercentageToDP(1.1),
+  },
+  hiringDot: {
+    width: Responsive.widthPercentageToDP(1.6),
+    height: Responsive.heightPercentageToDP(0.75),
+    borderRadius: Responsive.widthPercentageToDP(0.8),
+    backgroundColor: "#137333",
+  },
+  hiringText: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(12),
+    color: "#137333",
+  },
+  websiteText: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(13),
+    color: Colors.appColors.primary,
+  },
+  actionRow: {
+    flexDirection: "row",
+    paddingHorizontal: Responsive.widthPercentageToDP(5.3),
+    gap: Responsive.widthPercentageToDP(2.1),
+    marginBottom: Responsive.heightPercentageToDP(3),
+  },
+  bookmarkBtn: {
+    width: Responsive.widthPercentageToDP(13.9),
+    height: Responsive.heightPercentageToDP(6.4),
+    borderRadius: Responsive.widthPercentageToDP(2.1),
+    borderWidth: 1,
+    borderColor: Colors.appColors.borderLight,
+    backgroundColor: Colors.appColors.white,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bookmarkBtnText: {
+    fontSize: Responsive.convertFontScale(24),
+    color: Colors.appColors.tertiary,
+  },
+  primaryActionBtn: {
+    flex: 2,
+    height: Responsive.heightPercentageToDP(6.4),
+    borderRadius: Responsive.widthPercentageToDP(2.1),
+    backgroundColor: Colors.appColors.primary,
+    justifyContent: "center",
+    alignItems: "center",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#FF6600",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 6,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
+  },
+  primaryActionBtnText: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(14),
+    color: Colors.appColors.white,
+  },
+  secondaryActionBtn: {
+    flex: 2,
+    height: Responsive.heightPercentageToDP(6.4),
+    borderRadius: Responsive.widthPercentageToDP(2.1),
+    borderWidth: 1,
+    borderColor: Colors.appColors.borderLight,
+    backgroundColor: Colors.appColors.white,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  secondaryActionBtnText: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(14),
+    color: Colors.appColors.secondary,
+  },
+  statsCard: {
+    flexDirection: "row",
+    marginHorizontal: Responsive.widthPercentageToDP(5.3),
+    backgroundColor: Colors.appColors.white,
+    borderRadius: Responsive.widthPercentageToDP(2.1),
+    borderWidth: 1,
+    borderColor: Colors.appColors.borderLight,
+    paddingVertical: Responsive.heightPercentageToDP(2),
+    marginBottom: Responsive.heightPercentageToDP(3),
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.04,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
+  statColumn: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  statBorderLeft: {
+    borderLeftWidth: 1,
+    borderLeftColor: Colors.appColors.borderLight,
+  },
+  statLabel: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(10),
+    color: Colors.appColors.tertiary,
+    marginBottom: Responsive.heightPercentageToDP(0.5),
+  },
+  statValue: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(14),
+    color: Colors.appColors.secondary,
+  },
+  sectionContainer: {
+    paddingHorizontal: Responsive.widthPercentageToDP(5.3),
+    marginBottom: Responsive.heightPercentageToDP(3),
+  },
+  sectionHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Responsive.heightPercentageToDP(1.5),
+  },
+  sectionTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(18),
+    color: Colors.appColors.secondary,
+    marginBottom: Responsive.heightPercentageToDP(1.5),
+  },
+  seeAllJobsText: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(13),
+    color: Colors.appColors.primary,
+  },
+  card: {
+    backgroundColor: Colors.appColors.white,
+    borderRadius: Responsive.widthPercentageToDP(2.1),
+    borderWidth: 1,
+    borderColor: Colors.appColors.borderLight,
+    padding: Responsive.widthPercentageToDP(4.3),
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.04,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
+  cardBodyText: {
+    fontFamily: Fonts.regular,
+    fontSize: Responsive.convertFontScale(14),
+    color: Colors.appColors.tertiary,
+    lineHeight: Responsive.convertFontScale(22),
+  },
+  founderCard: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: Responsive.widthPercentageToDP(4.3),
+  },
+  founderAvatar: {
+    width: Responsive.widthPercentageToDP(12.8),
+    height: Responsive.heightPercentageToDP(5.9),
+    borderRadius: Responsive.widthPercentageToDP(6.4),
+    backgroundColor: Colors.appColors.grayLight,
+  },
+  founderInfo: {
+    flex: 1,
+  },
+  founderName: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(15),
+    color: Colors.appColors.secondary,
+  },
+  founderRole: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(12),
+    color: Colors.appColors.tertiary,
+    marginBottom: Responsive.heightPercentageToDP(0.5),
+  },
+  founderBio: {
+    fontFamily: Fonts.regular,
+    fontSize: Responsive.convertFontScale(13),
+    color: Colors.appColors.tertiary,
+    lineHeight: Responsive.convertFontScale(18),
+  },
+  jobRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: Responsive.widthPercentageToDP(4.3),
+  },
+  jobBorderTop: {
+    borderTopWidth: 1,
+    borderTopColor: Colors.appColors.borderLight,
+  },
+  jobTextContainer: {
+    flex: 1,
+    marginRight: Responsive.widthPercentageToDP(2.7),
+  },
+  jobTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(15),
+    color: Colors.appColors.secondary,
+    marginBottom: Responsive.heightPercentageToDP(0.5),
+  },
+  jobComp: {
+    fontFamily: Fonts.regular,
+    fontSize: Responsive.convertFontScale(13),
+    color: Colors.appColors.tertiary,
+  },
+  jobChevron: {
+    fontSize: Responsive.convertFontScale(22),
+    color: Colors.appColors.bookmarkInactive,
+    fontWeight: "bold",
+  },
+  officeMapPreview: {
+    height: Responsive.heightPercentageToDP(19.7),
+    width: "100%",
+    backgroundColor: "#e3e3e3",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  mapPin: {
+    width: Responsive.widthPercentageToDP(12.8),
+    height: Responsive.heightPercentageToDP(5.9),
+    borderRadius: Responsive.widthPercentageToDP(6.4),
+    backgroundColor: Colors.appColors.white,
+    justifyContent: "center",
+    alignItems: "center",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 6,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
+  },
+  mapPinIcon: {
+    fontSize: Responsive.convertFontScale(22),
+  },
+  officeDetails: {
+    padding: Responsive.widthPercentageToDP(4.3),
+  },
+  officeName: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(15),
+    color: Colors.appColors.secondary,
+    marginBottom: Responsive.heightPercentageToDP(0.5),
+  },
+  officeAddress: {
+    fontFamily: Fonts.regular,
+    fontSize: Responsive.convertFontScale(13),
+    color: Colors.appColors.tertiary,
+  },
+  bottomBarFloating: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: Responsive.widthPercentageToDP(5.3),
+    paddingTop: Responsive.heightPercentageToDP(1.5),
+    backgroundColor: Colors.appColors.background,
+    borderTopWidth: 1,
+    borderTopColor: Colors.appColors.borderLight,
+  },
+  bottomBarBtn: {
+    height: Responsive.heightPercentageToDP(6.4),
+    borderRadius: Responsive.widthPercentageToDP(6.9),
+    backgroundColor: Colors.appColors.primary,
+    justifyContent: "center",
+    alignItems: "center",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#FF6600",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
+  },
+  bottomBarBtnText: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(15),
+    color: Colors.appColors.white,
+  },
+});
+
+export default styles;

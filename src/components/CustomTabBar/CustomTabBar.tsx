@@ -28,7 +28,7 @@ export default function CustomTabBar({
       ]}
     >
       {state.routes.map((route, index) => {
-        const { options } = descriptors[route.key];
+        const { options } = descriptors[route.key] as any;
         const isFocused = state.index === index;
 
         // Skip rendering if tabBarVisible or equivalent options hide it
@@ -85,7 +85,7 @@ export default function CustomTabBar({
               <Text
                 numberOfLines={1}
                 adjustsFontSizeToFit
-                minimumScaleFactor={0.8}
+                minimumFontScale={0.8}
                 style={[
                   styles.label,
                   {
