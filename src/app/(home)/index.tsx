@@ -9,8 +9,8 @@ import {
   trendingStartups,
 } from "@/data/data";
 
-import { Colors, Images, Responsive } from "@/theme";
 import styles from "./styles";
+import { Colors, Images, Responsive } from "@/theme";
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
@@ -205,17 +205,16 @@ export default function HomeScreen() {
         </View>
 
         {/* Browse by Country Section */}
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>🌍 Browse by Country</Text>
-          <FlatList
-            data={countries}
-            horizontal
-            renderItem={renderCountryPill}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={styles.horizontalPillsContent}
-          />
-        </View>
+        <Text style={styles.countryTitle}>🌍 Browse by Country</Text>
+
+        <FlatList
+          data={countries}
+          horizontal
+          renderItem={renderCountryPill}
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={styles.horizontalPillsContent}
+        />
 
         {/* Browse by Industry Section */}
         <View style={styles.sectionContainer}>
@@ -242,26 +241,12 @@ export default function HomeScreen() {
   };
 
   return (
-    <View
-      style={[
-        styles.mainContainer,
-        {
-          paddingTop: Math.max(insets.top, Responsive.heightPercentageToDP(2)),
-        },
-      ]}
-    >
+    <View style={styles.mainContainer}>
       {/* Top Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top }]}>
         <View style={styles.headerLeft}>
-          <Image
-            source="https://lh3.googleusercontent.com/aida-public/AB6AXuD7bUIjmyPh1C6YPkO-eNe7261-xqDbZzXLSJq2aQpxAS9ZlhY0g5F0J0BdbrTfyED88fofNNaViHJ1qBAu8TPLTr8da9bh5OgHMMwlSjKBNfQMY-2eWwo8EXQ4UtEjrbuN1zyrmoZHsVO_5zRwnMxyamDtYsV4MjsfDZ6qv3OKUvTYyhwxRcP_1QUuo7w5hy99WStfxttYzb3DFLcOT-j5Yjo5EczobebIeMAr5tRekql6jeWwN2yr15tCcoXwhAxbPrHsZfC4VVBR"
-            style={styles.avatar}
-            contentFit="cover"
-          />
-          <View style={styles.headerTexts}>
-            <Text style={styles.greetingText}>👋 Good Morning</Text>
-            <Text style={styles.appTitleText}>ExploreYC</Text>
-          </View>
+          <Text style={styles.greetingText}>👋 Good Morning</Text>
+          <Text style={styles.appTitleText}>ExploreYC</Text>
         </View>
 
         <Pressable style={styles.notificationButton}>
@@ -277,6 +262,8 @@ export default function HomeScreen() {
       <FlatList
         data={[0]}
         renderItem={renderMainContent}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
         keyExtractor={(item, index) => index.toString()}
       />
     </View>

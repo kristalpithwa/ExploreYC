@@ -12,14 +12,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: Responsive.widthPercentageToDP(5.3),
     paddingVertical: Responsive.heightPercentageToDP(1.5),
-    backgroundColor: Colors.appColors.background,
+    backgroundColor: Colors.appColors.white,
     borderBottomWidth: 1,
     borderBottomColor: Colors.opacityColors.blackOpacity4,
   },
   headerLeft: {
-    flexDirection: "row",
     alignItems: "center",
-    gap: Responsive.widthPercentageToDP(3.2),
   },
   avatar: {
     width: Responsive.widthPercentageToDP(10.7),
@@ -97,10 +95,24 @@ const styles = StyleSheet.create({
     color: Colors.appColors.secondary,
     fontSize: Responsive.convertFontScale(14),
   },
+  countrySection: {
+    marginTop: Responsive.heightPercentageToDP(3.5),
+    paddingHorizontal: Responsive.widthPercentageToDP(5.3),
+  },
+  countryTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(18),
+    color: Colors.appColors.secondary,
+    marginBottom: Responsive.heightPercentageToDP(1.5),
+    marginTop: Responsive.heightPercentageToDP(1.5),
+    paddingHorizontal: Responsive.widthPercentageToDP(5.3),
+  },
+
   sectionContainer: {
     marginTop: Responsive.heightPercentageToDP(3.5),
     paddingHorizontal: Responsive.widthPercentageToDP(5.3),
   },
+
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -346,6 +358,7 @@ const styles = StyleSheet.create({
     gap: Responsive.widthPercentageToDP(2.7),
     paddingRight: Responsive.widthPercentageToDP(5.3),
     marginTop: Responsive.heightPercentageToDP(0.5),
+    paddingLeft: Responsive.widthPercentageToDP(5.3),
   },
   pillButton: {
     paddingHorizontal: Responsive.widthPercentageToDP(4.3),
@@ -377,7 +390,7 @@ const styles = StyleSheet.create({
     marginTop: Responsive.heightPercentageToDP(1),
   },
   industryCard: {
-    width: Responsive.widthPercentageToDP(46),
+    width: Responsive.widthPercentageToDP(43),
     flexGrow: 1,
     flexDirection: "row",
     backgroundColor: Colors.appColors.white,
@@ -387,6 +400,8 @@ const styles = StyleSheet.create({
     gap: Responsive.widthPercentageToDP(2.7),
     borderWidth: 1,
     borderColor: Colors.appColors.borderLight,
+    marginRight: Responsive.widthPercentageToDP(2),
+    marginBottom: Responsive.heightPercentageToDP(1),
     // Shadow
     shadowColor: Colors.appColors.black,
     shadowOffset: { width: 0, height: Responsive.heightPercentageToDP(0.5) },
