@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "dependencies": {
     "@expo/ui": "~57.0.4",
+    "@maplibre/maplibre-react-native": "^11.3.6",
     "@react-navigation/bottom-tabs": "^7.18.8",
     "expo": "~57.0.4",
     "expo-constants": "~57.0.3",
