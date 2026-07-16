@@ -109,6 +109,12 @@ export default function HomeScreen() {
           styles.pillButton,
           isActive ? styles.pillButtonActive : styles.pillButtonInactive,
         ]}
+        onPress={() =>
+          router.push({
+            pathname: "/(home)/countryDetails",
+            params: { country },
+          })
+        }
       >
         <Text
           style={[
@@ -126,13 +132,21 @@ export default function HomeScreen() {
 
   const renderIndustryCard = ({ item: ind }: { item: any }) => {
     return (
-      <View style={styles.industryCard}>
+      <Pressable
+        style={styles.industryCard}
+        onPress={() =>
+          router.push({
+            pathname: "/(home)/industryDetails",
+            params: { industry: ind.name },
+          })
+        }
+      >
         <Text style={styles.industryEmoji}>{ind.emoji}</Text>
         <View style={styles.industryInfo}>
           <Text style={styles.industryName}>{ind.name}</Text>
           <Text style={styles.industryCount}>{ind.count}</Text>
         </View>
-      </View>
+      </Pressable>
     );
   };
 
@@ -203,7 +217,10 @@ export default function HomeScreen() {
                 <Text style={styles.heroStatLabel}>AI Startups</Text>
               </View>
             </View>
-            <Pressable style={styles.heroExploreBtn}>
+            <Pressable
+              style={styles.heroExploreBtn}
+              onPress={() => router.push("/(home)/batchExplorer")}
+            >
               <Text style={styles.heroExploreBtnText}>Explore Batch</Text>
             </Pressable>
           </View>
