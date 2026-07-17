@@ -1,120 +1,156 @@
-import { View, Text, FlatList, Pressable, TextInput } from "react-native";
-import { Image } from "expo-image";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
-
 import {
-  countries,
-  industries,
-  statistics,
-  trendingStartups,
-} from "@/data/home";
+  View,
+  Text,
+  FlatList,
+  Pressable,
+  TextInput,
+  StyleSheet,
+} from "react-native";
+import { Image } from "expo-image";
+import { useRouter } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import styles from "./styles";
 import { Colors, Images, Responsive } from "@/theme";
+import { countries, getCompanyData, industries, statistics } from "@/data/home";
 
 export default function HomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
+  // onPress Methods
+
+  const onPressCompanyCard = (item: any) => {
+    router.push({
+      pathname: "/(home)/companyDetails",
+      params: { id: item.id },
+    });
+  };
+
+  const onPressCountryPill = (item: any, index: number) => {
+    router.push({
+      pathname: "/(home)/countryDetails",
+      params: { country: item },
+    });
+  };
+
+  const onPressIndustryCard = (item: any) => {
+    router.push({
+      pathname: "/(home)/industryDetails",
+      params: { industry: item.name },
+    });
+  };
+
   // Render Methods
 
-  const renderTrendingStartups = ({ item: startup }: { item: any }) => {
+  const renderTrendingStartups = ({ item }: { item: any }) => {
+    const name = item.name || "";
+
+    const description =
+      item.description || item.one_liner || item.long_description || "";
+
+    const batch =
+      item.batch || (item.source ? item.source.toUpperCase() : "YC");
+
+    const category = item.category || item.industry || "General";
+
+    const logoUrl = item.small_logo_thumb_url;
+    const logoText = name ? name.charAt(0).toUpperCase() : "";
+
     return (
       <Pressable
-        key={startup.id}
+        key={item.id}
         style={styles.startupCard}
-        onPress={() =>
-          router.push({
-            pathname: "/(home)/companyDetails",
-            params: { id: startup.id },
-          })
-        }
+        onPress={() => onPressCompanyCard(item)}
       >
         <View style={styles.cardHeader}>
           <View style={styles.cardHeaderLeft}>
             <View
               style={[
                 styles.logoContainer,
-                { backgroundColor: startup.logoBg },
+                {
+                  backgroundColor: logoUrl
+                    ? "transparent"
+                    : Colors.appColors.primary,
+                  overflow: "hidden",
+                },
               ]}
             >
-              <Text style={styles.logoText}>{startup.logo}</Text>
+              {logoUrl ? (
+                <Image
+                  source={{ uri: logoUrl }}
+                  style={StyleSheet.absoluteFill}
+                  contentFit="cover"
+                />
+              ) : (
+                <Text style={styles.logoText}>{logoText}</Text>
+              )}
             </View>
+
             <View style={styles.cardTitleInfo}>
               <Text style={styles.startupName} numberOfLines={1}>
-                {startup.name}
+                {name}
               </Text>
-              <Text style={styles.startupMeta}>{startup.batch}</Text>
+              <Text style={styles.startupMeta}>{batch}</Text>
             </View>
           </View>
+
           <Pressable>
             <Image
               source={Images.bookmark}
-              style={styles.bookmarkIcon}
-              tintColor={
-                startup.bookmarked
-                  ? Colors.appColors.primary
-                  : Colors.appColors.bookmarkInactive
-              }
+              style={[
+                styles.bookmarkIcon,
+                {
+                  tintColor: item?.bookmarked
+                    ? Colors.appColors.primary
+                    : Colors.appColors.bookmarkInactive,
+                },
+              ]}
             />
           </Pressable>
         </View>
 
         <Text style={styles.startupDesc} numberOfLines={2}>
-          {startup.description}
+          {description}
         </Text>
 
         <View style={styles.cardFooter}>
           <View style={styles.categoryBadge}>
-            <Text style={styles.categoryBadgeText}>{startup.category}</Text>
+            <Text style={styles.categoryBadgeText}>{category}</Text>
           </View>
+
           <Pressable style={styles.cardArrowBtn}>
-            <Image
-              source={Images.arrow_right}
-              style={styles.footerArrowIcon}
-              tintColor={Colors.appColors.primary}
-            />
+            <Image source={Images.arrow_right} style={styles.footerArrowIcon} />
           </Pressable>
         </View>
       </Pressable>
     );
   };
 
-  const renderYCStatistic = ({ item: stat }: { item: any }) => {
+  const renderYCStatistic = ({ item }: { item: any }) => {
     return (
       <View style={styles.statCard}>
         <Image
-          source={stat.icon}
+          source={item.icon}
           style={styles.statIcon}
-          tintColor={stat.color}
+          tintColor={item.color}
         />
-        <Text style={styles.statCount}>{stat.count}</Text>
-        <Text style={styles.statLabel}>{stat.label}</Text>
+        <Text style={styles.statCount}>{item.count}</Text>
+        <Text style={styles.statLabel}>{item.label}</Text>
       </View>
     );
   };
 
-  const renderCountryPill = ({
-    item: country,
-    index,
-  }: {
-    item: any;
-    index: number;
-  }) => {
+  const renderCountryPill = ({ item, index }: { item: any; index: number }) => {
     const isActive = index === 0; // USA active
+
     return (
       <Pressable
         style={[
           styles.pillButton,
           isActive ? styles.pillButtonActive : styles.pillButtonInactive,
         ]}
-        onPress={() =>
-          router.push({
-            pathname: "/(home)/countryDetails",
-            params: { country },
-          })
-        }
+        onPress={() => onPressCountryPill(item, index)}
       >
         <Text
           style={[
@@ -124,27 +160,22 @@ export default function HomeScreen() {
               : styles.pillButtonTextInactive,
           ]}
         >
-          {country}
+          {item}
         </Text>
       </Pressable>
     );
   };
 
-  const renderIndustryCard = ({ item: ind }: { item: any }) => {
+  const renderIndustryCard = ({ item }: { item: any }) => {
     return (
       <Pressable
         style={styles.industryCard}
-        onPress={() =>
-          router.push({
-            pathname: "/(home)/industryDetails",
-            params: { industry: ind.name },
-          })
-        }
+        onPress={() => onPressIndustryCard(item)}
       >
-        <Text style={styles.industryEmoji}>{ind.emoji}</Text>
+        <Text style={styles.industryEmoji}>{item.emoji}</Text>
         <View style={styles.industryInfo}>
-          <Text style={styles.industryName}>{ind.name}</Text>
-          <Text style={styles.industryCount}>{ind.count}</Text>
+          <Text style={styles.industryName}>{item.name}</Text>
+          <Text style={styles.industryCount}>{item.count}</Text>
         </View>
       </Pressable>
     );
@@ -173,7 +204,7 @@ export default function HomeScreen() {
         {/* Trending Startups Section */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>🔥 Trending Startups</Text>
-          <Pressable>
+          <Pressable onPress={() => router.push("/(home)/allCompanies")}>
             <View style={styles.viewAllBtn}>
               <Text style={styles.viewAllText}>View All</Text>
               <Image
@@ -188,7 +219,7 @@ export default function HomeScreen() {
         <FlatList
           horizontal
           decelerationRate="fast"
-          data={trendingStartups}
+          data={getCompanyData?.companies?.slice(0, 10)}
           renderItem={renderTrendingStartups}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}

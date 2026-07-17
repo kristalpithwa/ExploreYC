@@ -12,6 +12,7 @@ export default function HomeLayout() {
       <Stack.Screen name="batchExplorer/index" />
       <Stack.Screen name="countryDetails/index" />
       <Stack.Screen name="industryDetails/index" />
+      <Stack.Screen name="allCompanies/index" />
     </Stack>
   );
 }

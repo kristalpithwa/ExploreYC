@@ -239,6 +239,7 @@ const styles = StyleSheet.create({
   footerArrowIcon: {
     width: Responsive.widthPercentageToDP(3.7),
     height: Responsive.heightPercentageToDP(1.75),
+    tintColor: Colors.appColors.primary,
   },
   heroSection: {
     paddingHorizontal: Responsive.widthPercentageToDP(5.3),
