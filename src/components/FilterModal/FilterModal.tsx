@@ -9,8 +9,8 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Colors, Images } from "@/theme";
-import styles from "../../app/(discover)/styles";
+import { Images } from "@/theme";
+import styles from "./styles";
 
 interface FilterModalProps {
   visible: boolean;
@@ -69,7 +69,7 @@ export default function FilterModal({
         <View
           style={[
             styles.toggleThumb,
-            { alignSelf: value ? "flex-end" : "flex-start" },
+            value ? styles.toggleThumbActive : styles.toggleThumbInactive,
           ]}
         />
       </Pressable>
@@ -78,7 +78,7 @@ export default function FilterModal({
 
   return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       visible={visible}
       onRequestClose={onClose}
@@ -111,23 +111,16 @@ export default function FilterModal({
                 <Pressable
                   style={[
                     styles.tabButton,
-                    activeTab === 0 && {
-                      backgroundColor: Colors.appColors.primary,
-                      borderRadius: 10,
-                    },
+                    activeTab === 0 && styles.tabButtonActive,
                   ]}
                   onPress={() => onTabPress(0)}
                 >
                   <Text
                     style={[
                       styles.tabButtonText,
-                      {
-                        color:
-                          activeTab === 0
-                            ? Colors.appColors.white
-                            : Colors.appColors.tertiary,
-                        fontWeight: activeTab === 0 ? "700" : "500",
-                      },
+                      activeTab === 0
+                        ? styles.tabButtonTextActive
+                        : styles.tabButtonTextInactive,
                     ]}
                   >
                     All
@@ -136,23 +129,16 @@ export default function FilterModal({
                 <Pressable
                   style={[
                     styles.tabButton,
-                    activeTab === 1 && {
-                      backgroundColor: Colors.appColors.primary,
-                      borderRadius: 10,
-                    },
+                    activeTab === 1 && styles.tabButtonActive,
                   ]}
                   onPress={() => onTabPress(1)}
                 >
                   <Text
                     style={[
                       styles.tabButtonText,
-                      {
-                        color:
-                          activeTab === 1
-                            ? Colors.appColors.white
-                            : Colors.appColors.tertiary,
-                        fontWeight: activeTab === 1 ? "700" : "500",
-                      },
+                      activeTab === 1
+                        ? styles.tabButtonTextActive
+                        : styles.tabButtonTextInactive,
                     ]}
                   >
                     YC
@@ -161,23 +147,16 @@ export default function FilterModal({
                 <Pressable
                   style={[
                     styles.tabButton,
-                    activeTab === 2 && {
-                      backgroundColor: Colors.appColors.primary,
-                      borderRadius: 10,
-                    },
+                    activeTab === 2 && styles.tabButtonActive,
                   ]}
                   onPress={() => onTabPress(2)}
                 >
                   <Text
                     style={[
                       styles.tabButtonText,
-                      {
-                        color:
-                          activeTab === 2
-                            ? Colors.appColors.white
-                            : Colors.appColors.tertiary,
-                        fontWeight: activeTab === 2 ? "700" : "500",
-                      },
+                      activeTab === 2
+                        ? styles.tabButtonTextActive
+                        : styles.tabButtonTextInactive,
                     ]}
                   >
                     a16z
@@ -187,9 +166,9 @@ export default function FilterModal({
             </View>
 
             {/* 2. Dropdown selectors for Batch and Industry */}
-            <View style={[styles.modalSection, { gap: 16 }]}>
+            <View style={[styles.modalSection, styles.dropdownGroup]}>
               {/* Batch Dropdown */}
-              <View style={{ gap: 6 }}>
+              <View style={styles.dropdownContainer}>
                 <Text style={styles.modalSectionTitle}>Batch</Text>
                 <Pressable
                   style={styles.dropdownTrigger}
@@ -200,11 +179,7 @@ export default function FilterModal({
                     source={Images.arrow_right}
                     style={[
                       styles.dropdownIcon,
-                      {
-                        transform: [
-                          { rotate: showBatchDropdown ? "270deg" : "90deg" },
-                        ],
-                      },
+                      showBatchDropdown ? styles.rotate270 : styles.rotate90,
                     ]}
                     contentFit="contain"
                   />
@@ -236,7 +211,7 @@ export default function FilterModal({
               </View>
 
               {/* Industry Dropdown */}
-              <View style={{ gap: 6 }}>
+              <View style={styles.dropdownContainer}>
                 <Text style={styles.modalSectionTitle}>Industry</Text>
                 <Pressable
                   style={styles.dropdownTrigger}
@@ -247,13 +222,7 @@ export default function FilterModal({
                     source={Images.arrow_right}
                     style={[
                       styles.dropdownIcon,
-                      {
-                        transform: [
-                          {
-                            rotate: showIndustryDropdown ? "270deg" : "90deg",
-                          },
-                        ],
-                      },
+                      showIndustryDropdown ? styles.rotate270 : styles.rotate90,
                     ]}
                     contentFit="contain"
                   />
@@ -355,7 +324,6 @@ export default function FilterModal({
                       styles.sliderThumb,
                       {
                         left: `${((foundedRange[0] - 2010) / 16) * 100}%`,
-                        transform: [{ translateX: -10 }],
                       },
                     ]}
                   />
@@ -365,7 +333,6 @@ export default function FilterModal({
                       styles.sliderThumb,
                       {
                         left: `${((foundedRange[1] - 2010) / 16) * 100}%`,
-                        transform: [{ translateX: -10 }],
                       },
                     ]}
                   />
@@ -373,23 +340,10 @@ export default function FilterModal({
               </View>
 
               {/* Range adjust buttons for robust sliding control */}
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  marginTop: 10,
-                }}
-              >
-                <View style={{ flexDirection: "row", gap: 6 }}>
+              <View style={styles.rangeAdjustContainer}>
+                <View style={styles.buttonGroup}>
                   <Pressable
-                    style={{
-                      backgroundColor: Colors.appColors.grayLight,
-                      width: 28,
-                      height: 28,
-                      borderRadius: 6,
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
+                    style={styles.adjustButton}
                     onPress={() =>
                       onSelectFoundedRange([
                         Math.max(2010, foundedRange[0] - 1),
@@ -397,17 +351,10 @@ export default function FilterModal({
                       ])
                     }
                   >
-                    <Text style={{ fontSize: 16 }}>-</Text>
+                    <Text style={styles.adjustButtonText}>-</Text>
                   </Pressable>
                   <Pressable
-                    style={{
-                      backgroundColor: Colors.appColors.grayLight,
-                      width: 28,
-                      height: 28,
-                      borderRadius: 6,
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
+                    style={styles.adjustButton}
                     onPress={() =>
                       onSelectFoundedRange([
                         Math.min(foundedRange[1], foundedRange[0] + 1),
@@ -415,19 +362,12 @@ export default function FilterModal({
                       ])
                     }
                   >
-                    <Text style={{ fontSize: 16 }}>+</Text>
+                    <Text style={styles.adjustButtonText}>+</Text>
                   </Pressable>
                 </View>
-                <View style={{ flexDirection: "row", gap: 6 }}>
+                <View style={styles.buttonGroup}>
                   <Pressable
-                    style={{
-                      backgroundColor: Colors.appColors.grayLight,
-                      width: 28,
-                      height: 28,
-                      borderRadius: 6,
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
+                    style={styles.adjustButton}
                     onPress={() =>
                       onSelectFoundedRange([
                         foundedRange[0],
@@ -435,17 +375,10 @@ export default function FilterModal({
                       ])
                     }
                   >
-                    <Text style={{ fontSize: 16 }}>-</Text>
+                    <Text style={styles.adjustButtonText}>-</Text>
                   </Pressable>
                   <Pressable
-                    style={{
-                      backgroundColor: Colors.appColors.grayLight,
-                      width: 28,
-                      height: 28,
-                      borderRadius: 6,
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
+                    style={styles.adjustButton}
                     onPress={() =>
                       onSelectFoundedRange([
                         foundedRange[0],
@@ -453,7 +386,7 @@ export default function FilterModal({
                       ])
                     }
                   >
-                    <Text style={{ fontSize: 16 }}>+</Text>
+                    <Text style={styles.adjustButtonText}>+</Text>
                   </Pressable>
                 </View>
               </View>
