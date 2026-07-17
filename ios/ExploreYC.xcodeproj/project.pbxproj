@@ -8,30 +8,28 @@
 
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		29159D37CFFA9A3880BDA40D /* libPods-ExploreYC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F3AA82B943C204F0F3B0A9C6 /* libPods-ExploreYC.a */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		7A629C0DA1EF42DB9D65699D /* expo.icon in Resources */ = {isa = PBXBuildFile; fileRef = 95B444DFE46E43C08A2BA665 /* expo.icon */; };
-		A07D21F86057E8C314B203C8 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEC0B6FC465EB319427286 /* ExpoModulesProvider.swift */; };
+		5625B04A06E82BEC121F7FB8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13E12235565D6BD01E6612DC /* PrivacyInfo.xcprivacy */; };
+		8F56ECCDBD7322E98DD2FDFC /* libPods-ExploreYC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D8478F124D6182A8F2BB37 /* libPods-ExploreYC.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		E06E882EF499770312679580 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21804E3429235AFEFA19FB1D /* ExpoModulesProvider.swift */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
-		F9E6518FECCC7A881CFCBF39 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F35C632847706FAA948A9EFE /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		13B07F961A680F5B00A75B9A /* ExploreYC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExploreYC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ExploreYC/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ExploreYC/Info.plist; sourceTree = "<group>"; };
-		54B7BB9AAD6C865D21595A22 /* Pods-ExploreYC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExploreYC.debug.xcconfig"; path = "Target Support Files/Pods-ExploreYC/Pods-ExploreYC.debug.xcconfig"; sourceTree = "<group>"; };
-		95B444DFE46E43C08A2BA665 /* expo.icon */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = expo.icon; path = ExploreYC/expo.icon; sourceTree = "<group>"; };
+		13E12235565D6BD01E6612DC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = ExploreYC/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		17E65ECEAB390B72D6BFF2E6 /* Pods-ExploreYC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExploreYC.debug.xcconfig"; path = "Target Support Files/Pods-ExploreYC/Pods-ExploreYC.debug.xcconfig"; sourceTree = "<group>"; };
+		21804E3429235AFEFA19FB1D /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-ExploreYC/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		74FDBED3A12EADA06DC44E2A /* Pods-ExploreYC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExploreYC.release.xcconfig"; path = "Target Support Files/Pods-ExploreYC/Pods-ExploreYC.release.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = ExploreYC/SplashScreen.storyboard; sourceTree = "<group>"; };
-		AEEE0647C2C1A392508C6E6B /* Pods-ExploreYC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExploreYC.release.xcconfig"; path = "Target Support Files/Pods-ExploreYC/Pods-ExploreYC.release.xcconfig"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		E3CEC0B6FC465EB319427286 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-ExploreYC/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ExploreYC/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* ExploreYC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "ExploreYC-Bridging-Header.h"; path = "ExploreYC/ExploreYC-Bridging-Header.h"; sourceTree = "<group>"; };
-		F35C632847706FAA948A9EFE /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = ExploreYC/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		F3AA82B943C204F0F3B0A9C6 /* libPods-ExploreYC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ExploreYC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F6D8478F124D6182A8F2BB37 /* libPods-ExploreYC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ExploreYC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,7 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				29159D37CFFA9A3880BDA40D /* libPods-ExploreYC.a in Frameworks */,
+				8F56ECCDBD7322E98DD2FDFC /* libPods-ExploreYC.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,8 +53,7 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				95B444DFE46E43C08A2BA665 /* expo.icon */,
-				F35C632847706FAA948A9EFE /* PrivacyInfo.xcprivacy */,
+				13E12235565D6BD01E6612DC /* PrivacyInfo.xcprivacy */,
 			);
 			name = ExploreYC;
 			sourceTree = "<group>";
@@ -65,17 +62,27 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				F3AA82B943C204F0F3B0A9C6 /* libPods-ExploreYC.a */,
+				F6D8478F124D6182A8F2BB37 /* libPods-ExploreYC.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		63ED1463D9BE5E96C2AFF118 /* ExploreYC */ = {
+		2D78ACFFB2D2F684C8FDF7D4 /* ExploreYC */ = {
 			isa = PBXGroup;
 			children = (
-				E3CEC0B6FC465EB319427286 /* ExpoModulesProvider.swift */,
+				21804E3429235AFEFA19FB1D /* ExpoModulesProvider.swift */,
 			);
 			name = ExploreYC;
+			sourceTree = "<group>";
+		};
+		69EC5454B510C17C9F7215E4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				17E65ECEAB390B72D6BFF2E6 /* Pods-ExploreYC.debug.xcconfig */,
+				74FDBED3A12EADA06DC44E2A /* Pods-ExploreYC.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -92,8 +99,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				A377E6F0038EDAF23EC9FAC5 /* Pods */,
-				E54974C751218D2CE275E710 /* ExpoModulesProviders */,
+				69EC5454B510C17C9F7215E4 /* Pods */,
+				D9BC8251D2B3C1FBDA537E31 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -108,16 +115,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A377E6F0038EDAF23EC9FAC5 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				54B7BB9AAD6C865D21595A22 /* Pods-ExploreYC.debug.xcconfig */,
-				AEEE0647C2C1A392508C6E6B /* Pods-ExploreYC.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
@@ -127,10 +124,10 @@
 			path = ExploreYC/Supporting;
 			sourceTree = "<group>";
 		};
-		E54974C751218D2CE275E710 /* ExpoModulesProviders */ = {
+		D9BC8251D2B3C1FBDA537E31 /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				63ED1463D9BE5E96C2AFF118 /* ExploreYC */,
+				2D78ACFFB2D2F684C8FDF7D4 /* ExploreYC */,
 			);
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
@@ -143,15 +140,15 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ExploreYC" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				70D53BC499477C34BF056506 /* [Expo] Configure project */,
+				0E6B90376E395A12EC65A69C /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				7CE90975C27B47009459B254 /* [Expo Dev Launcher] Strip Local Network Keys for Release */,
-				B257F7AD2F79EB05BD3269DC /* [MapLibre React Native] Remove MapLibre.xcframework-ios.signature */,
-				3B94982727D0740DA6952684 /* [CP] Embed Pods Frameworks */,
+				E36C371FA1784F2D83E558CE /* [Expo Dev Launcher] Strip Local Network Keys for Release */,
+				7F5AE3C0BE07A45F6D9DBBE0 /* [MapLibre React Native] Remove MapLibre.xcframework-ios.signature */,
+				5B5311643B58B08A76AF2B07 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -159,7 +156,7 @@
 			);
 			name = ExploreYC;
 			packageProductDependencies = (
-				7154FD9DB641B7D448658607 /* MapLibre */,
+				442F8063F75061436EF1AF85 /* MapLibre */,
 			);
 			productName = ExploreYC;
 			productReference = 13B07F961A680F5B00A75B9A /* ExploreYC.app */;
@@ -188,7 +185,7 @@
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
-				D00F0CED02F3C76933E90D3B /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */,
+				FF2FEB288733EF14051F2CE4 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -207,8 +204,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				7A629C0DA1EF42DB9D65699D /* expo.icon in Resources */,
-				F9E6518FECCC7A881CFCBF39 /* PrivacyInfo.xcprivacy in Resources */,
+				5625B04A06E82BEC121F7FB8 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,7 +250,31 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		3B94982727D0740DA6952684 /* [CP] Embed Pods Frameworks */ = {
+		0E6B90376E395A12EC65A69C /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env",
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/ExploreYC/ExploreYC.entitlements",
+				"$(SRCROOT)/Pods/Target Support Files/Pods-ExploreYC/expo-configure-project.sh",
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/Pods/Target Support Files/Pods-ExploreYC/ExpoModulesProvider.swift",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-ExploreYC/expo-configure-project.sh\"\n";
+		};
+		5B5311643B58B08A76AF2B07 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -298,7 +318,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ExploreYC/Pods-ExploreYC-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		70D53BC499477C34BF056506 /* [Expo] Configure project */ = {
+		7F5AE3C0BE07A45F6D9DBBE0 /* [MapLibre React Native] Remove MapLibre.xcframework-ios.signature */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -307,34 +327,15 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/.xcode.env",
-				"$(SRCROOT)/.xcode.env.local",
-				"$(SRCROOT)/ExploreYC/ExploreYC.entitlements",
-				"$(SRCROOT)/Pods/Target Support Files/Pods-ExploreYC/expo-configure-project.sh",
 			);
-			name = "[Expo] Configure project";
+			name = "[MapLibre React Native] Remove MapLibre.xcframework-ios.signature";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(SRCROOT)/Pods/Target Support Files/Pods-ExploreYC/ExpoModulesProvider.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-ExploreYC/expo-configure-project.sh\"\n";
-		};
-		7CE90975C27B47009459B254 /* [Expo Dev Launcher] Strip Local Network Keys for Release */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[Expo Dev Launcher] Strip Local Network Keys for Release";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Strip dev-launcher-specific local network permission keys from non-Debug builds\n# This only removes _expo._tcp Bonjour services and the dev-launcher usage description.\n# Other Bonjour services and custom descriptions are preserved for production use.\n\nif [ \"$CONFIGURATION\" != \"Debug\" ]; then\n  PLIST_PATH=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n  if [ -f \"$PLIST_PATH\" ]; then\n    # Check if NSBonjourServices exists\n    if /usr/libexec/PlistBuddy -c \"Print :NSBonjourServices\" \"$PLIST_PATH\" >/dev/null 2>&1; then\n      # Get the count of services\n      COUNT=$(/usr/libexec/PlistBuddy -c \"Print :NSBonjourServices\" \"$PLIST_PATH\" 2>/dev/null | grep \"^    \" | wc -l | tr -d ' ')\n\n      # Remove _expo._tcp\n      for ((i=COUNT-1; i>=0; i--)); do\n        SERVICE=$(/usr/libexec/PlistBuddy -c \"Print :NSBonjourServices:$i\" \"$PLIST_PATH\" 2>/dev/null || echo \"\")\n        if echo \"$SERVICE\" | grep -q \"_expo._tcp\"; then\n          /usr/libexec/PlistBuddy -c \"Delete :NSBonjourServices:$i\" \"$PLIST_PATH\" 2>/dev/null || true\n        fi\n      done\n\n      # If the array is now empty, remove it entirely\n      REMAINING=$(/usr/libexec/PlistBuddy -c \"Print :NSBonjourServices\" \"$PLIST_PATH\" 2>/dev/null | grep \"^    \" | wc -l | tr -d ' ')\n      if [ \"$REMAINING\" -eq \"0\" ]; then\n        /usr/libexec/PlistBuddy -c \"Delete :NSBonjourServices\" \"$PLIST_PATH\" 2>/dev/null || true\n      fi\n    fi\n\n    # Only delete the description if it matches the dev-launcher default text\n    DESC=$(/usr/libexec/PlistBuddy -c \"Print :NSLocalNetworkUsageDescription\" \"$PLIST_PATH\" 2>/dev/null || echo \"\")\n    if echo \"$DESC\" | grep -q \"Expo Dev Launcher\"; then\n      /usr/libexec/PlistBuddy -c \"Delete :NSLocalNetworkUsageDescription\" \"$PLIST_PATH\" 2>/dev/null || true\n    fi\n  fi\nfi\n";
+			shellScript = "rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\"";
 		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -372,24 +373,19 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ExploreYC/Pods-ExploreYC-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B257F7AD2F79EB05BD3269DC /* [MapLibre React Native] Remove MapLibre.xcframework-ios.signature */ = {
+		E36C371FA1784F2D83E558CE /* [Expo Dev Launcher] Strip Local Network Keys for Release */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 			);
-			name = "[MapLibre React Native] Remove MapLibre.xcframework-ios.signature";
-			outputFileListPaths = (
-			);
+			name = "[Expo Dev Launcher] Strip Local Network Keys for Release";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\"";
+			shellScript = "# Strip dev-launcher-specific local network permission keys from non-Debug builds\n# This only removes _expo._tcp Bonjour services and the dev-launcher usage description.\n# Other Bonjour services and custom descriptions are preserved for production use.\n\nif [ \"$CONFIGURATION\" != \"Debug\" ]; then\n  PLIST_PATH=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n  if [ -f \"$PLIST_PATH\" ]; then\n    # Check if NSBonjourServices exists\n    if /usr/libexec/PlistBuddy -c \"Print :NSBonjourServices\" \"$PLIST_PATH\" >/dev/null 2>&1; then\n      # Get the count of services\n      COUNT=$(/usr/libexec/PlistBuddy -c \"Print :NSBonjourServices\" \"$PLIST_PATH\" 2>/dev/null | grep \"^    \" | wc -l | tr -d ' ')\n\n      # Remove _expo._tcp\n      for ((i=COUNT-1; i>=0; i--)); do\n        SERVICE=$(/usr/libexec/PlistBuddy -c \"Print :NSBonjourServices:$i\" \"$PLIST_PATH\" 2>/dev/null || echo \"\")\n        if echo \"$SERVICE\" | grep -q \"_expo._tcp\"; then\n          /usr/libexec/PlistBuddy -c \"Delete :NSBonjourServices:$i\" \"$PLIST_PATH\" 2>/dev/null || true\n        fi\n      done\n\n      # If the array is now empty, remove it entirely\n      REMAINING=$(/usr/libexec/PlistBuddy -c \"Print :NSBonjourServices\" \"$PLIST_PATH\" 2>/dev/null | grep \"^    \" | wc -l | tr -d ' ')\n      if [ \"$REMAINING\" -eq \"0\" ]; then\n        /usr/libexec/PlistBuddy -c \"Delete :NSBonjourServices\" \"$PLIST_PATH\" 2>/dev/null || true\n      fi\n    fi\n\n    # Only delete the description if it matches the dev-launcher default text\n    DESC=$(/usr/libexec/PlistBuddy -c \"Print :NSLocalNetworkUsageDescription\" \"$PLIST_PATH\" 2>/dev/null || echo \"\")\n    if echo \"$DESC\" | grep -q \"Expo Dev Launcher\"; then\n      /usr/libexec/PlistBuddy -c \"Delete :NSLocalNetworkUsageDescription\" \"$PLIST_PATH\" 2>/dev/null || true\n    fi\n  fi\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -399,7 +395,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				A07D21F86057E8C314B203C8 /* ExpoModulesProvider.swift in Sources */,
+				E06E882EF499770312679580 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -408,9 +404,9 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 54B7BB9AAD6C865D21595A22 /* Pods-ExploreYC.debug.xcconfig */;
+			baseConfigurationReference = 17E65ECEAB390B72D6BFF2E6 /* Pods-ExploreYC.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = expo;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ExploreYC/ExploreYC.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
@@ -445,9 +441,9 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AEEE0647C2C1A392508C6E6B /* Pods-ExploreYC.release.xcconfig */;
+			baseConfigurationReference = 74FDBED3A12EADA06DC44E2A /* Pods-ExploreYC.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = expo;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ExploreYC/ExploreYC.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
@@ -634,7 +630,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D00F0CED02F3C76933E90D3B /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */ = {
+		FF2FEB288733EF14051F2CE4 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/maplibre/maplibre-gl-native-distribution";
 			requirement = {
@@ -645,9 +641,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7154FD9DB641B7D448658607 /* MapLibre */ = {
+		442F8063F75061436EF1AF85 /* MapLibre */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D00F0CED02F3C76933E90D3B /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */;
+			package = FF2FEB288733EF14051F2CE4 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */;
 			productName = MapLibre;
 		};
 /* End XCSwiftPackageProductDependency section */

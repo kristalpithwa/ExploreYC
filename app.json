@@ -8,16 +8,9 @@
     "scheme": "exploreyc",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon",
       "bundleIdentifier": "com.kristalpithwa.ExploreYC"
     },
     "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
-      },
       "predictiveBackGestureEnabled": false,
       "package": "com.kristalpithwa.ExploreYC"
     },
@@ -30,9 +23,9 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#FF6600",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "imageWidth": 500
         }
       ],
       "@maplibre/maplibre-react-native"
