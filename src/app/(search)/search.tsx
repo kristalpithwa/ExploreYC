@@ -119,6 +119,8 @@ export default function SearchScreen() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedStartup, setSelectedStartup] = useState<Startup | null>(null);
 
+  const lastPinPressTimeRef = useRef(0);
+
   // Filter startups based on search and category
   const filteredStartups = useMemo(() => {
     return mockStartups.filter((startup) => {
@@ -138,12 +140,20 @@ export default function SearchScreen() {
   }, [searchQuery, selectedCategory]);
 
   const handleSelectStartup = (startup: Startup) => {
+    lastPinPressTimeRef.current = Date.now();
     setSelectedStartup(startup);
     cameraRef.current?.flyTo({
       center: startup.coordinates,
       zoom: 14.5,
       duration: 1000,
     });
+  };
+
+  const handleMapPress = () => {
+    if (Date.now() - lastPinPressTimeRef.current < 200) {
+      return;
+    }
+    setSelectedStartup(null);
   };
 
   const handleResetCamera = () => {
@@ -185,7 +195,7 @@ export default function SearchScreen() {
         mapStyle="https://tiles.openfreemap.org/styles/bright"
         logo={false}
         attribution={false}
-        onPress={() => setSelectedStartup(null)}
+        onPress={handleMapPress}
       >
         <Camera ref={cameraRef} initialViewState={initialViewState} />
 
@@ -202,9 +212,9 @@ export default function SearchScreen() {
             key={startup.id}
             id={`pin-${startup.id}`}
             lngLat={startup.coordinates}
-            onPress={() => handleSelectStartup(startup)}
           >
-            <View
+            <Pressable
+              onPress={() => handleSelectStartup(startup)}
               style={[
                 styles.pinOuter,
                 selectedStartup?.id === startup.id && styles.pinOuterSelected,
@@ -215,7 +225,7 @@ export default function SearchScreen() {
               >
                 <Text style={styles.pinText}>{startup.logo}</Text>
               </View>
-            </View>
+            </Pressable>
           </ViewAnnotation>
         ))}
       </Map>
