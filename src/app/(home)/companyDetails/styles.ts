@@ -176,6 +176,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  bookmarkBtnActive: {
+    backgroundColor: Colors.opacityColors.primaryOpacity10,
+    borderColor: Colors.appColors.primary,
+  },
   bookmarkBtnText: {
     fontSize: Responsive.convertFontScale(24),
     color: Colors.appColors.tertiary,

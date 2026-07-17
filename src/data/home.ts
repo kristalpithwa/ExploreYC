@@ -2209,6 +2209,51 @@ export const getCompanyData = {
   has_more: true,
 };
 
+export const companyDetails = {
+  id: 4001196974,
+  source: "producthunt",
+  source_id: "1196974",
+  name: "SaftaBee.com",
+  slug: "saftabee-com",
+  website:
+    "https://www.producthunt.com/r/NFZF6ZTN77ALEN?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+ExploreYC+%28ID%3A+292574%29",
+  one_liner: "Safta Bee design and produce the Best Beekeeping Suits.",
+  long_description:
+    "Get premium protective bee suits in the UK at Safta Bee. Discover top-quality suits for maximum safety & comfort. Perfect for all seasons; order now!",
+  team_size: null,
+  batch: null,
+  status: null,
+  industry: null,
+  subindustry: null,
+  all_locations: null,
+  is_hiring: false,
+  top_company: false,
+  nonprofit: false,
+  stage: null,
+  country: null,
+  latitude: null,
+  longitude: null,
+  small_logo_thumb_url:
+    "https://ph-files.imgix.net/8c0ba0b2-6a13-4e2d-a35b-839a957bf84c.jpeg?auto=format",
+  founders: null,
+  year_founded: null,
+  exit_type: null,
+  acquirer: null,
+  ticker_symbol: null,
+  funded_date: null,
+  source_url:
+    "https://www.producthunt.com/products/saftabee-com?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+ExploreYC+%28ID%3A+292574%29",
+  funding_total_usd: null,
+  funding_last_round_usd: null,
+  funding_last_round_name: null,
+  funding_last_round_date: null,
+  valuation_usd: null,
+  employee_count: null,
+  employee_growth_6m: null,
+  created_at: "2026-07-17T05:27:36.691539Z",
+  updated_at: "2026-07-17T05:27:36.691539Z",
+};
+
 export const statistics = [
   {
     id: "1",
