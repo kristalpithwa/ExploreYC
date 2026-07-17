@@ -11,6 +11,7 @@
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		5625B04A06E82BEC121F7FB8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13E12235565D6BD01E6612DC /* PrivacyInfo.xcprivacy */; };
 		8F56ECCDBD7322E98DD2FDFC /* libPods-ExploreYC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D8478F124D6182A8F2BB37 /* libPods-ExploreYC.a */; };
+		976F2ECB300A39C0005EBA0F /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = 442F8063F75061436EF1AF85 /* MapLibre */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		E06E882EF499770312679580 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21804E3429235AFEFA19FB1D /* ExpoModulesProvider.swift */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
@@ -20,7 +21,7 @@
 		13B07F961A680F5B00A75B9A /* ExploreYC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExploreYC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ExploreYC/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ExploreYC/Info.plist; sourceTree = "<group>"; };
-		13E12235565D6BD01E6612DC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = ExploreYC/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		13E12235565D6BD01E6612DC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = ExploreYC/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		17E65ECEAB390B72D6BFF2E6 /* Pods-ExploreYC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExploreYC.debug.xcconfig"; path = "Target Support Files/Pods-ExploreYC/Pods-ExploreYC.debug.xcconfig"; sourceTree = "<group>"; };
 		21804E3429235AFEFA19FB1D /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-ExploreYC/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		74FDBED3A12EADA06DC44E2A /* Pods-ExploreYC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExploreYC.release.xcconfig"; path = "Target Support Files/Pods-ExploreYC/Pods-ExploreYC.release.xcconfig"; sourceTree = "<group>"; };
@@ -37,6 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				976F2ECB300A39C0005EBA0F /* MapLibre in Frameworks */,
 				8F56ECCDBD7322E98DD2FDFC /* libPods-ExploreYC.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -81,7 +83,6 @@
 				17E65ECEAB390B72D6BFF2E6 /* Pods-ExploreYC.debug.xcconfig */,
 				74FDBED3A12EADA06DC44E2A /* Pods-ExploreYC.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
