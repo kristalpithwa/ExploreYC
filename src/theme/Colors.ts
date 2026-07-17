@@ -22,9 +22,14 @@ const appColors = {
   brandGreen: "#34A853",
   brandYellow: "#FBBC05",
   brandRed: "#EA4335",
+  orangeLightest: "#FFF5F0",
 };
 
 const opacityColors = {
+  primaryOpacity10: "rgba(255, 102, 0, 0.1)",
+  primaryOpacity15: "rgba(255, 102, 0, 0.15)",
+  primaryOpacity30: "rgba(255, 102, 0, 0.3)",
+
   blackOpacity4: "rgba(0, 0, 0, 0.04)",
   blackOpacity10: "rgba(0, 0, 0, 0.1)",
   blackOpacity20: "rgba(0, 0, 0, 0.2)",
