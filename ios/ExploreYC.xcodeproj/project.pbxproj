@@ -9,28 +9,27 @@
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		5625B04A06E82BEC121F7FB8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13E12235565D6BD01E6612DC /* PrivacyInfo.xcprivacy */; };
-		8F56ECCDBD7322E98DD2FDFC /* libPods-ExploreYC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D8478F124D6182A8F2BB37 /* libPods-ExploreYC.a */; };
-		976F2ECB300A39C0005EBA0F /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = 442F8063F75061436EF1AF85 /* MapLibre */; };
+		9569AC97EB2DF5C21840046F /* libPods-ExploreYC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4A3F5A1D1F315998FBA1DF /* libPods-ExploreYC.a */; };
+		A0C462E43C9FAE936392146E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 1040A4C8FCBACF2C5171EACF /* PrivacyInfo.xcprivacy */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		E06E882EF499770312679580 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21804E3429235AFEFA19FB1D /* ExpoModulesProvider.swift */; };
+		E0AD8EBBDAE9BF3FE90743C8 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFC21BAFB6E046ABD9E8D8D /* ExpoModulesProvider.swift */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1040A4C8FCBACF2C5171EACF /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = ExploreYC/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* ExploreYC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExploreYC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ExploreYC/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ExploreYC/Info.plist; sourceTree = "<group>"; };
-		13E12235565D6BD01E6612DC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = ExploreYC/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		17E65ECEAB390B72D6BFF2E6 /* Pods-ExploreYC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExploreYC.debug.xcconfig"; path = "Target Support Files/Pods-ExploreYC/Pods-ExploreYC.debug.xcconfig"; sourceTree = "<group>"; };
-		21804E3429235AFEFA19FB1D /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-ExploreYC/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		74FDBED3A12EADA06DC44E2A /* Pods-ExploreYC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExploreYC.release.xcconfig"; path = "Target Support Files/Pods-ExploreYC/Pods-ExploreYC.release.xcconfig"; sourceTree = "<group>"; };
+		4241229ACE058869A8CF84F9 /* Pods-ExploreYC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExploreYC.release.xcconfig"; path = "Target Support Files/Pods-ExploreYC/Pods-ExploreYC.release.xcconfig"; sourceTree = "<group>"; };
+		4FFC21BAFB6E046ABD9E8D8D /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-ExploreYC/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		78B37BA3B543C461725C47B2 /* Pods-ExploreYC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExploreYC.debug.xcconfig"; path = "Target Support Files/Pods-ExploreYC/Pods-ExploreYC.debug.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = ExploreYC/SplashScreen.storyboard; sourceTree = "<group>"; };
+		AC4A3F5A1D1F315998FBA1DF /* libPods-ExploreYC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ExploreYC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ExploreYC/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* ExploreYC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "ExploreYC-Bridging-Header.h"; path = "ExploreYC/ExploreYC-Bridging-Header.h"; sourceTree = "<group>"; };
-		F6D8478F124D6182A8F2BB37 /* libPods-ExploreYC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ExploreYC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,8 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				976F2ECB300A39C0005EBA0F /* MapLibre in Frameworks */,
-				8F56ECCDBD7322E98DD2FDFC /* libPods-ExploreYC.a in Frameworks */,
+				9569AC97EB2DF5C21840046F /* libPods-ExploreYC.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,7 +53,7 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				13E12235565D6BD01E6612DC /* PrivacyInfo.xcprivacy */,
+				1040A4C8FCBACF2C5171EACF /* PrivacyInfo.xcprivacy */,
 			);
 			name = ExploreYC;
 			sourceTree = "<group>";
@@ -64,26 +62,17 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				F6D8478F124D6182A8F2BB37 /* libPods-ExploreYC.a */,
+				AC4A3F5A1D1F315998FBA1DF /* libPods-ExploreYC.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		2D78ACFFB2D2F684C8FDF7D4 /* ExploreYC */ = {
+		7C2605DDDEE47DDBDAA324E4 /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				21804E3429235AFEFA19FB1D /* ExpoModulesProvider.swift */,
+				BE5B71F9689874FAA037725C /* ExploreYC */,
 			);
-			name = ExploreYC;
-			sourceTree = "<group>";
-		};
-		69EC5454B510C17C9F7215E4 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				17E65ECEAB390B72D6BFF2E6 /* Pods-ExploreYC.debug.xcconfig */,
-				74FDBED3A12EADA06DC44E2A /* Pods-ExploreYC.release.xcconfig */,
-			);
-			path = Pods;
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -100,8 +89,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				69EC5454B510C17C9F7215E4 /* Pods */,
-				D9BC8251D2B3C1FBDA537E31 /* ExpoModulesProviders */,
+				A4C9BA6C3ABA22E995B430C2 /* Pods */,
+				7C2605DDDEE47DDBDAA324E4 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -116,6 +105,16 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		A4C9BA6C3ABA22E995B430C2 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				78B37BA3B543C461725C47B2 /* Pods-ExploreYC.debug.xcconfig */,
+				4241229ACE058869A8CF84F9 /* Pods-ExploreYC.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
@@ -125,12 +124,12 @@
 			path = ExploreYC/Supporting;
 			sourceTree = "<group>";
 		};
-		D9BC8251D2B3C1FBDA537E31 /* ExpoModulesProviders */ = {
+		BE5B71F9689874FAA037725C /* ExploreYC */ = {
 			isa = PBXGroup;
 			children = (
-				2D78ACFFB2D2F684C8FDF7D4 /* ExploreYC */,
+				4FFC21BAFB6E046ABD9E8D8D /* ExpoModulesProvider.swift */,
 			);
-			name = ExpoModulesProviders;
+			name = ExploreYC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,15 +140,15 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ExploreYC" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				0E6B90376E395A12EC65A69C /* [Expo] Configure project */,
+				8372ABD286FD4F91E426D114 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				E36C371FA1784F2D83E558CE /* [Expo Dev Launcher] Strip Local Network Keys for Release */,
-				7F5AE3C0BE07A45F6D9DBBE0 /* [MapLibre React Native] Remove MapLibre.xcframework-ios.signature */,
-				5B5311643B58B08A76AF2B07 /* [CP] Embed Pods Frameworks */,
+				FD681559E9294E01A90E19C9 /* [Expo Dev Launcher] Strip Local Network Keys for Release */,
+				60E74A2D57C813DC43125333 /* [MapLibre React Native] Remove MapLibre.xcframework-ios.signature */,
+				DA0EEF12CA393D243AAA021D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -157,7 +156,7 @@
 			);
 			name = ExploreYC;
 			packageProductDependencies = (
-				442F8063F75061436EF1AF85 /* MapLibre */,
+				5FFBEE574496CD9F64EB453A /* MapLibre */,
 			);
 			productName = ExploreYC;
 			productReference = 13B07F961A680F5B00A75B9A /* ExploreYC.app */;
@@ -186,7 +185,7 @@
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
-				FF2FEB288733EF14051F2CE4 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */,
+				90F98FCA9A530D15D2FFF001 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -205,7 +204,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				5625B04A06E82BEC121F7FB8 /* PrivacyInfo.xcprivacy in Resources */,
+				A0C462E43C9FAE936392146E /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,75 +250,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		0E6B90376E395A12EC65A69C /* [Expo] Configure project */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/.xcode.env",
-				"$(SRCROOT)/.xcode.env.local",
-				"$(SRCROOT)/ExploreYC/ExploreYC.entitlements",
-				"$(SRCROOT)/Pods/Target Support Files/Pods-ExploreYC/expo-configure-project.sh",
-			);
-			name = "[Expo] Configure project";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(SRCROOT)/Pods/Target Support Files/Pods-ExploreYC/ExpoModulesProvider.swift",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-ExploreYC/expo-configure-project.sh\"\n";
-		};
-		5B5311643B58B08A76AF2B07 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ExploreYC/Pods-ExploreYC-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoFileSystem/ExpoFileSystem.framework/ExpoFileSystem",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoFont/ExpoFont.framework/ExpoFont",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoImage/ExpoImage.framework/ExpoImage",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoImage/SDWebImage.framework/SDWebImage",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoImage/SDWebImageAVIFCoder.framework/SDWebImageAVIFCoder",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoImage/SDWebImageSVGCoder.framework/SDWebImageSVGCoder",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoImage/SDWebImageWebPCoder.framework/SDWebImageWebPCoder",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoImage/libavif.framework/libavif",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoModulesCore/ExpoModulesCore.framework/ExpoModulesCore",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoModulesJSI/ExpoModulesJSI.framework/ExpoModulesJSI",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoModulesWorklets/ExpoModulesWorklets.framework/ExpoModulesWorklets",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/React-Core-prebuilt/React.framework/React",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ReactNativeDependencies/ReactNativeDependencies.framework/ReactNativeDependencies",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermesvm.framework/hermesvm",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoFileSystem.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoFont.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImageAVIFCoder.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImageSVGCoder.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImageWebPCoder.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libavif.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoModulesCore.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoModulesJSI.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoModulesWorklets.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactNativeDependencies.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermesvm.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ExploreYC/Pods-ExploreYC-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7F5AE3C0BE07A45F6D9DBBE0 /* [MapLibre React Native] Remove MapLibre.xcframework-ios.signature */ = {
+		60E74A2D57C813DC43125333 /* [MapLibre React Native] Remove MapLibre.xcframework-ios.signature */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -374,7 +305,75 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ExploreYC/Pods-ExploreYC-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E36C371FA1784F2D83E558CE /* [Expo Dev Launcher] Strip Local Network Keys for Release */ = {
+		8372ABD286FD4F91E426D114 /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env",
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/ExploreYC/ExploreYC.entitlements",
+				"$(SRCROOT)/Pods/Target Support Files/Pods-ExploreYC/expo-configure-project.sh",
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/Pods/Target Support Files/Pods-ExploreYC/ExpoModulesProvider.swift",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-ExploreYC/expo-configure-project.sh\"\n";
+		};
+		DA0EEF12CA393D243AAA021D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ExploreYC/Pods-ExploreYC-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoFileSystem/ExpoFileSystem.framework/ExpoFileSystem",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoFont/ExpoFont.framework/ExpoFont",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoImage/ExpoImage.framework/ExpoImage",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoImage/SDWebImage.framework/SDWebImage",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoImage/SDWebImageAVIFCoder.framework/SDWebImageAVIFCoder",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoImage/SDWebImageSVGCoder.framework/SDWebImageSVGCoder",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoImage/SDWebImageWebPCoder.framework/SDWebImageWebPCoder",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoImage/libavif.framework/libavif",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoModulesCore/ExpoModulesCore.framework/ExpoModulesCore",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoModulesJSI/ExpoModulesJSI.framework/ExpoModulesJSI",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoModulesWorklets/ExpoModulesWorklets.framework/ExpoModulesWorklets",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/React-Core-prebuilt/React.framework/React",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ReactNativeDependencies/ReactNativeDependencies.framework/ReactNativeDependencies",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermesvm.framework/hermesvm",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoFileSystem.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoFont.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImageAVIFCoder.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImageSVGCoder.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImageWebPCoder.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libavif.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoModulesCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoModulesJSI.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoModulesWorklets.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactNativeDependencies.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermesvm.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ExploreYC/Pods-ExploreYC-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FD681559E9294E01A90E19C9 /* [Expo Dev Launcher] Strip Local Network Keys for Release */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -396,7 +395,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				E06E882EF499770312679580 /* ExpoModulesProvider.swift in Sources */,
+				E0AD8EBBDAE9BF3FE90743C8 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,7 +404,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 17E65ECEAB390B72D6BFF2E6 /* Pods-ExploreYC.debug.xcconfig */;
+			baseConfigurationReference = 78B37BA3B543C461725C47B2 /* Pods-ExploreYC.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -442,7 +441,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 74FDBED3A12EADA06DC44E2A /* Pods-ExploreYC.release.xcconfig */;
+			baseConfigurationReference = 4241229ACE058869A8CF84F9 /* Pods-ExploreYC.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -631,7 +630,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		FF2FEB288733EF14051F2CE4 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */ = {
+		90F98FCA9A530D15D2FFF001 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/maplibre/maplibre-gl-native-distribution";
 			requirement = {
@@ -642,9 +641,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		442F8063F75061436EF1AF85 /* MapLibre */ = {
+		5FFBEE574496CD9F64EB453A /* MapLibre */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = FF2FEB288733EF14051F2CE4 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */;
+			package = 90F98FCA9A530D15D2FFF001 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */;
 			productName = MapLibre;
 		};
 /* End XCSwiftPackageProductDependency section */
