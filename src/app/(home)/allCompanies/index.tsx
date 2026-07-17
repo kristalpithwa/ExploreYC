@@ -2,10 +2,10 @@ import React, { useState, useMemo } from "react";
 import {
   View,
   Text,
-  FlatList,
   Pressable,
   TextInput,
   StyleSheet,
+  FlatList,
 } from "react-native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
@@ -13,7 +13,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import styles from "./styles";
 import { getCompanyData } from "@/data/home";
-import { Colors, Images, Responsive } from "@/theme";
+import { Colors, Images } from "@/theme";
 
 interface Company {
   id: number;
@@ -36,6 +36,25 @@ const FILTER_CATEGORIES = [
   "Productivity",
 ];
 
+// Helper to determine initials avatar colors based on company name
+const getAvatarTheme = (name: string) => {
+  const char = (name || "").charAt(0).toUpperCase();
+  const code = char.charCodeAt(0) || 0;
+
+  const themes = [
+    { bg: "rgba(255, 102, 0, 0.08)", text: Colors.appColors.primary }, // YC Orange tint
+    { bg: "rgba(46, 125, 50, 0.08)", text: "#2E7D32" }, // Green tint
+    { bg: "rgba(13, 71, 161, 0.08)", text: "#0D47A1" }, // Blue tint
+    { bg: "rgba(74, 20, 140, 0.08)", text: "#4A148C" }, // Purple tint
+    { bg: "rgba(245, 127, 23, 0.08)", text: "#F57F17" }, // Amber tint
+    { bg: "rgba(0, 96, 100, 0.08)", text: "#006064" }, // Cyan tint
+    { bg: "rgba(216, 67, 21, 0.08)", text: "#D84315" }, // Coral tint
+    { bg: "rgba(26, 35, 126, 0.08)", text: "#1A237E" }, // Indigo tint
+  ];
+
+  return themes[code % themes.length];
+};
+
 export default function AllCompaniesScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -43,8 +62,12 @@ export default function AllCompaniesScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [bookmarkedIds, setBookmarkedIds] = useState<number[]>([]);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
-  const companies: Company[] = getCompanyData?.companies || [];
+  const companies: Company[] = useMemo(
+    () => getCompanyData?.companies || [],
+    [],
+  );
 
   // Toggle Bookmark
   const toggleBookmark = (id: number) => {
@@ -52,6 +75,53 @@ export default function AllCompaniesScreen() {
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
     );
   };
+
+  // Pre-calculate category counts based on the static data
+  const categoryCounts = useMemo(() => {
+    return {
+      All: companies.length,
+      Hiring: companies.filter((c) => c.is_hiring).length,
+      "Product Hunt": companies.filter((c) => c.source === "producthunt")
+        .length,
+      AI: companies.filter((c) => {
+        const desc = (c.long_description || "").toLowerCase();
+        const oneLiner = (c.one_liner || "").toLowerCase();
+        return (
+          desc.includes("ai") ||
+          desc.includes("artificial") ||
+          oneLiner.includes("ai")
+        );
+      }).length,
+      Fintech: companies.filter((c) => {
+        const desc = (c.long_description || "").toLowerCase();
+        const oneLiner = (c.one_liner || "").toLowerCase();
+        return (
+          desc.includes("finance") ||
+          desc.includes("invest") ||
+          desc.includes("tax") ||
+          desc.includes("cash") ||
+          desc.includes("rate") ||
+          oneLiner.includes("invest")
+        );
+      }).length,
+      Productivity: companies.filter((c) => {
+        const desc = (c.long_description || "").toLowerCase();
+        const oneLiner = (c.one_liner || "").toLowerCase();
+        return (
+          desc.includes("work") ||
+          desc.includes("workspace") ||
+          desc.includes("bookmark") ||
+          desc.includes("pdf") ||
+          desc.includes("mcp") ||
+          oneLiner.includes("work") ||
+          oneLiner.includes("workspace") ||
+          oneLiner.includes("bookmark") ||
+          oneLiner.includes("pdf") ||
+          oneLiner.includes("mcp")
+        );
+      }).length,
+    };
+  }, [companies]);
 
   // Filter companies based on search query and category pill
   const filteredCompanies = useMemo(() => {
@@ -106,14 +176,27 @@ export default function AllCompaniesScreen() {
   }, [searchQuery, selectedCategory, companies]);
 
   // Render Item
-  const renderCompanyItem = ({ item }: { item: Company }) => {
+  const renderCompanyItem = ({
+    item,
+    index,
+  }: {
+    item: Company;
+    index: number;
+  }) => {
     const isBookmarked = bookmarkedIds.includes(item.id);
     const logoUrl = item.small_logo_thumb_url;
     const name = item.name || "";
     const description = item.one_liner || item.long_description || "";
-    const batch =
-      item.batch || (item.source ? item.source.toUpperCase() : "YC");
+    const batch = item.batch;
+    const sourceLabel =
+      item.source === "producthunt"
+        ? "Product Hunt"
+        : item.source
+          ? item.source.toUpperCase()
+          : "";
+    const showYC = !batch && !sourceLabel;
     const category = item.industry || "General";
+    const avatarTheme = getAvatarTheme(name);
 
     return (
       <Pressable
@@ -128,7 +211,12 @@ export default function AllCompaniesScreen() {
         {/* Card Top Section */}
         <View style={styles.cardTop}>
           <View style={styles.cardTopLeft}>
-            <View style={styles.logoWrapper}>
+            <View
+              style={[
+                styles.logoWrapper,
+                !logoUrl && { backgroundColor: avatarTheme.bg },
+              ]}
+            >
               {logoUrl ? (
                 <Image
                   source={{ uri: logoUrl }}
@@ -136,7 +224,7 @@ export default function AllCompaniesScreen() {
                   contentFit="cover"
                 />
               ) : (
-                <Text style={styles.logoText}>
+                <Text style={[styles.logoText, { color: avatarTheme.text }]}>
                   {name ? name.charAt(0).toUpperCase() : ""}
                 </Text>
               )}
@@ -145,12 +233,23 @@ export default function AllCompaniesScreen() {
               <Text style={styles.companyName} numberOfLines={1}>
                 {name}
               </Text>
-              <Text style={styles.metaText}>{batch}</Text>
+              <View style={styles.metaTextRow}>
+                {batch && <Text style={styles.metaText}>{batch}</Text>}
+                {batch && sourceLabel && <Text style={styles.metaDot}>•</Text>}
+                {sourceLabel && (
+                  <Text style={styles.metaSource}>{sourceLabel}</Text>
+                )}
+                {showYC && <Text style={styles.metaText}>YC</Text>}
+              </View>
             </View>
           </View>
 
           <Pressable
-            style={styles.bookmarkBtn}
+            hitSlop={12}
+            style={[
+              styles.bookmarkBtn,
+              isBookmarked && styles.bookmarkBtnActive,
+            ]}
             onPress={(e) => {
               e.stopPropagation();
               toggleBookmark(item.id);
@@ -175,15 +274,21 @@ export default function AllCompaniesScreen() {
 
         {/* Card Bottom Section */}
         <View style={styles.cardBottom}>
-          <View style={{ flexDirection: "row", gap: 8 }}>
+          <View style={styles.tagContainer}>
             <View style={styles.categoryBadge}>
               <Text style={styles.categoryText}>{category}</Text>
             </View>
+
+            {batch && (
+              <View style={styles.batchBadge}>
+                <Text style={styles.batchText}>{batch}</Text>
+              </View>
+            )}
+
             {item.is_hiring && (
-              <View style={[styles.categoryBadge, styles.hiringBadge]}>
-                <Text style={[styles.categoryText, styles.hiringText]}>
-                  🟢 Hiring
-                </Text>
+              <View style={styles.hiringBadge}>
+                <View style={styles.hiringDot} />
+                <Text style={styles.hiringText}>Hiring</Text>
               </View>
             )}
           </View>
@@ -200,15 +305,42 @@ export default function AllCompaniesScreen() {
     <View style={styles.container}>
       {/* Header Bar */}
       <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
-        <Pressable style={styles.backBtn} onPress={() => router.back()}>
+        <Pressable
+          hitSlop={12}
+          style={styles.backBtn}
+          onPress={() => router.back()}
+        >
           <Text style={styles.backBtnText}>←</Text>
         </Pressable>
-        <Text style={styles.headerTitle}>All Startups</Text>
+        <View style={styles.headerTitleContainer}>
+          <Text style={styles.headerTitle}>All Startups</Text>
+          <Text style={styles.headerSub}>
+            {filteredCompanies.length} startup
+            {filteredCompanies.length !== 1 ? "s" : ""} found
+          </Text>
+        </View>
       </View>
 
       {/* Search Input */}
-      <View style={styles.searchBarContainer}>
-        <Text style={styles.searchIconEmoji}>🔍</Text>
+      <View
+        style={[
+          styles.searchBarContainer,
+          isSearchFocused && styles.searchBarContainerFocused,
+        ]}
+      >
+        <Image
+          source={Images.search}
+          style={{
+            width: 18,
+            height: 18,
+            marginRight: 10,
+          }}
+          tintColor={
+            isSearchFocused
+              ? Colors.appColors.primary
+              : Colors.appColors.tertiary
+          }
+        />
         <TextInput
           placeholder="Search startups, solutions, descriptions..."
           placeholderTextColor={Colors.appColors.tertiary}
@@ -216,6 +348,8 @@ export default function AllCompaniesScreen() {
           onChangeText={setSearchQuery}
           style={styles.searchInput}
           clearButtonMode="while-editing"
+          onFocus={() => setIsSearchFocused(true)}
+          onBlur={() => setIsSearchFocused(false)}
         />
       </View>
 
@@ -223,7 +357,6 @@ export default function AllCompaniesScreen() {
       <View
         style={{
           height: 50,
-          marginBottom: Responsive.heightPercentageToDP(1.5),
         }}
       >
         <FlatList
@@ -234,6 +367,8 @@ export default function AllCompaniesScreen() {
           contentContainerStyle={styles.pillsContent}
           renderItem={({ item }) => {
             const isActive = selectedCategory === item;
+            const count =
+              categoryCounts[item as keyof typeof categoryCounts] ?? 0;
             return (
               <Pressable
                 onPress={() => setSelectedCategory(item)}
@@ -243,6 +378,11 @@ export default function AllCompaniesScreen() {
                   style={[styles.pillText, isActive && styles.pillTextActive]}
                 >
                   {item}
+                </Text>
+                <Text
+                  style={[styles.pillCount, isActive && styles.pillCountActive]}
+                >
+                  {count}
                 </Text>
               </Pressable>
             );
@@ -254,17 +394,24 @@ export default function AllCompaniesScreen() {
       {/* Startup Cards List */}
       <FlatList
         data={filteredCompanies}
-        renderItem={renderCompanyItem}
+        renderItem={({ item, index }) => renderCompanyItem({ item, index })}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <View style={styles.emptyState}>
-            <Text style={{ fontSize: 48 }}>🔍</Text>
+            <Image
+              source={Images.search}
+              style={{
+                width: 48,
+                height: 48,
+                tintColor: Colors.appColors.borderLight,
+                marginBottom: 16,
+              }}
+            />
             <Text style={styles.emptyTitle}>No Startups Found</Text>
             <Text style={styles.emptySubtitle}>
-              We couldn't find any startups matching "{searchQuery}" in this
-              category.
+              {`We couldn't find any startups matching "${searchQuery}" in this category.`}
             </Text>
           </View>
         }

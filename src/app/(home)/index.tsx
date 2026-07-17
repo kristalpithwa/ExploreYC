@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -14,9 +15,36 @@ import styles from "./styles";
 import { Colors, Images, Responsive } from "@/theme";
 import { countries, getCompanyData, industries, statistics } from "@/data/home";
 
+// Helper to determine initials avatar colors based on company name
+const getAvatarTheme = (name: string) => {
+  const char = (name || "").charAt(0).toUpperCase();
+  const code = char.charCodeAt(0) || 0;
+  
+  const themes = [
+    { bg: "rgba(255, 102, 0, 0.08)", text: Colors.appColors.primary }, // YC Orange tint
+    { bg: "rgba(46, 125, 50, 0.08)", text: "#2E7D32" }, // Green tint
+    { bg: "rgba(13, 71, 161, 0.08)", text: "#0D47A1" }, // Blue tint
+    { bg: "rgba(74, 20, 140, 0.08)", text: "#4A148C" }, // Purple tint
+    { bg: "rgba(245, 127, 23, 0.08)", text: "#F57F17" }, // Amber tint
+    { bg: "rgba(0, 96, 100, 0.08)", text: "#006064" }, // Cyan tint
+    { bg: "rgba(216, 67, 21, 0.08)", text: "#D84315" }, // Coral tint
+    { bg: "rgba(26, 35, 126, 0.08)", text: "#1A237E" }, // Indigo tint
+  ];
+  
+  return themes[code % themes.length];
+};
+
 export default function HomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+
+  const [bookmarkedIds, setBookmarkedIds] = useState<number[]>([]);
+
+  const toggleBookmark = (id: number) => {
+    setBookmarkedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
 
   // onPress Methods
 
@@ -44,18 +72,25 @@ export default function HomeScreen() {
   // Render Methods
 
   const renderTrendingStartups = ({ item }: { item: any }) => {
+    const isBookmarked = bookmarkedIds.includes(item.id);
     const name = item.name || "";
 
     const description =
       item.description || item.one_liner || item.long_description || "";
 
-    const batch =
-      item.batch || (item.source ? item.source.toUpperCase() : "YC");
+    const batch = item.batch;
+    const sourceLabel =
+      item.source === "producthunt"
+        ? "Product Hunt"
+        : item.source
+          ? item.source.toUpperCase()
+          : "";
+    const showYC = !batch && !sourceLabel;
 
     const category = item.category || item.industry || "General";
 
     const logoUrl = item.small_logo_thumb_url;
-    const logoText = name ? name.charAt(0).toUpperCase() : "";
+    const avatarTheme = getAvatarTheme(name);
 
     return (
       <Pressable
@@ -68,12 +103,7 @@ export default function HomeScreen() {
             <View
               style={[
                 styles.logoContainer,
-                {
-                  backgroundColor: logoUrl
-                    ? "transparent"
-                    : Colors.appColors.primary,
-                  overflow: "hidden",
-                },
+                !logoUrl && { backgroundColor: avatarTheme.bg }
               ]}
             >
               {logoUrl ? (
@@ -83,7 +113,9 @@ export default function HomeScreen() {
                   contentFit="cover"
                 />
               ) : (
-                <Text style={styles.logoText}>{logoText}</Text>
+                <Text style={[styles.logoText, { color: avatarTheme.text }]}>
+                  {name ? name.charAt(0).toUpperCase() : ""}
+                </Text>
               )}
             </View>
 
@@ -91,21 +123,33 @@ export default function HomeScreen() {
               <Text style={styles.startupName} numberOfLines={1}>
                 {name}
               </Text>
-              <Text style={styles.startupMeta}>{batch}</Text>
+              <View style={styles.metaTextRow}>
+                {batch && <Text style={styles.startupMeta}>{batch}</Text>}
+                {batch && sourceLabel && <Text style={styles.metaDot}>•</Text>}
+                {sourceLabel && (
+                  <Text style={styles.metaSource}>{sourceLabel}</Text>
+                )}
+                {showYC && <Text style={styles.startupMeta}>YC</Text>}
+              </View>
             </View>
           </View>
 
-          <Pressable>
+          <Pressable
+            hitSlop={12}
+            style={[styles.bookmarkBtn, isBookmarked && styles.bookmarkBtnActive]}
+            onPress={(e) => {
+              e.stopPropagation();
+              toggleBookmark(item.id);
+            }}
+          >
             <Image
               source={Images.bookmark}
-              style={[
-                styles.bookmarkIcon,
-                {
-                  tintColor: item?.bookmarked
-                    ? Colors.appColors.primary
-                    : Colors.appColors.bookmarkInactive,
-                },
-              ]}
+              style={styles.bookmarkIcon}
+              tintColor={
+                isBookmarked
+                  ? Colors.appColors.primary
+                  : Colors.appColors.bookmarkInactive
+              }
             />
           </Pressable>
         </View>
@@ -115,13 +159,28 @@ export default function HomeScreen() {
         </Text>
 
         <View style={styles.cardFooter}>
-          <View style={styles.categoryBadge}>
-            <Text style={styles.categoryBadgeText}>{category}</Text>
+          <View style={styles.tagContainer}>
+            <View style={styles.categoryBadge}>
+              <Text style={styles.categoryBadgeText}>{category}</Text>
+            </View>
+
+            {batch && (
+              <View style={styles.batchBadge}>
+                <Text style={styles.batchText}>{batch}</Text>
+              </View>
+            )}
+
+            {item.is_hiring && (
+              <View style={styles.hiringBadge}>
+                <View style={styles.hiringDot} />
+                <Text style={styles.hiringText}>Hiring</Text>
+              </View>
+            )}
           </View>
 
-          <Pressable style={styles.cardArrowBtn}>
+          <View style={styles.cardArrowBtn}>
             <Image source={Images.arrow_right} style={styles.footerArrowIcon} />
-          </Pressable>
+          </View>
         </View>
       </Pressable>
     );
