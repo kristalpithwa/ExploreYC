@@ -6,6 +6,8 @@
     "@expo/ui": "~57.0.4",
     "@maplibre/maplibre-react-native": "^11.3.6",
     "@react-navigation/bottom-tabs": "^7.18.8",
+    "@tanstack/react-query": "^5.101.2",
+    "axios": "^1.18.1",
     "expo": "~57.0.4",
     "expo-constants": "~57.0.3",
     "expo-dev-client": "~57.0.5",

@@ -1,42 +1,20 @@
-import { Tabs } from "expo-router";
-import CustomTabBar from "@/components/CustomTabBar/CustomTabBar";
+import { useState } from "react";
+import Router from "@/navigation/router";
+import { Colors } from "@/theme";
+import { StatusBar } from "react-native";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export default function TabLayout() {
+  const [queryClient] = useState(() => new QueryClient());
+
   return (
-    <Tabs
-      initialRouteName="(home)"
-      tabBar={(props) => <CustomTabBar {...props as any} />}
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Tabs.Screen
-        name="(home)"
-        options={{
-          title: "Home",
-        }}
+    <QueryClientProvider client={queryClient}>
+      <StatusBar
+        translucent={true}
+        barStyle="dark-content"
+        backgroundColor={Colors.transparent}
       />
-
-      <Tabs.Screen
-        name="(discover)"
-        options={{
-          title: "Discover",
-        }}
-      />
-
-      <Tabs.Screen
-        name="(search)"
-        options={{
-          title: "Search",
-        }}
-      />
-
-      <Tabs.Screen
-        name="(analytics)"
-        options={{
-          title: "Analytics",
-        }}
-      />
-    </Tabs>
+      <Router />
+    </QueryClientProvider>
   );
 }

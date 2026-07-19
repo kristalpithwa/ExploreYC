@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useMemo } from "react";
 import {
   View,
   Text,
@@ -13,13 +13,14 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import styles from "./styles";
 import { Colors, Images, Responsive } from "@/theme";
-import { countries, getCompanyData, industries, statistics } from "@/data/home";
+import { countries, industries, statistics } from "@/data/home";
+import { useGetCompanyList } from "@/services/apiService";
 
 // Helper to determine initials avatar colors based on company name
 const getAvatarTheme = (name: string) => {
   const char = (name || "").charAt(0).toUpperCase();
   const code = char.charCodeAt(0) || 0;
-  
+
   const themes = [
     { bg: "rgba(255, 102, 0, 0.08)", text: Colors.appColors.primary }, // YC Orange tint
     { bg: "rgba(46, 125, 50, 0.08)", text: "#2E7D32" }, // Green tint
@@ -30,7 +31,7 @@ const getAvatarTheme = (name: string) => {
     { bg: "rgba(216, 67, 21, 0.08)", text: "#D84315" }, // Coral tint
     { bg: "rgba(26, 35, 126, 0.08)", text: "#1A237E" }, // Indigo tint
   ];
-  
+
   return themes[code % themes.length];
 };
 
@@ -38,13 +39,20 @@ export default function HomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
-  const [bookmarkedIds, setBookmarkedIds] = useState<number[]>([]);
+  const companyListPayload = useMemo(
+    () => ({
+      limit: 50,
+      offset: 0,
+      batch: "Winter 2025",
+    }),
+    [],
+  );
 
-  const toggleBookmark = (id: number) => {
-    setBookmarkedIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
-  };
+  const { data: companyList, isLoading: isCompanyLoading } =
+    useGetCompanyList(companyListPayload);
+
+  const companies = companyList?.companies || [];
+  console.log("companies =>", companies);
 
   // onPress Methods
 
@@ -72,13 +80,11 @@ export default function HomeScreen() {
   // Render Methods
 
   const renderTrendingStartups = ({ item }: { item: any }) => {
-    const isBookmarked = bookmarkedIds.includes(item.id);
-    const name = item.name || "";
-
     const description =
       item.description || item.one_liner || item.long_description || "";
 
     const batch = item.batch;
+
     const sourceLabel =
       item.source === "producthunt"
         ? "Product Hunt"
@@ -90,7 +96,8 @@ export default function HomeScreen() {
     const category = item.category || item.industry || "General";
 
     const logoUrl = item.small_logo_thumb_url;
-    const avatarTheme = getAvatarTheme(name);
+
+    const avatarTheme = getAvatarTheme(item?.name);
 
     return (
       <Pressable
@@ -103,7 +110,7 @@ export default function HomeScreen() {
             <View
               style={[
                 styles.logoContainer,
-                !logoUrl && { backgroundColor: avatarTheme.bg }
+                !logoUrl && { backgroundColor: avatarTheme.bg },
               ]}
             >
               {logoUrl ? (
@@ -114,15 +121,16 @@ export default function HomeScreen() {
                 />
               ) : (
                 <Text style={[styles.logoText, { color: avatarTheme.text }]}>
-                  {name ? name.charAt(0).toUpperCase() : ""}
+                  {item?.name ? item?.name.charAt(0).toUpperCase() : ""}
                 </Text>
               )}
             </View>
 
             <View style={styles.cardTitleInfo}>
               <Text style={styles.startupName} numberOfLines={1}>
-                {name}
+                {item?.name}
               </Text>
+
               <View style={styles.metaTextRow}>
                 {batch && <Text style={styles.startupMeta}>{batch}</Text>}
                 {batch && sourceLabel && <Text style={styles.metaDot}>•</Text>}
@@ -133,25 +141,6 @@ export default function HomeScreen() {
               </View>
             </View>
           </View>
-
-          <Pressable
-            hitSlop={12}
-            style={[styles.bookmarkBtn, isBookmarked && styles.bookmarkBtnActive]}
-            onPress={(e) => {
-              e.stopPropagation();
-              toggleBookmark(item.id);
-            }}
-          >
-            <Image
-              source={Images.bookmark}
-              style={styles.bookmarkIcon}
-              tintColor={
-                isBookmarked
-                  ? Colors.appColors.primary
-                  : Colors.appColors.bookmarkInactive
-              }
-            />
-          </Pressable>
         </View>
 
         <Text style={styles.startupDesc} numberOfLines={2}>
@@ -170,7 +159,7 @@ export default function HomeScreen() {
               </View>
             )}
 
-            {item.is_hiring && (
+            {item?.is_hiring > 0 && (
               <View style={styles.hiringBadge}>
                 <View style={styles.hiringDot} />
                 <Text style={styles.hiringText}>Hiring</Text>
@@ -278,7 +267,7 @@ export default function HomeScreen() {
         <FlatList
           horizontal
           decelerationRate="fast"
-          data={getCompanyData?.companies?.slice(0, 10)}
+          data={companies.slice(0, 10)}
           renderItem={renderTrendingStartups}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}

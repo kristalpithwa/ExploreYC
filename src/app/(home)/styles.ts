@@ -258,7 +258,6 @@ const styles = StyleSheet.create({
   },
   tagContainer: {
     flexDirection: "row",
-    flexWrap: "wrap",
     gap: 6,
     flex: 1,
     marginRight: 8,
@@ -400,7 +399,6 @@ const styles = StyleSheet.create({
   },
   statsGrid: {
     flexDirection: "row",
-    flexWrap: "wrap",
     gap: Responsive.widthPercentageToDP(3.2),
     marginTop: Responsive.heightPercentageToDP(1),
   },
@@ -469,7 +467,6 @@ const styles = StyleSheet.create({
   },
   industriesGrid: {
     flexDirection: "row",
-    flexWrap: "wrap",
     gap: Responsive.widthPercentageToDP(3.2),
     marginTop: Responsive.heightPercentageToDP(1),
   },
