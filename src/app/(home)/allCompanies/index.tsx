@@ -12,8 +12,8 @@ import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import styles from "./styles";
-import { getCompanyData } from "@/data/home";
 import { Colors, Images } from "@/theme";
+import { useGetCompanyList } from "@/services/apiService";
 
 interface Company {
   id: number;
@@ -61,22 +61,24 @@ export default function AllCompaniesScreen() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [bookmarkedIds, setBookmarkedIds] = useState<number[]>([]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
-  const companies: Company[] = useMemo(
-    () => getCompanyData?.companies || [],
+  const companyListPayload = useMemo(
+    () => ({
+      limit: 50,
+      offset: 0,
+      batch: "Winter 2025",
+    }),
     [],
   );
 
-  // Toggle Bookmark
-  const toggleBookmark = (id: number) => {
-    setBookmarkedIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
-    );
-  };
+  const { data: companyList, isLoading: isCompanyLoading } =
+    useGetCompanyList(companyListPayload);
+
+  const companies = companyList?.companies || [];
 
   // Pre-calculate category counts based on the static data
+
   const categoryCounts = useMemo(() => {
     return {
       All: companies.length,
@@ -124,6 +126,7 @@ export default function AllCompaniesScreen() {
   }, [companies]);
 
   // Filter companies based on search query and category pill
+
   const filteredCompanies = useMemo(() => {
     return companies.filter((company) => {
       const name = company.name || "";
@@ -175,39 +178,32 @@ export default function AllCompaniesScreen() {
     });
   }, [searchQuery, selectedCategory, companies]);
 
+  const onPressCompanyCard = (item: any) => {
+    router.push({
+      pathname: "/(home)/companyDetails",
+      params: { id: item.id },
+    });
+  };
+
   // Render Item
-  const renderCompanyItem = ({
-    item,
-    index,
-  }: {
-    item: Company;
-    index: number;
-  }) => {
-    const isBookmarked = bookmarkedIds.includes(item.id);
-    const logoUrl = item.small_logo_thumb_url;
-    const name = item.name || "";
-    const description = item.one_liner || item.long_description || "";
-    const batch = item.batch;
+
+  const renderCompanyItem = ({ item }: { item: Company }) => {
+    const logoUrl = item?.small_logo_thumb_url;
+    const name = item?.name || "";
+    const description = item?.one_liner || item?.long_description || "";
+    const batch = item?.batch;
     const sourceLabel =
-      item.source === "producthunt"
+      item?.source === "producthunt"
         ? "Product Hunt"
-        : item.source
-          ? item.source.toUpperCase()
+        : item?.source
+          ? item?.source?.toUpperCase()
           : "";
     const showYC = !batch && !sourceLabel;
-    const category = item.industry || "General";
+    const category = item?.industry || "General";
     const avatarTheme = getAvatarTheme(name);
 
     return (
-      <Pressable
-        style={styles.card}
-        onPress={() =>
-          router.push({
-            pathname: "/(home)/companyDetails",
-            params: { id: item.id },
-          })
-        }
-      >
+      <Pressable style={styles.card} onPress={() => onPressCompanyCard(item)}>
         {/* Card Top Section */}
         <View style={styles.cardTop}>
           <View style={styles.cardTopLeft}>
@@ -229,6 +225,7 @@ export default function AllCompaniesScreen() {
                 </Text>
               )}
             </View>
+
             <View style={styles.cardHeaderInfo}>
               <Text style={styles.companyName} numberOfLines={1}>
                 {name}
@@ -243,28 +240,6 @@ export default function AllCompaniesScreen() {
               </View>
             </View>
           </View>
-
-          <Pressable
-            hitSlop={12}
-            style={[
-              styles.bookmarkBtn,
-              isBookmarked && styles.bookmarkBtnActive,
-            ]}
-            onPress={(e) => {
-              e.stopPropagation();
-              toggleBookmark(item.id);
-            }}
-          >
-            <Image
-              source={Images.bookmark}
-              style={styles.bookmarkIcon}
-              tintColor={
-                isBookmarked
-                  ? Colors.appColors.primary
-                  : Colors.appColors.bookmarkInactive
-              }
-            />
-          </Pressable>
         </View>
 
         {/* Description */}
@@ -285,7 +260,7 @@ export default function AllCompaniesScreen() {
               </View>
             )}
 
-            {item.is_hiring && (
+            {item.is_hiring > 0 && (
               <View style={styles.hiringBadge}>
                 <View style={styles.hiringDot} />
                 <Text style={styles.hiringText}>Hiring</Text>
@@ -298,6 +273,40 @@ export default function AllCompaniesScreen() {
           </View>
         </View>
       </Pressable>
+    );
+  };
+
+  const renderFilter = ({ item }: { item: string }) => {
+    const isActive = selectedCategory === item;
+    const count = categoryCounts[item as keyof typeof categoryCounts] ?? 0;
+    return (
+      <Pressable
+        onPress={() => setSelectedCategory(item)}
+        style={[styles.pill, isActive && styles.pillActive]}
+      >
+        <Text style={[styles.pillText, isActive && styles.pillTextActive]}>
+          {item}
+        </Text>
+        <Text style={[styles.pillCount, isActive && styles.pillCountActive]}>
+          {count}
+        </Text>
+      </Pressable>
+    );
+  };
+
+  const renderEmptyCards = () => {
+    return (
+      <View style={styles.emptyState}>
+        <Image
+          source={Images.search}
+          style={styles.emptyIcon}
+          tintColor={Colors.appColors.borderLight}
+        />
+        <Text style={styles.emptyTitle}>No Startups Found</Text>
+        <Text style={styles.emptySubtitle}>
+          {`We couldn't find any startups matching "${searchQuery}" in this category.`}
+        </Text>
+      </View>
     );
   };
 
@@ -330,11 +339,7 @@ export default function AllCompaniesScreen() {
       >
         <Image
           source={Images.search}
-          style={{
-            width: 18,
-            height: 18,
-            marginRight: 10,
-          }}
+          style={styles.searchIcon}
           tintColor={
             isSearchFocused
               ? Colors.appColors.primary
@@ -354,67 +359,27 @@ export default function AllCompaniesScreen() {
       </View>
 
       {/* Category Filter Scroll */}
-      <View
-        style={{
-          height: 50,
-        }}
-      >
+
+      <View style={styles.filterWrapper}>
         <FlatList
           horizontal
           data={FILTER_CATEGORIES}
-          showsHorizontalScrollIndicator={false}
+          renderItem={renderFilter}
           style={styles.filterPillsScroll}
+          showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.pillsContent}
-          renderItem={({ item }) => {
-            const isActive = selectedCategory === item;
-            const count =
-              categoryCounts[item as keyof typeof categoryCounts] ?? 0;
-            return (
-              <Pressable
-                onPress={() => setSelectedCategory(item)}
-                style={[styles.pill, isActive && styles.pillActive]}
-              >
-                <Text
-                  style={[styles.pillText, isActive && styles.pillTextActive]}
-                >
-                  {item}
-                </Text>
-                <Text
-                  style={[styles.pillCount, isActive && styles.pillCountActive]}
-                >
-                  {count}
-                </Text>
-              </Pressable>
-            );
-          }}
-          keyExtractor={(item) => item}
+          keyExtractor={(item, index) => index.toString()}
         />
       </View>
 
       {/* Startup Cards List */}
       <FlatList
         data={filteredCompanies}
-        renderItem={({ item, index }) => renderCompanyItem({ item, index })}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.listContent}
+        renderItem={renderCompanyItem}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={
-          <View style={styles.emptyState}>
-            <Image
-              source={Images.search}
-              style={{
-                width: 48,
-                height: 48,
-                tintColor: Colors.appColors.borderLight,
-                marginBottom: 16,
-              }}
-            />
-            <Text style={styles.emptyTitle}>No Startups Found</Text>
-            <Text style={styles.emptySubtitle}>
-              {`We couldn't find any startups matching "${searchQuery}" in this category.`}
-            </Text>
-          </View>
-        }
+        ListEmptyComponent={renderEmptyCards}
+        contentContainerStyle={styles.listContent}
+        keyExtractor={(item, index) => index.toString()}
       />
     </View>
   );

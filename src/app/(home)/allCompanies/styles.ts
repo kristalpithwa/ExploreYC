@@ -146,6 +146,14 @@ const styles = StyleSheet.create({
     color: Colors.appColors.secondary,
     padding: 0,
   },
+  searchIcon: {
+    width: Responsive.widthPercentageToDP(4.5),
+    height: Responsive.heightPercentageToDP(4.5),
+    marginRight: Responsive.widthPercentageToDP(2.5),
+  },
+  filterWrapper: {
+    height: Responsive.heightPercentageToDP(7),
+  },
   filterPillsScroll: {
     flexGrow: 0,
   },
@@ -394,6 +402,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingTop: Responsive.heightPercentageToDP(8),
     paddingHorizontal: Responsive.widthPercentageToDP(10.6),
+  },
+  emptyIcon: {
+    width: Responsive.widthPercentageToDP(12),
+    height: Responsive.widthPercentageToDP(12),
+    marginBottom: Responsive.heightPercentageToDP(2),
   },
   emptyTitle: {
     fontFamily: Fonts.bold,

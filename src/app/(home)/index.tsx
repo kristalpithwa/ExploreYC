@@ -52,7 +52,6 @@ export default function HomeScreen() {
     useGetCompanyList(companyListPayload);
 
   const companies = companyList?.companies || [];
-  console.log("companies =>", companies);
 
   // onPress Methods
 
@@ -352,6 +351,8 @@ export default function HomeScreen() {
       </>
     );
   };
+
+  // Main Render
 
   return (
     <View style={styles.mainContainer}>

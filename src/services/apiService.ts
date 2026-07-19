@@ -13,7 +13,7 @@ export const useGetCompanyList = (payload: any) => {
     queryKey: ["GetCompanyList", payload],
     queryFn: async () => {
       const res = await axiosInterceptor.post(url, payload);
-      return Platform.OS === "android" ? getCompanyData : res?.data;
+      return Platform.OS === "ios" ? getCompanyData : res?.data;
     },
     staleTime: DEFAULT_STALE_TIME,
     gcTime: DEFAULT_GC_TIME,
