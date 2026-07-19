@@ -447,6 +447,59 @@ const styles = StyleSheet.create({
     fontSize: Responsive.convertFontScale(15),
     color: Colors.appColors.white,
   },
+  formerNamesText: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(13),
+    color: Colors.appColors.tertiary,
+    marginBottom: Responsive.heightPercentageToDP(1),
+  },
+  infoRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  infoLabel: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(14),
+    color: Colors.appColors.tertiary,
+  },
+  infoValue: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(14),
+    color: Colors.appColors.secondary,
+  },
+  oneLinerHeader: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(15),
+    color: Colors.appColors.secondary,
+    marginBottom: Responsive.heightPercentageToDP(1.5),
+    lineHeight: Responsive.convertFontScale(22),
+  },
+  tagsWrapper: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: Responsive.widthPercentageToDP(2.1),
+  },
+  tagChip: {
+    backgroundColor: Colors.appColors.grayLight,
+    paddingHorizontal: Responsive.widthPercentageToDP(3.2),
+    paddingVertical: Responsive.heightPercentageToDP(0.8),
+    borderRadius: Responsive.widthPercentageToDP(4.3),
+    borderWidth: 1,
+    borderColor: Colors.appColors.borderLight,
+  },
+  tagChipText: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(12),
+    color: Colors.appColors.secondary,
+  },
+  officeMapContainer: {
+    height: Responsive.heightPercentageToDP(19.7),
+    width: "100%",
+    borderRadius: Responsive.widthPercentageToDP(2.1),
+    overflow: "hidden",
+    backgroundColor: "#e3e3e3",
+  },
 });
 
 export default styles;

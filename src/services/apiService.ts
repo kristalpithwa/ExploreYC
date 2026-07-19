@@ -47,7 +47,9 @@ export const useGetCompanyDetails = (payload: any) => {
     queryKey: ["GetCompanyDetails", payload],
     queryFn: async () => {
       const res = await axiosInterceptor.get(url);
-      return Platform.OS === "ios" ? getCompanyData : res?.data;
+      return Platform.OS === "ios"
+        ? getCompanyData.companies.find((c: any) => c.id.toString() === payload.toString())
+        : res?.data;
     },
     staleTime: DEFAULT_STALE_TIME,
     gcTime: DEFAULT_GC_TIME,
