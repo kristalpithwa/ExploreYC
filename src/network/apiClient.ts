@@ -1,5 +1,5 @@
 import { create } from "axios";
-import { LOCAL_API_URL } from "@/network/config";
+import { BASE_URL } from "@/network/config";
 
 const headers = {
   Accept: "application/json",
@@ -7,7 +7,7 @@ const headers = {
 };
 
 export const axiosInterceptor = create({
-  baseURL: LOCAL_API_URL,
+  baseURL: BASE_URL,
   headers: headers,
   // Disable withCredentials to prevent iOS from overriding our Cookie header
   withCredentials: false,
