@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   listContent: {
     paddingHorizontal: Responsive.widthPercentageToDP(5.3),
     paddingTop: Responsive.heightPercentageToDP(1),
-    paddingBottom: Responsive.heightPercentageToDP(4),
+    paddingBottom: Responsive.heightPercentageToDP(16),
     gap: Responsive.heightPercentageToDP(2),
   },
   card: {
@@ -421,6 +421,18 @@ const styles = StyleSheet.create({
     color: Colors.appColors.tertiary,
     textAlign: "center",
     lineHeight: Responsive.convertFontScale(20),
+  },
+  loadingMoreContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: Responsive.heightPercentageToDP(2),
+    gap: Responsive.widthPercentageToDP(2),
+  },
+  loadingMoreText: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(12),
+    color: Colors.appColors.tertiary,
   },
 });
 

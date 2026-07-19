@@ -6,6 +6,7 @@ import {
   TextInput,
   StyleSheet,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
@@ -13,7 +14,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import styles from "./styles";
 import { Colors, Images } from "@/theme";
-import { useGetCompanyList } from "@/services/apiService";
+import { useGetCompanyListInfinite } from "@/services/apiService";
 
 interface Company {
   id: number;
@@ -66,16 +67,52 @@ export default function AllCompaniesScreen() {
   const companyListPayload = useMemo(
     () => ({
       limit: 50,
-      offset: 0,
       batch: "Winter 2025",
     }),
     [],
   );
 
-  const { data: companyList, isLoading: isCompanyLoading } =
-    useGetCompanyList(companyListPayload);
+  const {
+    data: companyListPages,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useGetCompanyListInfinite(companyListPayload);
 
-  const companies = companyList?.companies || [];
+  const companies = useMemo(
+    () =>
+      companyListPages?.pages
+        .flatMap((page: any) => page?.companies || [])
+        .filter(Boolean) || [],
+    [companyListPages],
+  );
+
+  const onLoadMore = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
+
+  const renderListFooter = () => {
+    if (isFetchingNextPage) {
+      return (
+        <View style={styles.loadingMoreContainer}>
+          <ActivityIndicator size="small" color={Colors.appColors.primary} />
+          <Text style={styles.loadingMoreText}>Loading more startups…</Text>
+        </View>
+      );
+    }
+
+    if (!hasNextPage && companies.length > 0) {
+      return (
+        <View style={styles.loadingMoreContainer}>
+          <Text style={styles.loadingMoreText}>All startups loaded</Text>
+        </View>
+      );
+    }
+
+    return null;
+  };
 
   // Pre-calculate category counts based on the static data
 
@@ -260,7 +297,7 @@ export default function AllCompaniesScreen() {
               </View>
             )}
 
-            {item.is_hiring > 0 && (
+            {item.is_hiring && (
               <View style={styles.hiringBadge}>
                 <View style={styles.hiringDot} />
                 <Text style={styles.hiringText}>Hiring</Text>
@@ -331,6 +368,7 @@ export default function AllCompaniesScreen() {
       </View>
 
       {/* Search Input */}
+
       <View
         style={[
           styles.searchBarContainer,
@@ -338,6 +376,7 @@ export default function AllCompaniesScreen() {
         ]}
       >
         <Image
+          contentFit="contain"
           source={Images.search}
           style={styles.searchIcon}
           tintColor={
@@ -346,6 +385,7 @@ export default function AllCompaniesScreen() {
               : Colors.appColors.tertiary
           }
         />
+
         <TextInput
           placeholder="Search startups, solutions, descriptions..."
           placeholderTextColor={Colors.appColors.tertiary}
@@ -373,11 +413,15 @@ export default function AllCompaniesScreen() {
       </View>
 
       {/* Startup Cards List */}
+
       <FlatList
         data={filteredCompanies}
+        onEndReached={onLoadMore}
+        onEndReachedThreshold={0.5}
         renderItem={renderCompanyItem}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={renderEmptyCards}
+        ListFooterComponent={renderListFooter}
         contentContainerStyle={styles.listContent}
         keyExtractor={(item, index) => index.toString()}
       />
