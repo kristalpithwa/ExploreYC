@@ -69,6 +69,8 @@ export default function AllCompaniesScreen() {
     ],
   );
 
+  console.log("companyListPayload =>", companyListPayload);
+
   // API Method
 
   const {

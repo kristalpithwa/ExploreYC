@@ -114,7 +114,10 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: Colors.appColors.black,
-        shadowOffset: { width: 0, height: Responsive.heightPercentageToDP(0.5) },
+        shadowOffset: {
+          width: 0,
+          height: Responsive.heightPercentageToDP(0.5),
+        },
         shadowOpacity: 0.05,
         shadowRadius: Responsive.widthPercentageToDP(2.1),
       },
@@ -136,7 +139,10 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: Colors.appColors.black,
-        shadowOffset: { width: 0, height: Responsive.heightPercentageToDP(0.5) },
+        shadowOffset: {
+          width: 0,
+          height: Responsive.heightPercentageToDP(0.5),
+        },
         shadowOpacity: 0.05,
         shadowRadius: Responsive.widthPercentageToDP(2.1),
       },
@@ -167,7 +173,10 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: Colors.appColors.black,
-        shadowOffset: { width: 0, height: Responsive.heightPercentageToDP(0.5) },
+        shadowOffset: {
+          width: 0,
+          height: Responsive.heightPercentageToDP(0.5),
+        },
         shadowOpacity: 0.15,
         shadowRadius: Responsive.widthPercentageToDP(1.6),
       },
@@ -204,7 +213,10 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: Colors.appColors.primary,
-        shadowOffset: { width: 0, height: Responsive.heightPercentageToDP(0.5) },
+        shadowOffset: {
+          width: 0,
+          height: Responsive.heightPercentageToDP(0.5),
+        },
         shadowOpacity: 0.3,
         shadowRadius: Responsive.widthPercentageToDP(2.1),
       },

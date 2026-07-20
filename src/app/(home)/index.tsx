@@ -24,42 +24,8 @@ export default function HomeScreen() {
     number | null
   >(null);
 
-  const companyListPayload = useMemo(
-    () => ({
-      limit: 10,
-      offset: 0,
-      batch: "Summer 2026",
-    }),
-    [],
-  );
-
-  const { data: companyList } = useGetCompanyList(companyListPayload);
-
+  const { data: companyList } = useGetCompanyList({ limit: 10, offset: 0 });
   const { data: stats } = useGetStats();
-
-  const companies = companyList?.companies || [];
-
-  const dynamicCountries = useMemo(() => {
-    if (stats?.by_country) {
-      const keys = Object.keys(stats.by_country);
-      if (keys.length > 0) return keys;
-    }
-    return countries;
-  }, [stats]);
-
-  const dynamicIndustries = useMemo(() => {
-    if (stats?.by_industry) {
-      const entries = Object.entries(stats?.by_industry);
-      if (entries.length > 0) {
-        return entries.map(([name, count]) => ({
-          emoji: INDUSTRY_EMOJIS[name] || "💼",
-          name,
-          count: `${count} Startups`,
-        }));
-      }
-    }
-    return industries;
-  }, [stats]);
 
   const dynamicStatistics = useMemo(() => {
     if (!stats) return statistics;
@@ -104,7 +70,33 @@ export default function HomeScreen() {
     ];
   }, [stats]);
 
+  const dynamicCountries = useMemo(() => {
+    if (stats?.by_country) {
+      const keys = Object.keys(stats.by_country);
+      if (keys.length > 0) return keys;
+    }
+    return countries;
+  }, [stats]);
+
+  const dynamicIndustries = useMemo(() => {
+    if (stats?.by_industry) {
+      const entries = Object.entries(stats?.by_industry);
+      if (entries.length > 0) {
+        return entries.map(([name, count]) => ({
+          emoji: INDUSTRY_EMOJIS[name] || "💼",
+          name,
+          count: `${count} Startups`,
+        }));
+      }
+    }
+    return industries;
+  }, [stats]);
+
   // onPress Methods
+
+  const onPressViewAll = () => {
+    router.push("/(home)/allCompanies");
+  };
 
   const onPressCompanyCard = (item: any) => {
     router.push({
@@ -279,13 +271,13 @@ export default function HomeScreen() {
         {/* Trending Startups Section */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>🔥 Trending Startups</Text>
-          <Pressable onPress={() => router.push("/(home)/allCompanies")}>
+          <Pressable onPress={() => onPressViewAll()}>
             <View style={styles.viewAllBtn}>
               <Text style={styles.viewAllText}>View All</Text>
               <Image
-                source={Images.arrow_right}
+                contentFit="contain"
                 style={styles.arrowIcon}
-                tintColor={Colors.appColors.primary}
+                source={Images.arrow_right}
               />
             </View>
           </Pressable>
@@ -294,7 +286,7 @@ export default function HomeScreen() {
         <FlatList
           horizontal
           decelerationRate="fast"
-          data={companies}
+          data={companyList?.companies || []}
           renderItem={renderTrendingStartups}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}

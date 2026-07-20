@@ -1,7 +1,69 @@
-import { StyleSheet, Platform } from "react-native";
+import {
+  StyleSheet,
+  Platform,
+  ViewStyle,
+  TextStyle,
+  ImageStyle,
+} from "react-native";
 import { Colors, Fonts, Responsive } from "@/theme";
 
-const styles = StyleSheet.create({
+type CountryDetailsStyles = {
+  mainContainer: ViewStyle;
+  header: ViewStyle;
+  headerLeft: ViewStyle;
+  headerBtn: ViewStyle;
+  backBtnText: TextStyle;
+  headerTitle: TextStyle;
+  scrollContent: ViewStyle;
+  heroCard: ViewStyle;
+  flagContainer: ViewStyle;
+  flagText: TextStyle;
+  countryName: TextStyle;
+  countryStartups: TextStyle;
+  statsGrid: ViewStyle;
+  statCard: ViewStyle;
+  statNumber: TextStyle;
+  statLabel: TextStyle;
+  industriesCard: ViewStyle;
+  sectionTitle: TextStyle;
+  industriesList: ViewStyle;
+  industryRow: ViewStyle;
+  industryLabels: ViewStyle;
+  industryName: TextStyle;
+  industryPercentage: TextStyle;
+  progressBarTrack: ViewStyle;
+  progressBarFill: ViewStyle;
+  carouselSection: ViewStyle;
+  carouselHeader: ViewStyle;
+  carouselTitle: TextStyle;
+  seeAllLink: TextStyle;
+  carouselScroll: ViewStyle;
+  carouselContent: ViewStyle;
+  companyCard: ViewStyle;
+  logoBox: ViewStyle;
+  logoText: TextStyle;
+  companyName: TextStyle;
+  companyTag: ViewStyle;
+  companyTagText: TextStyle;
+  distributionCard: ViewStyle;
+  chartContainer: ViewStyle;
+  barGroup: ViewStyle;
+  barTrack: ViewStyle;
+  barFill: ViewStyle;
+  barLabel: TextStyle;
+  barLabelActive: TextStyle;
+  insightsCard: ViewStyle;
+  insightsHeader: ViewStyle;
+  insightsList: ViewStyle;
+  insightRow: ViewStyle;
+  insightBullet: ViewStyle;
+  insightText: TextStyle;
+  insightHighlight: TextStyle;
+  ctaBtn: ViewStyle;
+  ctaBtnText: TextStyle;
+};
+
+const styles = StyleSheet.create<CountryDetailsStyles>({
   mainContainer: {
     flex: 1,
     backgroundColor: Colors.appColors.background,
@@ -287,7 +349,7 @@ const styles = StyleSheet.create({
   chartContainer: {
     height: Responsive.heightPercentageToDP(18),
     flexDirection: "row",
-    alignItems: "end",
+    alignItems: "flex-end",
     justifyContent: "space-between",
     paddingHorizontal: Responsive.widthPercentageToDP(1.6),
     marginTop: Responsive.heightPercentageToDP(1),

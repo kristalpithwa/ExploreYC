@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
   arrowIcon: {
     width: Responsive.widthPercentageToDP(3.7),
     height: Responsive.heightPercentageToDP(1.75),
+    tintColor: Colors.appColors.primary,
   },
   horizontalScrollContent: {
     paddingLeft: Responsive.widthPercentageToDP(5.3),
@@ -381,7 +382,7 @@ const styles = StyleSheet.create({
   heroExploreBtn: {
     backgroundColor: Colors.appColors.white,
     borderRadius: Responsive.widthPercentageToDP(4.8),
-    height: Responsive.heightPercentageToDP(6.5),
+    height: Responsive.heightPercentageToDP(4),
     justifyContent: "center",
     alignItems: "center",
     shadowColor: Colors.appColors.black,

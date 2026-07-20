@@ -4,147 +4,20 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/theme";
 import styles from "./styles";
-
-interface CompanyItem {
-  id: string;
-  name: string;
-  category: string;
-  logo: string;
-  logoBg: string;
-}
-
-interface IndustryPercentage {
-  name: string;
-  percentage: number;
-}
-
-interface BatchBar {
-  name: string;
-  heightPercentage: number;
-  active?: boolean;
-}
-
-interface CountryStats {
-  name: string;
-  flag: string;
-  totalCompaniesCount: number;
-  companies: number;
-  industries: number;
-  batches: number;
-  topStartups: number;
-  topIndustries: IndustryPercentage[];
-  topCompanies: CompanyItem[];
-  batchDistribution: BatchBar[];
-  insights: string[];
-}
-
-const countryStatsData: Record<string, CountryStats> = {
-  India: {
-    name: "India",
-    flag: "🇮🇳",
-    totalCompaniesCount: 214,
-    companies: 214,
-    industries: 15,
-    batches: 12,
-    topStartups: 25,
-    topIndustries: [
-      { name: "AI", percentage: 45 },
-      { name: "Fintech", percentage: 25 },
-      { name: "Developer Tools", percentage: 18 },
-    ],
-    topCompanies: [
-      {
-        id: "1",
-        name: "Razorpay",
-        category: "Fintech",
-        logo: "R",
-        logoBg: Colors.appColors.brandBlue,
-      },
-      {
-        id: "3",
-        name: "Postman",
-        category: "Dev Tools",
-        logo: "P",
-        logoBg: Colors.appColors.primary,
-      },
-      {
-        id: "2",
-        name: "Zepto",
-        category: "Commerce",
-        logo: "Z",
-        logoBg: "#B10DC9",
-      },
-    ],
-    batchDistribution: [
-      { name: "W20", heightPercentage: 20 },
-      { name: "S20", heightPercentage: 40 },
-      { name: "W21", heightPercentage: 60 },
-      { name: "S21", heightPercentage: 90 },
-      { name: "W22", heightPercentage: 100, active: true },
-      { name: "S22", heightPercentage: 75 },
-    ],
-    insights: [
-      "AI sector saw a 150% YoY growth in funding during 2023.",
-      "Engineering talent retention rates are 20% higher than global averages.",
-      "Fintech infrastructure startups comprise 60% of new YC admits from the region.",
-    ],
-  },
-  USA: {
-    name: "USA",
-    flag: "🇺🇸",
-    totalCompaniesCount: 1250,
-    companies: 1250,
-    industries: 45,
-    batches: 35,
-    topStartups: 150,
-    topIndustries: [
-      { name: "AI & ML", percentage: 52 },
-      { name: "Enterprise SaaS", percentage: 30 },
-      { name: "Healthcare", percentage: 12 },
-    ],
-    topCompanies: [
-      {
-        id: "3",
-        name: "OpenAI",
-        category: "AI",
-        logo: "O",
-        logoBg: Colors.appColors.brandOpenAI,
-      },
-      {
-        id: "1",
-        name: "Stripe",
-        category: "Fintech",
-        logo: "S",
-        logoBg: Colors.appColors.brandStripe,
-      },
-      {
-        id: "2",
-        name: "Airbnb",
-        category: "Travel",
-        logo: "A",
-        logoBg: Colors.appColors.brandAirbnb,
-      },
-    ],
-    batchDistribution: [
-      { name: "W20", heightPercentage: 60 },
-      { name: "S20", heightPercentage: 70 },
-      { name: "W21", heightPercentage: 85 },
-      { name: "S21", heightPercentage: 95 },
-      { name: "W22", heightPercentage: 100, active: true },
-      { name: "S22", heightPercentage: 90 },
-    ],
-    insights: [
-      "AI research and foundation models captured 45% of total seed capital.",
-      "B2B SaaS continues to lead in customer acquisition velocity.",
-      "Healthcare tech saw significant valuation multiples recovery in early 2026.",
-    ],
-  },
-};
+import { countryStatsData } from "@/data/home";
+import { useGetCompanyListInfinite } from "@/services/apiService";
 
 export default function CountryDetailScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { country } = useLocalSearchParams<{ country: string }>();
+
+  const { data: companyListPages } = useGetCompanyListInfinite({
+    limit: 30,
+    country: country || undefined,
+  });
+
+  console.log("CountryDetailScreen", companyListPages);
 
   // Fallback to India if data for the parameter doesn't exist
   const stats = useMemo(() => {
