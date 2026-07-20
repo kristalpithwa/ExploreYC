@@ -22,8 +22,6 @@ export default function CompanyDetailScreen() {
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  console.log("id =>", id);
-
   const { data: companyDetails } = useGetCompanyDetails(id);
 
   const rawJson = companyDetails?.raw_json;
@@ -227,6 +225,7 @@ export default function CompanyDetailScreen() {
   return (
     <View style={styles.mainContainer}>
       <ScrollView
+        bounces={false}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
           styles.scrollContent,
@@ -370,12 +369,6 @@ export default function CompanyDetailScreen() {
             <Text style={styles.statLabel}>FOUNDED</Text>
             <Text style={styles.statValue}>
               {companyDetails?.year_founded || "N/A"}
-            </Text>
-          </View>
-          <View style={[styles.statColumn, styles.statBorderLeft]}>
-            <Text style={styles.statLabel}>COUNTRY</Text>
-            <Text style={styles.statValue}>
-              {companyDetails?.country || "N/A"}
             </Text>
           </View>
         </View>

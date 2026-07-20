@@ -448,6 +448,7 @@ const styles = StyleSheet.create({
     borderRadius: Responsive.widthPercentageToDP(4.8),
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: Colors.appColors.grayLight,
   },
   pillButtonActive: {
     backgroundColor: Colors.appColors.primary,
@@ -458,6 +459,7 @@ const styles = StyleSheet.create({
   pillButtonText: {
     fontFamily: Fonts.medium,
     fontSize: Responsive.convertFontScale(13),
+    color: Colors.appColors.secondary,
   },
   pillButtonTextActive: {
     color: Colors.appColors.white,

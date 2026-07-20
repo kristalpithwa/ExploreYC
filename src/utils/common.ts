@@ -66,3 +66,18 @@ export const getHeroImage = (industry?: string) => {
   }
   return "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80&w=800&h=400";
 };
+
+export const INDUSTRY_EMOJIS: Record<string, string> = {
+  B2B: "🏢",
+  Industrials: "🏭",
+  Healthcare: "🩺",
+  Fintech: "💳",
+  Consumer: "🛍️",
+  "Real Estate and Construction": "🏗️",
+  Education: "📚",
+  Government: "🏛️",
+  "Dev Tools": "🧑‍💻",
+  AI: "🤖",
+  Climate: "🌱",
+  Security: "🔒",
+};

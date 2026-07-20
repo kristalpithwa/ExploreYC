@@ -100,3 +100,14 @@ export const useGetFilterSources = () => {
   });
 };
 
+export const useGetStats = () => {
+  return useQuery({
+    queryKey: ["useGetStats"],
+    queryFn: async () => {
+      const res = await axiosInterceptor.get("stats");
+      return res?.data || [];
+    },
+    staleTime: DEFAULT_STALE_TIME,
+    gcTime: DEFAULT_GC_TIME,
+  });
+};

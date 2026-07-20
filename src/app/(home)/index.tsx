@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -14,12 +14,15 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import styles from "./styles";
 import { Colors, Images, Responsive } from "@/theme";
 import { countries, industries, statistics } from "@/data/home";
-import { useGetCompanyList } from "@/services/apiService";
-import { getAvatarTheme } from "@/utils/common";
+import { useGetCompanyList, useGetStats } from "@/services/apiService";
+import { getAvatarTheme, INDUSTRY_EMOJIS } from "@/utils/common";
 
 export default function HomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const [selectedCountryIndex, setSelectedCountryIndex] = useState<
+    number | null
+  >(null);
 
   const companyListPayload = useMemo(
     () => ({
@@ -32,7 +35,74 @@ export default function HomeScreen() {
 
   const { data: companyList } = useGetCompanyList(companyListPayload);
 
+  const { data: stats } = useGetStats();
+
   const companies = companyList?.companies || [];
+
+  const dynamicCountries = useMemo(() => {
+    if (stats?.by_country) {
+      const keys = Object.keys(stats.by_country);
+      if (keys.length > 0) return keys;
+    }
+    return countries;
+  }, [stats]);
+
+  const dynamicIndustries = useMemo(() => {
+    if (stats?.by_industry) {
+      const entries = Object.entries(stats?.by_industry);
+      if (entries.length > 0) {
+        return entries.map(([name, count]) => ({
+          emoji: INDUSTRY_EMOJIS[name] || "💼",
+          name,
+          count: `${count} Startups`,
+        }));
+      }
+    }
+    return industries;
+  }, [stats]);
+
+  const dynamicStatistics = useMemo(() => {
+    if (!stats) return statistics;
+    const total = stats?.total_all_companies || stats?.total_companies || 0;
+    const hiring = stats.hiring || 0;
+    const countriesCount = stats.by_country
+      ? Object.keys(stats.by_country).length
+      : 0;
+    const industriesCount = stats.by_industry
+      ? Object.keys(stats.by_industry).length
+      : 0;
+
+    return [
+      {
+        id: "1",
+        count: total.toLocaleString(),
+        label: "Funded Startups",
+        icon: Images.building,
+        color: Colors.appColors.primary,
+      },
+      {
+        id: "2",
+        count: hiring.toLocaleString(),
+        label: "Hiring Companies",
+        icon: Images.briefcase,
+        color: Colors.appColors.green,
+      },
+      {
+        id: "3",
+        count: `${countriesCount}+`,
+        label: "Countries",
+        icon: Images.globe,
+        color: Colors.appColors.skyBlue,
+      },
+      {
+        id: "4",
+        count: `${industriesCount}+`,
+        label: "Industries",
+        icon: Images.category,
+        color: Colors.appColors.brandRed,
+      },
+    ];
+  }, [stats]);
 
   // onPress Methods
 
@@ -44,6 +114,7 @@ export default function HomeScreen() {
   };
 
   const onPressCountryPill = (item: any, index: number) => {
+    setSelectedCountryIndex(index);
     router.push({
       pathname: "/(home)/countryDetails",
       params: { country: item },
@@ -160,26 +231,12 @@ export default function HomeScreen() {
   };
 
   const renderCountryPill = ({ item, index }: { item: any; index: number }) => {
-    const isActive = index === 0; // USA active
-
     return (
       <Pressable
-        style={[
-          styles.pillButton,
-          isActive ? styles.pillButtonActive : styles.pillButtonInactive,
-        ]}
+        style={styles.pillButton}
         onPress={() => onPressCountryPill(item, index)}
       >
-        <Text
-          style={[
-            styles.pillButtonText,
-            isActive
-              ? styles.pillButtonTextActive
-              : styles.pillButtonTextInactive,
-          ]}
-        >
-          {item}
-        </Text>
+        <Text style={styles.pillButtonText}>{item}</Text>
       </Pressable>
     );
   };
@@ -279,7 +336,7 @@ export default function HomeScreen() {
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>📈 YC Statistics</Text>
           <FlatList
-            data={statistics}
+            data={dynamicStatistics}
             numColumns={2}
             renderItem={renderYCStatistic}
             contentContainerStyle={styles.statsGrid}
@@ -291,8 +348,9 @@ export default function HomeScreen() {
         <Text style={styles.countryTitle}>🌍 Browse by Country</Text>
 
         <FlatList
-          data={countries}
+          data={dynamicCountries}
           horizontal
+          extraData={selectedCountryIndex}
           renderItem={renderCountryPill}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
@@ -303,21 +361,12 @@ export default function HomeScreen() {
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>🏭 Browse by Industry</Text>
           <FlatList
-            data={industries}
+            data={dynamicIndustries}
             numColumns={2}
             renderItem={renderIndustryCard}
             contentContainerStyle={styles.industriesGrid}
             keyExtractor={(item, index) => index.toString()}
           />
-
-          <Pressable style={styles.seeMoreBtn}>
-            <Text style={styles.seeMoreBtnText}>See More Industries</Text>
-            <Image
-              source={Images.arrow_right}
-              style={styles.seeMoreArrowIcon}
-              tintColor={Colors.appColors.secondary}
-            />
-          </Pressable>
         </View>
       </>
     );
