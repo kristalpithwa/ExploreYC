@@ -319,10 +319,62 @@ const styles = StyleSheet.create({
     color: Colors.appColors.white,
     fontWeight: "700",
   },
-  tabButtonTextInactive: {
-    color: Colors.appColors.tertiary,
-    fontWeight: "500",
+  badgeContainer: {
+    backgroundColor: Colors.appColors.primary,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 12,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  badgeText: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(11),
+    color: Colors.appColors.white,
+  },
+  dropdownSearchInput: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(13),
+    color: Colors.appColors.secondary,
+    backgroundColor: Colors.appColors.white,
+    paddingHorizontal: Responsive.widthPercentageToDP(3.5),
+    paddingVertical: Responsive.heightPercentageToDP(1),
+    margin: Responsive.widthPercentageToDP(2),
+    borderRadius: Responsive.widthPercentageToDP(2.5),
+    borderWidth: 1,
+    borderColor: Colors.appColors.borderLight,
+  },
+  sourcesScrollContent: {
+    gap: Responsive.widthPercentageToDP(2),
+    paddingVertical: Responsive.heightPercentageToDP(0.5),
+  },
+  sourceChip: {
+    paddingHorizontal: Responsive.widthPercentageToDP(4),
+    paddingVertical: Responsive.heightPercentageToDP(1.2),
+    borderRadius: Responsive.widthPercentageToDP(5),
+    backgroundColor: Colors.appColors.grayLight,
+    borderWidth: 1,
+    borderColor: Colors.appColors.borderLight,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  sourceChipActive: {
+    backgroundColor: Colors.appColors.primary,
+    borderColor: Colors.appColors.primary,
+  },
+  sourceChipText: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(13),
+  },
+  sourceChipTextActive: {
+    color: Colors.appColors.white,
+    fontFamily: Fonts.bold,
+  },
+  sourceChipTextInactive: {
+    color: Colors.appColors.secondary,
   },
 });
 
 export default styles;
+
+

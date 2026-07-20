@@ -2786,7 +2786,7 @@ SPEC CHECKSUMS:
   ExpoKeepAwake: 8a96e2075b75641001f55393d7e6600a5b808f09
   ExpoLinking: 24c7525db6e8ab5c347890b3498857babde8b306
   ExpoLogBox: b39a76aab749833d58111c3be1264bb90f3b92d4
-  ExpoModulesCore: 6df142c36acedd31dac5043d87bf35f80af537e0
+  ExpoModulesCore: 66ce8f39ffe0600d1ac7e63689eda8488a747c5b
   ExpoModulesJSI: 0fad44a0464a4469b83a06e34e529c13043f2f69
   ExpoModulesWorklets: f6b71b8ddeb8dceb2ce3504544ecfbd708ba79a2
   ExpoModulesWorkletsAdapter: 4b63d6cf4db0897d2ec530d4f3d51eaaed319fd6
@@ -2798,7 +2798,7 @@ SPEC CHECKSUMS:
   ExpoWebBrowser: 32dfd25ad5d384028137a0de71991f28663562e0
   EXUpdatesInterface: 492cdb30f3889cc35d9e737a4b5fc3aec39d1131
   FBLazyVector: b3e7ad108f0d882e30445c5527d774e3fd432f3d
-  hermes-engine: 2ed9cf474251b84d187f98dfb14ae9a44e64516d
+  hermes-engine: 1be0e6c1c3343f6a7843ce36213de9df86617b27
   MapLibreReactNative: 9f1f16d5f5f522309ad1f2afc483a34cfc56fe6e
   RCTDeprecation: 2a74a2c57675e64419bd89078efde81f7c1de90b
   RCTRequired: 30451112e6fef4e6f31b4e7eee0845156e35e4b0

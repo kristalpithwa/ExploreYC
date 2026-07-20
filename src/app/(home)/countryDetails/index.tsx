@@ -1,10 +1,5 @@
 import React, { useMemo } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Pressable,
-} from "react-native";
+import { View, Text, ScrollView, Pressable } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/theme";
@@ -44,7 +39,7 @@ interface CountryStats {
 }
 
 const countryStatsData: Record<string, CountryStats> = {
-  "India": {
+  India: {
     name: "India",
     flag: "🇮🇳",
     totalCompaniesCount: 214,
@@ -58,9 +53,27 @@ const countryStatsData: Record<string, CountryStats> = {
       { name: "Developer Tools", percentage: 18 },
     ],
     topCompanies: [
-      { id: "1", name: "Razorpay", category: "Fintech", logo: "R", logoBg: Colors.appColors.brandBlue },
-      { id: "3", name: "Postman", category: "Dev Tools", logo: "P", logoBg: Colors.appColors.primary },
-      { id: "2", name: "Zepto", category: "Commerce", logo: "Z", logoBg: "#B10DC9" },
+      {
+        id: "1",
+        name: "Razorpay",
+        category: "Fintech",
+        logo: "R",
+        logoBg: Colors.appColors.brandBlue,
+      },
+      {
+        id: "3",
+        name: "Postman",
+        category: "Dev Tools",
+        logo: "P",
+        logoBg: Colors.appColors.primary,
+      },
+      {
+        id: "2",
+        name: "Zepto",
+        category: "Commerce",
+        logo: "Z",
+        logoBg: "#B10DC9",
+      },
     ],
     batchDistribution: [
       { name: "W20", heightPercentage: 20 },
@@ -76,7 +89,7 @@ const countryStatsData: Record<string, CountryStats> = {
       "Fintech infrastructure startups comprise 60% of new YC admits from the region.",
     ],
   },
-  "USA": {
+  USA: {
     name: "USA",
     flag: "🇺🇸",
     totalCompaniesCount: 1250,
@@ -90,9 +103,27 @@ const countryStatsData: Record<string, CountryStats> = {
       { name: "Healthcare", percentage: 12 },
     ],
     topCompanies: [
-      { id: "3", name: "OpenAI", category: "AI", logo: "O", logoBg: Colors.appColors.brandOpenAI },
-      { id: "1", name: "Stripe", category: "Fintech", logo: "S", logoBg: Colors.appColors.brandStripe },
-      { id: "2", name: "Airbnb", category: "Travel", logo: "A", logoBg: Colors.appColors.brandAirbnb },
+      {
+        id: "3",
+        name: "OpenAI",
+        category: "AI",
+        logo: "O",
+        logoBg: Colors.appColors.brandOpenAI,
+      },
+      {
+        id: "1",
+        name: "Stripe",
+        category: "Fintech",
+        logo: "S",
+        logoBg: Colors.appColors.brandStripe,
+      },
+      {
+        id: "2",
+        name: "Airbnb",
+        category: "Travel",
+        logo: "A",
+        logoBg: Colors.appColors.brandAirbnb,
+      },
     ],
     batchDistribution: [
       { name: "W20", heightPercentage: 60 },
@@ -125,10 +156,7 @@ export default function CountryDetailScreen() {
       {/* Top Header */}
       <View style={[styles.header, { paddingTop: insets.top }]}>
         <View style={styles.headerLeft}>
-          <Pressable
-            onPress={() => router.back()}
-            style={styles.headerBtn}
-          >
+          <Pressable onPress={() => router.back()} style={styles.headerBtn}>
             <Text style={styles.backBtnText}>←</Text>
           </Pressable>
           <Text style={styles.headerTitle}>{stats.name} Profile</Text>
@@ -146,7 +174,9 @@ export default function CountryDetailScreen() {
             <Text style={styles.flagText}>{stats.flag}</Text>
           </View>
           <Text style={styles.countryName}>{stats.name}</Text>
-          <Text style={styles.countryStartups}>{stats.totalCompaniesCount} Startups</Text>
+          <Text style={styles.countryStartups}>
+            {stats.totalCompaniesCount} Startups
+          </Text>
         </View>
 
         {/* Stats Grid */}
@@ -177,7 +207,9 @@ export default function CountryDetailScreen() {
               <View key={index} style={styles.industryRow}>
                 <View style={styles.industryLabels}>
                   <Text style={styles.industryName}>{ind.name}</Text>
-                  <Text style={styles.industryPercentage}>{ind.percentage}%</Text>
+                  <Text style={styles.industryPercentage}>
+                    {ind.percentage}%
+                  </Text>
                 </View>
                 <View style={styles.progressBarTrack}>
                   <View
@@ -221,7 +253,9 @@ export default function CountryDetailScreen() {
                 }
                 style={styles.companyCard}
               >
-                <View style={[styles.logoBox, { backgroundColor: company.logoBg }]}>
+                <View
+                  style={[styles.logoBox, { backgroundColor: company.logoBg }]}
+                >
                   <Text style={styles.logoText}>{company.logo}</Text>
                 </View>
                 <Text style={styles.companyName} numberOfLines={1}>
@@ -255,10 +289,7 @@ export default function CountryDetailScreen() {
                   />
                 </View>
                 <Text
-                  style={[
-                    styles.barLabel,
-                    bar.active && styles.barLabelActive,
-                  ]}
+                  style={[styles.barLabel, bar.active && styles.barLabelActive]}
                 >
                   {bar.name}
                 </Text>

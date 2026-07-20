@@ -1,61 +1,123 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   View,
   Text,
   Pressable,
   Modal,
   ScrollView,
+  TextInput,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Images } from "@/theme";
+import { Colors, Images } from "@/theme";
 import styles from "./styles";
+import {
+  useGetFilterBatches,
+  useGetFilterIndustries,
+  useGetFilterCountries,
+  useGetFilterSources,
+} from "@/services/apiService";
 
 interface FilterModalProps {
   visible: boolean;
   onClose: () => void;
-  activeTab: number;
-  onTabPress: (index: number) => void;
   selectedBatch: string;
   onSelectBatch: (batch: string) => void;
   selectedIndustry: string;
   onSelectIndustry: (industry: string) => void;
-  selectedStatuses: string[];
-  onToggleStatus: (status: string) => void;
+  selectedCountry: string;
+  onSelectCountry: (country: string) => void;
+  selectedSource: string;
+  onSelectSource: (source: string) => void;
   hiringOnly: boolean;
   onToggleHiringOnly: (val: boolean) => void;
   topCompaniesOnly: boolean;
   onToggleTopCompaniesOnly: (val: boolean) => void;
-  foundedRange: [number, number];
-  onSelectFoundedRange: (range: [number, number]) => void;
   onReset: () => void;
+  onApply: () => void;
 }
 
 export default function FilterModal({
   visible,
   onClose,
-  activeTab,
-  onTabPress,
   selectedBatch,
   onSelectBatch,
   selectedIndustry,
   onSelectIndustry,
-  selectedStatuses,
-  onToggleStatus,
+  selectedCountry,
+  onSelectCountry,
+  selectedSource,
+  onSelectSource,
   hiringOnly,
   onToggleHiringOnly,
   topCompaniesOnly,
   onToggleTopCompaniesOnly,
-  foundedRange,
-  onSelectFoundedRange,
   onReset,
+  onApply,
 }: FilterModalProps) {
   const insets = useSafeAreaInsets();
+
+  // API Hooks for dynamic dropdown data
+  const { data: batches = [], isLoading: loadingBatches } =
+    useGetFilterBatches();
+  const { data: industries = [], isLoading: loadingIndustries } =
+    useGetFilterIndustries();
+  const { data: countries = [], isLoading: loadingCountries } =
+    useGetFilterCountries();
+  const { data: sources = [], isLoading: loadingSources } =
+    useGetFilterSources();
 
   // Dropdown expansion states
   const [showBatchDropdown, setShowBatchDropdown] = useState(false);
   const [showIndustryDropdown, setShowIndustryDropdown] = useState(false);
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+
+  // Search queries within dropdowns
+  const [batchSearch, setBatchSearch] = useState("");
+  const [industrySearch, setIndustrySearch] = useState("");
+  const [countrySearch, setCountrySearch] = useState("");
+
+  // Filtered lists for dropdowns based on search input
+  const filteredBatches = useMemo(() => {
+    if (!batchSearch.trim()) return batches;
+    return batches.filter((b: string) =>
+      b.toLowerCase().includes(batchSearch.toLowerCase()),
+    );
+  }, [batches, batchSearch]);
+
+  const filteredIndustries = useMemo(() => {
+    if (!industrySearch.trim()) return industries;
+    return industries.filter((i: string) =>
+      i.toLowerCase().includes(industrySearch.toLowerCase()),
+    );
+  }, [industries, industrySearch]);
+
+  const filteredCountries = useMemo(() => {
+    if (!countrySearch.trim()) return countries;
+    return countries.filter((c: string) =>
+      c.toLowerCase().includes(countrySearch.toLowerCase()),
+    );
+  }, [countries, countrySearch]);
+
+  const activeCount = useMemo(() => {
+    let count = 0;
+    if (selectedBatch) count++;
+    if (selectedIndustry) count++;
+    if (selectedCountry) count++;
+    if (selectedSource) count++;
+    if (hiringOnly) count++;
+    if (topCompaniesOnly) count++;
+    return count;
+  }, [
+    selectedBatch,
+    selectedIndustry,
+    selectedCountry,
+    selectedSource,
+    hiringOnly,
+    topCompaniesOnly,
+  ]);
 
   const renderSwitch = (
     value: boolean,
@@ -90,82 +152,97 @@ export default function FilterModal({
 
           {/* Modal Title Bar */}
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Filters</Text>
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
+            >
+              <Text style={styles.modalTitle}>Filter Startups</Text>
+              {activeCount > 0 && (
+                <View style={styles.badgeContainer}>
+                  <Text style={styles.badgeText}>{activeCount}</Text>
+                </View>
+              )}
+            </View>
             <Pressable style={styles.resetBtn} onPress={onReset}>
-              <Text style={styles.resetBtnText}>Reset</Text>
+              <Text style={styles.resetBtnText}>Reset All</Text>
             </Pressable>
           </View>
 
           {/* Scrollable Filter Options */}
           <ScrollView
             showsVerticalScrollIndicator={false}
+            nestedScrollEnabled={true}
             contentContainerStyle={[
               styles.modalScroll,
               { paddingBottom: insets.bottom + 100 },
             ]}
           >
-            {/* 1. Source Selection */}
+            {/* 1. Source Selection Chips */}
             <View style={styles.modalSection}>
-              <Text style={styles.modalSectionTitle}>Source Selection</Text>
-              <View style={styles.tabsContainer}>
-                <Pressable
-                  style={[
-                    styles.tabButton,
-                    activeTab === 0 && styles.tabButtonActive,
-                  ]}
-                  onPress={() => onTabPress(0)}
+              <Text style={styles.modalSectionTitle}>Source</Text>
+              {loadingSources ? (
+                <ActivityIndicator
+                  size="small"
+                  color={Colors.appColors.primary}
+                />
+              ) : (
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.sourcesScrollContent}
                 >
-                  <Text
+                  <Pressable
                     style={[
-                      styles.tabButtonText,
-                      activeTab === 0
-                        ? styles.tabButtonTextActive
-                        : styles.tabButtonTextInactive,
+                      styles.sourceChip,
+                      !selectedSource && styles.sourceChipActive,
                     ]}
+                    onPress={() => onSelectSource("")}
                   >
-                    All
-                  </Text>
-                </Pressable>
-                <Pressable
-                  style={[
-                    styles.tabButton,
-                    activeTab === 1 && styles.tabButtonActive,
-                  ]}
-                  onPress={() => onTabPress(1)}
-                >
-                  <Text
-                    style={[
-                      styles.tabButtonText,
-                      activeTab === 1
-                        ? styles.tabButtonTextActive
-                        : styles.tabButtonTextInactive,
-                    ]}
-                  >
-                    YC
-                  </Text>
-                </Pressable>
-                <Pressable
-                  style={[
-                    styles.tabButton,
-                    activeTab === 2 && styles.tabButtonActive,
-                  ]}
-                  onPress={() => onTabPress(2)}
-                >
-                  <Text
-                    style={[
-                      styles.tabButtonText,
-                      activeTab === 2
-                        ? styles.tabButtonTextActive
-                        : styles.tabButtonTextInactive,
-                    ]}
-                  >
-                    a16z
-                  </Text>
-                </Pressable>
-              </View>
+                    <Text
+                      style={[
+                        styles.sourceChipText,
+                        !selectedSource
+                          ? styles.sourceChipTextActive
+                          : styles.sourceChipTextInactive,
+                      ]}
+                    >
+                      All Sources
+                    </Text>
+                  </Pressable>
+                  {sources.map((item: any) => {
+                    const sourceKey =
+                      typeof item === "string" ? item : item.key;
+                    const displayName =
+                      typeof item === "string" ? item : item.display_name;
+                    const isSelected = selectedSource === sourceKey;
+                    return (
+                      <Pressable
+                        key={sourceKey}
+                        style={[
+                          styles.sourceChip,
+                          isSelected && styles.sourceChipActive,
+                        ]}
+                        onPress={() =>
+                          onSelectSource(isSelected ? "" : sourceKey)
+                        }
+                      >
+                        <Text
+                          style={[
+                            styles.sourceChipText,
+                            isSelected
+                              ? styles.sourceChipTextActive
+                              : styles.sourceChipTextInactive,
+                          ]}
+                        >
+                          {displayName}
+                        </Text>
+                      </Pressable>
+                    );
+                  })}
+                </ScrollView>
+              )}
             </View>
 
-            {/* 2. Dropdown selectors for Batch and Industry */}
+            {/* 2. Dropdown selectors for Batch, Industry, Country */}
             <View style={[styles.modalSection, styles.dropdownGroup]}>
               {/* Batch Dropdown */}
               <View style={styles.dropdownContainer}>
@@ -174,7 +251,9 @@ export default function FilterModal({
                   style={styles.dropdownTrigger}
                   onPress={() => setShowBatchDropdown(!showBatchDropdown)}
                 >
-                  <Text style={styles.dropdownText}>{selectedBatch}</Text>
+                  <Text style={styles.dropdownText}>
+                    {selectedBatch || "All Batches"}
+                  </Text>
                   <Image
                     source={Images.arrow_right}
                     style={[
@@ -186,26 +265,64 @@ export default function FilterModal({
                 </Pressable>
                 {showBatchDropdown && (
                   <View style={styles.dropdownOptions}>
-                    {["All Batches", "W24", "S23"].map((batch) => (
+                    <TextInput
+                      placeholder="Search batches..."
+                      placeholderTextColor={Colors.appColors.tertiary}
+                      value={batchSearch}
+                      onChangeText={setBatchSearch}
+                      style={styles.dropdownSearchInput}
+                    />
+                    <ScrollView
+                      style={{ maxHeight: 180 }}
+                      nestedScrollEnabled={true}
+                    >
                       <Pressable
-                        key={batch}
                         style={styles.dropdownOption}
                         onPress={() => {
-                          onSelectBatch(batch);
+                          onSelectBatch("");
                           setShowBatchDropdown(false);
                         }}
                       >
                         <Text
                           style={[
                             styles.dropdownOptionText,
-                            selectedBatch === batch &&
-                              styles.dropdownOptionTextSelected,
+                            !selectedBatch && styles.dropdownOptionTextSelected,
                           ]}
                         >
-                          {batch}
+                          All Batches
                         </Text>
                       </Pressable>
-                    ))}
+                      {loadingBatches ? (
+                        <ActivityIndicator
+                          size="small"
+                          color={Colors.appColors.primary}
+                          style={{ marginVertical: 10 }}
+                        />
+                      ) : (
+                        filteredBatches.map((batch: string) => (
+                          <Pressable
+                            key={batch}
+                            style={styles.dropdownOption}
+                            onPress={() => {
+                              onSelectBatch(
+                                selectedBatch === batch ? "" : batch,
+                              );
+                              setShowBatchDropdown(false);
+                            }}
+                          >
+                            <Text
+                              style={[
+                                styles.dropdownOptionText,
+                                selectedBatch === batch &&
+                                  styles.dropdownOptionTextSelected,
+                              ]}
+                            >
+                              {batch}
+                            </Text>
+                          </Pressable>
+                        ))
+                      )}
+                    </ScrollView>
                   </View>
                 )}
               </View>
@@ -217,7 +334,9 @@ export default function FilterModal({
                   style={styles.dropdownTrigger}
                   onPress={() => setShowIndustryDropdown(!showIndustryDropdown)}
                 >
-                  <Text style={styles.dropdownText}>{selectedIndustry}</Text>
+                  <Text style={styles.dropdownText}>
+                    {selectedIndustry || "All Industries"}
+                  </Text>
                   <Image
                     source={Images.arrow_right}
                     style={[
@@ -229,166 +348,164 @@ export default function FilterModal({
                 </Pressable>
                 {showIndustryDropdown && (
                   <View style={styles.dropdownOptions}>
-                    {["All Industries", "AI", "Fintech", "Healthtech"].map(
-                      (ind) => (
-                        <Pressable
-                          key={ind}
-                          style={styles.dropdownOption}
-                          onPress={() => {
-                            onSelectIndustry(ind);
-                            setShowIndustryDropdown(false);
-                          }}
+                    <TextInput
+                      placeholder="Search industries..."
+                      placeholderTextColor={Colors.appColors.tertiary}
+                      value={industrySearch}
+                      onChangeText={setIndustrySearch}
+                      style={styles.dropdownSearchInput}
+                    />
+                    <ScrollView
+                      style={{ maxHeight: 180 }}
+                      nestedScrollEnabled={true}
+                    >
+                      <Pressable
+                        style={styles.dropdownOption}
+                        onPress={() => {
+                          onSelectIndustry("");
+                          setShowIndustryDropdown(false);
+                        }}
+                      >
+                        <Text
+                          style={[
+                            styles.dropdownOptionText,
+                            !selectedIndustry &&
+                              styles.dropdownOptionTextSelected,
+                          ]}
                         >
-                          <Text
-                            style={[
-                              styles.dropdownOptionText,
-                              selectedIndustry === ind &&
-                                styles.dropdownOptionTextSelected,
-                            ]}
+                          All Industries
+                        </Text>
+                      </Pressable>
+                      {loadingIndustries ? (
+                        <ActivityIndicator
+                          size="small"
+                          color={Colors.appColors.primary}
+                          style={{ marginVertical: 10 }}
+                        />
+                      ) : (
+                        filteredIndustries.map((ind: string) => (
+                          <Pressable
+                            key={ind}
+                            style={styles.dropdownOption}
+                            onPress={() => {
+                              onSelectIndustry(
+                                selectedIndustry === ind ? "" : ind,
+                              );
+                              setShowIndustryDropdown(false);
+                            }}
                           >
-                            {ind}
-                          </Text>
-                        </Pressable>
-                      ),
-                    )}
+                            <Text
+                              style={[
+                                styles.dropdownOptionText,
+                                selectedIndustry === ind &&
+                                  styles.dropdownOptionTextSelected,
+                              ]}
+                            >
+                              {ind}
+                            </Text>
+                          </Pressable>
+                        ))
+                      )}
+                    </ScrollView>
+                  </View>
+                )}
+              </View>
+
+              {/* Country Dropdown */}
+              <View style={styles.dropdownContainer}>
+                <Text style={styles.modalSectionTitle}>Country</Text>
+                <Pressable
+                  style={styles.dropdownTrigger}
+                  onPress={() => setShowCountryDropdown(!showCountryDropdown)}
+                >
+                  <Text style={styles.dropdownText}>
+                    {selectedCountry || "All Countries"}
+                  </Text>
+                  <Image
+                    source={Images.arrow_right}
+                    style={[
+                      styles.dropdownIcon,
+                      showCountryDropdown ? styles.rotate270 : styles.rotate90,
+                    ]}
+                    contentFit="contain"
+                  />
+                </Pressable>
+                {showCountryDropdown && (
+                  <View style={styles.dropdownOptions}>
+                    <TextInput
+                      placeholder="Search countries..."
+                      placeholderTextColor={Colors.appColors.tertiary}
+                      value={countrySearch}
+                      onChangeText={setCountrySearch}
+                      style={styles.dropdownSearchInput}
+                    />
+                    <ScrollView
+                      style={{ maxHeight: 180 }}
+                      nestedScrollEnabled={true}
+                    >
+                      <Pressable
+                        style={styles.dropdownOption}
+                        onPress={() => {
+                          onSelectCountry("");
+                          setShowCountryDropdown(false);
+                        }}
+                      >
+                        <Text
+                          style={[
+                            styles.dropdownOptionText,
+                            !selectedCountry &&
+                              styles.dropdownOptionTextSelected,
+                          ]}
+                        >
+                          All Countries
+                        </Text>
+                      </Pressable>
+                      {loadingCountries ? (
+                        <ActivityIndicator
+                          size="small"
+                          color={Colors.appColors.primary}
+                          style={{ marginVertical: 10 }}
+                        />
+                      ) : (
+                        filteredCountries.map((country: string) => (
+                          <Pressable
+                            key={country}
+                            style={styles.dropdownOption}
+                            onPress={() => {
+                              onSelectCountry(
+                                selectedCountry === country ? "" : country,
+                              );
+                              setShowCountryDropdown(false);
+                            }}
+                          >
+                            <Text
+                              style={[
+                                styles.dropdownOptionText,
+                                selectedCountry === country &&
+                                  styles.dropdownOptionTextSelected,
+                              ]}
+                            >
+                              {country}
+                            </Text>
+                          </Pressable>
+                        ))
+                      )}
+                    </ScrollView>
                   </View>
                 )}
               </View>
             </View>
 
-            {/* 3. Status checkbox grid */}
+            {/* 3. Switch Toggles */}
             <View style={styles.modalSection}>
-              <Text style={styles.modalSectionTitle}>Status</Text>
-              <View style={styles.checkboxGrid}>
-                {["Active", "Public", "Acquired", "Closed"].map((status) => {
-                  const isActive = selectedStatuses.includes(status);
-                  return (
-                    <Pressable
-                      key={status}
-                      style={[
-                        styles.checkboxItem,
-                        isActive && styles.checkboxItemActive,
-                      ]}
-                      onPress={() => onToggleStatus(status)}
-                    >
-                      <View
-                        style={[
-                          styles.checkboxBox,
-                          isActive && styles.checkboxBoxActive,
-                        ]}
-                      >
-                        {isActive && <Text style={styles.checkMark}>✓</Text>}
-                      </View>
-                      <Text style={styles.checkboxText}>{status}</Text>
-                    </Pressable>
-                  );
-                })}
-              </View>
-            </View>
-
-            {/* 4. Switch Toggles */}
-            <View style={styles.modalSection}>
+              <Text style={styles.modalSectionTitle}>Attributes</Text>
               <View style={styles.toggleRow}>
-                <Text style={styles.toggleLabel}>Hiring Only</Text>
+                <Text style={styles.toggleLabel}>Actively Hiring Only</Text>
                 {renderSwitch(hiringOnly, onToggleHiringOnly)}
               </View>
               <View style={styles.toggleRow}>
-                <Text style={styles.toggleLabel}>YC Top Companies</Text>
+                <Text style={styles.toggleLabel}>YC Top Companies Only</Text>
                 {renderSwitch(topCompaniesOnly, onToggleTopCompaniesOnly)}
-              </View>
-            </View>
-
-            {/* 5. Founded Year Range Slider */}
-            <View style={styles.modalSection}>
-              <View style={styles.sliderHeader}>
-                <Text style={styles.sliderHeaderText}>Founded Year</Text>
-                <Text style={styles.sliderHeaderRange}>
-                  {foundedRange[0]} - {foundedRange[1]}
-                </Text>
-              </View>
-
-              <View style={styles.sliderTrackContainer}>
-                <View style={styles.sliderTrack}>
-                  <View
-                    style={[
-                      styles.sliderProgress,
-                      {
-                        left: `${((foundedRange[0] - 2010) / 16) * 100}%`,
-                        right: `${((2026 - foundedRange[1]) / 16) * 100}%`,
-                      },
-                    ]}
-                  />
-                  {/* Left thumb selector button */}
-                  <View
-                    style={[
-                      styles.sliderThumb,
-                      {
-                        left: `${((foundedRange[0] - 2010) / 16) * 100}%`,
-                      },
-                    ]}
-                  />
-                  {/* Right thumb selector button */}
-                  <View
-                    style={[
-                      styles.sliderThumb,
-                      {
-                        left: `${((foundedRange[1] - 2010) / 16) * 100}%`,
-                      },
-                    ]}
-                  />
-                </View>
-              </View>
-
-              {/* Range adjust buttons for robust sliding control */}
-              <View style={styles.rangeAdjustContainer}>
-                <View style={styles.buttonGroup}>
-                  <Pressable
-                    style={styles.adjustButton}
-                    onPress={() =>
-                      onSelectFoundedRange([
-                        Math.max(2010, foundedRange[0] - 1),
-                        foundedRange[1],
-                      ])
-                    }
-                  >
-                    <Text style={styles.adjustButtonText}>-</Text>
-                  </Pressable>
-                  <Pressable
-                    style={styles.adjustButton}
-                    onPress={() =>
-                      onSelectFoundedRange([
-                        Math.min(foundedRange[1], foundedRange[0] + 1),
-                        foundedRange[1],
-                      ])
-                    }
-                  >
-                    <Text style={styles.adjustButtonText}>+</Text>
-                  </Pressable>
-                </View>
-                <View style={styles.buttonGroup}>
-                  <Pressable
-                    style={styles.adjustButton}
-                    onPress={() =>
-                      onSelectFoundedRange([
-                        foundedRange[0],
-                        Math.max(foundedRange[0], foundedRange[1] - 1),
-                      ])
-                    }
-                  >
-                    <Text style={styles.adjustButtonText}>-</Text>
-                  </Pressable>
-                  <Pressable
-                    style={styles.adjustButton}
-                    onPress={() =>
-                      onSelectFoundedRange([
-                        foundedRange[0],
-                        Math.min(2026, foundedRange[1] + 1),
-                      ])
-                    }
-                  >
-                    <Text style={styles.adjustButtonText}>+</Text>
-                  </Pressable>
-                </View>
               </View>
             </View>
           </ScrollView>
@@ -400,8 +517,16 @@ export default function FilterModal({
               { paddingBottom: Math.max(insets.bottom, 20) },
             ]}
           >
-            <Pressable style={styles.applyButton} onPress={onClose}>
-              <Text style={styles.applyButtonText}>Apply Filters</Text>
+            <Pressable
+              style={styles.applyButton}
+              onPress={() => {
+                onApply();
+                onClose();
+              }}
+            >
+              <Text style={styles.applyButtonText}>
+                Apply Filters {activeCount > 0 ? `(${activeCount})` : ""}
+              </Text>
             </Pressable>
           </View>
         </View>

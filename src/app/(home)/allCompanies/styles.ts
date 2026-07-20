@@ -97,7 +97,16 @@ const styles = StyleSheet.create({
     fontSize: Responsive.convertFontScale(12),
     color: Colors.appColors.primary,
   },
-  searchBarContainer: {
+  searchRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: Responsive.widthPercentageToDP(5.3),
+    marginTop: Responsive.heightPercentageToDP(2),
+    marginBottom: Responsive.heightPercentageToDP(1),
+    gap: Responsive.widthPercentageToDP(2.5),
+  },
+  searchBarFlex: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Colors.appColors.white,
@@ -106,9 +115,6 @@ const styles = StyleSheet.create({
     borderRadius: Responsive.widthPercentageToDP(4),
     paddingHorizontal: Responsive.widthPercentageToDP(4),
     height: Responsive.heightPercentageToDP(6.2),
-    marginHorizontal: Responsive.widthPercentageToDP(5.3),
-    marginTop: Responsive.heightPercentageToDP(2),
-    marginBottom: Responsive.heightPercentageToDP(1.5),
     ...Platform.select({
       ios: {
         shadowColor: Colors.appColors.black,
@@ -135,6 +141,98 @@ const styles = StyleSheet.create({
       },
     }),
   },
+  filterBtn: {
+    width: Responsive.heightPercentageToDP(6.2),
+    height: Responsive.heightPercentageToDP(6.2),
+    borderRadius: Responsive.widthPercentageToDP(4),
+    backgroundColor: Colors.appColors.white,
+    borderWidth: 1.5,
+    borderColor: Colors.appColors.borderLight,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+    ...Platform.select({
+      ios: {
+        shadowColor: Colors.appColors.black,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.02,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
+  filterBtnActive: {
+    backgroundColor: Colors.opacityColors.primaryOpacity10,
+    borderColor: Colors.appColors.primary,
+  },
+  filterIcon: {
+    width: Responsive.widthPercentageToDP(5.3),
+    height: Responsive.widthPercentageToDP(5.3),
+  },
+  filterBadge: {
+    position: "absolute",
+    top: -5,
+    right: -5,
+    backgroundColor: Colors.appColors.primary,
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 4,
+    borderWidth: 1.5,
+    borderColor: Colors.appColors.white,
+  },
+  filterBadgeText: {
+    color: Colors.appColors.white,
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(10),
+  },
+  activeFiltersRow: {
+    // marginVertical: Responsive.heightPercentageToDP(0.8),
+    marginBottom: Responsive.heightPercentageToDP(1),
+  },
+  activeFiltersContent: {
+    paddingHorizontal: Responsive.widthPercentageToDP(5.3),
+    gap: Responsive.widthPercentageToDP(2.5),
+    alignItems: "center",
+  },
+  activeTag: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 102, 0, 0.08)",
+    borderWidth: 1,
+    borderColor: "rgba(255, 102, 0, 0.25)",
+    paddingHorizontal: Responsive.widthPercentageToDP(3.5),
+    paddingVertical: Responsive.heightPercentageToDP(0.8),
+    borderRadius: Responsive.widthPercentageToDP(5),
+    gap: 6,
+  },
+  activeTagText: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(12.5),
+    color: Colors.appColors.primary,
+  },
+  activeTagClose: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(11),
+    color: Colors.appColors.primary,
+    marginLeft: 2,
+  },
+  clearAllBtn: {
+    justifyContent: "center",
+    paddingHorizontal: Responsive.widthPercentageToDP(2),
+    paddingVertical: Responsive.heightPercentageToDP(0.8),
+  },
+  clearAllText: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(12.5),
+    color: Colors.appColors.tertiary,
+    textDecorationLine: "underline",
+  },
+
   searchIconEmoji: {
     fontSize: Responsive.convertFontScale(16),
     marginRight: Responsive.widthPercentageToDP(2.5),
@@ -152,7 +250,7 @@ const styles = StyleSheet.create({
     marginRight: Responsive.widthPercentageToDP(2.5),
   },
   filterWrapper: {
-    height: Responsive.heightPercentageToDP(7),
+    marginBottom: Responsive.heightPercentageToDP(0.2),
   },
   filterPillsScroll: {
     flexGrow: 0,
@@ -215,7 +313,6 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingHorizontal: Responsive.widthPercentageToDP(5.3),
-    paddingTop: Responsive.heightPercentageToDP(1),
     paddingBottom: Responsive.heightPercentageToDP(16),
     gap: Responsive.heightPercentageToDP(2),
   },

@@ -1,10 +1,5 @@
 import React, { useMemo } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Pressable,
-} from "react-native";
+import { View, Text, ScrollView, Pressable } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/theme";
@@ -39,7 +34,7 @@ interface IndustryStats {
 }
 
 const industryStatsData: Record<string, IndustryStats> = {
-  "AI": {
+  AI: {
     name: "Artificial Intelligence",
     emoji: "🤖",
     totalCompaniesCount: 1245,
@@ -53,9 +48,27 @@ const industryStatsData: Record<string, IndustryStats> = {
       { name: "United Kingdom", percentage: 8 },
     ],
     topCompanies: [
-      { id: "3", name: "OpenAI", category: "AI", logo: "O", logoBg: Colors.appColors.brandOpenAI },
-      { id: "1", name: "Cursor", category: "AI Code Editor", logo: "C", logoBg: "#10A37F" },
-      { id: "2", name: "Scale AI", category: "Data Infra", logo: "S", logoBg: Colors.appColors.brandBlue },
+      {
+        id: "3",
+        name: "OpenAI",
+        category: "AI",
+        logo: "O",
+        logoBg: Colors.appColors.brandOpenAI,
+      },
+      {
+        id: "1",
+        name: "Cursor",
+        category: "AI Code Editor",
+        logo: "C",
+        logoBg: "#10A37F",
+      },
+      {
+        id: "2",
+        name: "Scale AI",
+        category: "Data Infra",
+        logo: "S",
+        logoBg: Colors.appColors.brandBlue,
+      },
     ],
     latestBatch: "Summer 2024",
     latestBatchAdded: "+253 AI Companies",
@@ -64,7 +77,7 @@ const industryStatsData: Record<string, IndustryStats> = {
       "B2B SaaS integrating LLMs makes up 60% of new AI entries.",
     ],
   },
-  "Fintech": {
+  Fintech: {
     name: "Fintech",
     emoji: "💳",
     totalCompaniesCount: 840,
@@ -78,9 +91,27 @@ const industryStatsData: Record<string, IndustryStats> = {
       { name: "Brazil", percentage: 10 },
     ],
     topCompanies: [
-      { id: "1", name: "Stripe", category: "Fintech", logo: "S", logoBg: Colors.appColors.brandStripe },
-      { id: "2", name: "Razorpay", category: "Fintech", logo: "R", logoBg: Colors.appColors.brandBlue },
-      { id: "3", name: "Coinbase", category: "Crypto", logo: "C", logoBg: Colors.appColors.brandBlue },
+      {
+        id: "1",
+        name: "Stripe",
+        category: "Fintech",
+        logo: "S",
+        logoBg: Colors.appColors.brandStripe,
+      },
+      {
+        id: "2",
+        name: "Razorpay",
+        category: "Fintech",
+        logo: "R",
+        logoBg: Colors.appColors.brandBlue,
+      },
+      {
+        id: "3",
+        name: "Coinbase",
+        category: "Crypto",
+        logo: "C",
+        logoBg: Colors.appColors.brandBlue,
+      },
     ],
     latestBatch: "Winter 2024",
     latestBatchAdded: "+42 Fintech Companies",
@@ -99,7 +130,10 @@ export default function IndustryDetailScreen() {
   // Resolve industry details, fallback to AI if not found
   const stats = useMemo(() => {
     // Check if user selected "AI" or "Artificial Intelligence"
-    const key = industry === "Artificial Intelligence" || industry === "AI" ? "AI" : "Fintech";
+    const key =
+      industry === "Artificial Intelligence" || industry === "AI"
+        ? "AI"
+        : "Fintech";
     return industryStatsData[key];
   }, [industry]);
 
@@ -108,10 +142,7 @@ export default function IndustryDetailScreen() {
       {/* Top Header */}
       <View style={[styles.header, { paddingTop: insets.top }]}>
         <View style={styles.headerLeft}>
-          <Pressable
-            onPress={() => router.back()}
-            style={styles.headerBtn}
-          >
+          <Pressable onPress={() => router.back()} style={styles.headerBtn}>
             <Text style={styles.backBtnText}>←</Text>
           </Pressable>
           <Text style={styles.headerTitle}>Industry Profile</Text>
@@ -124,16 +155,25 @@ export default function IndustryDetailScreen() {
         contentContainerStyle={styles.scrollContent}
       >
         {/* Hero Banner Card */}
-        <View style={[styles.heroCard, { backgroundColor: Colors.appColors.primary }]}>
+        <View
+          style={[
+            styles.heroCard,
+            { backgroundColor: Colors.appColors.primary },
+          ]}
+        >
           <Text style={styles.heroIconText}>{stats.emoji}</Text>
           <Text style={styles.heroTitle}>{stats.name}</Text>
-          
+
           <View style={styles.heroMetadataRow}>
             <View style={styles.heroMetaItem}>
-              <Text style={styles.heroMetaText}>🏢 {stats.totalCompaniesCount} Companies</Text>
+              <Text style={styles.heroMetaText}>
+                🏢 {stats.totalCompaniesCount} Companies
+              </Text>
             </View>
             <View style={styles.heroMetaItem}>
-              <Text style={styles.heroMetaText}>🌍 {stats.countries} Countries</Text>
+              <Text style={styles.heroMetaText}>
+                🌍 {stats.countries} Countries
+              </Text>
             </View>
           </View>
         </View>
@@ -188,7 +228,9 @@ export default function IndustryDetailScreen() {
                 }
                 style={styles.companyCard}
               >
-                <View style={[styles.logoBox, { backgroundColor: company.logoBg }]}>
+                <View
+                  style={[styles.logoBox, { backgroundColor: company.logoBg }]}
+                >
                   <Text style={styles.logoText}>{company.logo}</Text>
                 </View>
                 <Text style={styles.companyName} numberOfLines={1}>
@@ -210,7 +252,9 @@ export default function IndustryDetailScreen() {
               <View key={index} style={styles.countryRow}>
                 <View style={styles.countryLabels}>
                   <Text style={styles.countryName}>{country.name}</Text>
-                  <Text style={styles.countryPercentage}>{country.percentage}%</Text>
+                  <Text style={styles.countryPercentage}>
+                    {country.percentage}%
+                  </Text>
                 </View>
                 <View style={styles.progressBarTrack}>
                   <View

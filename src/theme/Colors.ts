@@ -51,7 +51,6 @@ const opacityColors = {
   whiteOpacity70: "rgba(255, 255, 255, 0.7)",
   whiteOpacity85: "rgba(255, 255, 255, 0.85)",
   whiteOpacity80: "rgba(255, 255, 255, 0.8)",
-
 };
 
 const defaults = {

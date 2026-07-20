@@ -15,25 +15,7 @@ import styles from "./styles";
 import { Colors, Images, Responsive } from "@/theme";
 import { countries, industries, statistics } from "@/data/home";
 import { useGetCompanyList } from "@/services/apiService";
-
-// Helper to determine initials avatar colors based on company name
-const getAvatarTheme = (name: string) => {
-  const char = (name || "").charAt(0).toUpperCase();
-  const code = char.charCodeAt(0) || 0;
-
-  const themes = [
-    { bg: "rgba(255, 102, 0, 0.08)", text: Colors.appColors.primary }, // YC Orange tint
-    { bg: "rgba(46, 125, 50, 0.08)", text: "#2E7D32" }, // Green tint
-    { bg: "rgba(13, 71, 161, 0.08)", text: "#0D47A1" }, // Blue tint
-    { bg: "rgba(74, 20, 140, 0.08)", text: "#4A148C" }, // Purple tint
-    { bg: "rgba(245, 127, 23, 0.08)", text: "#F57F17" }, // Amber tint
-    { bg: "rgba(0, 96, 100, 0.08)", text: "#006064" }, // Cyan tint
-    { bg: "rgba(216, 67, 21, 0.08)", text: "#D84315" }, // Coral tint
-    { bg: "rgba(26, 35, 126, 0.08)", text: "#1A237E" }, // Indigo tint
-  ];
-
-  return themes[code % themes.length];
-};
+import { getAvatarTheme } from "@/utils/common";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -41,15 +23,14 @@ export default function HomeScreen() {
 
   const companyListPayload = useMemo(
     () => ({
-      limit: 50,
+      limit: 10,
       offset: 0,
-      batch: "Winter 2025",
+      batch: "Summer 2026",
     }),
     [],
   );
 
-  const { data: companyList, isLoading: isCompanyLoading } =
-    useGetCompanyList(companyListPayload);
+  const { data: companyList } = useGetCompanyList(companyListPayload);
 
   const companies = companyList?.companies || [];
 
@@ -83,24 +64,14 @@ export default function HomeScreen() {
       item.description || item.one_liner || item.long_description || "";
 
     const batch = item.batch;
-
-    const sourceLabel =
-      item.source === "producthunt"
-        ? "Product Hunt"
-        : item.source
-          ? item.source.toUpperCase()
-          : "";
+    const sourceLabel = item.source.toUpperCase();
     const showYC = !batch && !sourceLabel;
-
     const category = item.category || item.industry || "General";
-
     const logoUrl = item.small_logo_thumb_url;
-
     const avatarTheme = getAvatarTheme(item?.name);
 
     return (
       <Pressable
-        key={item.id}
         style={styles.startupCard}
         onPress={() => onPressCompanyCard(item)}
       >
@@ -266,7 +237,7 @@ export default function HomeScreen() {
         <FlatList
           horizontal
           decelerationRate="fast"
-          data={companies.slice(0, 10)}
+          data={companies}
           renderItem={renderTrendingStartups}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}

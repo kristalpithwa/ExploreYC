@@ -1,7 +1,5 @@
-import { getCompanyData } from "@/data/home";
 import { axiosInterceptor } from "@/network/apiClient";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { Platform } from "react-native";
 
 export const DEFAULT_STALE_TIME = 1000 * 60 * 5;
 export const DEFAULT_GC_TIME = 1000 * 60 * 5;
@@ -13,7 +11,7 @@ export const useGetCompanyList = (payload: any) => {
     queryKey: ["GetCompanyList", payload],
     queryFn: async () => {
       const res = await axiosInterceptor.post(url, payload);
-      return Platform.OS === "ios" ? getCompanyData : res?.data;
+      return res?.data;
     },
     staleTime: DEFAULT_STALE_TIME,
     gcTime: DEFAULT_GC_TIME,
@@ -28,7 +26,7 @@ export const useGetCompanyListInfinite = (payload: any) => {
     queryFn: async ({ pageParam = 0 }: any) => {
       const requestPayload = { ...payload, offset: pageParam };
       const res = await axiosInterceptor.post(url, requestPayload);
-      return Platform.OS === "ios" ? getCompanyData : res?.data;
+      return res?.data;
     },
     getNextPageParam: (lastPage: any) => {
       if (!lastPage) return undefined;
@@ -47,11 +45,58 @@ export const useGetCompanyDetails = (payload: any) => {
     queryKey: ["GetCompanyDetails", payload],
     queryFn: async () => {
       const res = await axiosInterceptor.get(url);
-      return Platform.OS === "ios"
-        ? getCompanyData.companies.find((c: any) => c.id.toString() === payload.toString())
-        : res?.data;
+      return res?.data;
     },
     staleTime: DEFAULT_STALE_TIME,
     gcTime: DEFAULT_GC_TIME,
   });
 };
+
+export const useGetFilterBatches = () => {
+  return useQuery({
+    queryKey: ["GetFilterBatches"],
+    queryFn: async () => {
+      const res = await axiosInterceptor.get("filters/batches");
+      return res?.data?.batches || [];
+    },
+    staleTime: DEFAULT_STALE_TIME,
+    gcTime: DEFAULT_GC_TIME,
+  });
+};
+
+export const useGetFilterIndustries = () => {
+  return useQuery({
+    queryKey: ["GetFilterIndustries"],
+    queryFn: async () => {
+      const res = await axiosInterceptor.get("filters/industries");
+      return res?.data?.industries || [];
+    },
+    staleTime: DEFAULT_STALE_TIME,
+    gcTime: DEFAULT_GC_TIME,
+  });
+};
+
+export const useGetFilterCountries = () => {
+  return useQuery({
+    queryKey: ["GetFilterCountries"],
+    queryFn: async () => {
+      const res = await axiosInterceptor.get("filters/countries");
+      return res?.data?.countries || [];
+    },
+    staleTime: DEFAULT_STALE_TIME,
+    gcTime: DEFAULT_GC_TIME,
+  });
+};
+
+export const useGetFilterSources = () => {
+  return useQuery({
+    queryKey: ["GetFilterSources"],
+    queryFn: async () => {
+      const res = await axiosInterceptor.get("filters/sources");
+      return res?.data?.sources || [];
+    },
+    staleTime: DEFAULT_STALE_TIME,
+    gcTime: DEFAULT_GC_TIME,
+  });
+};
+
