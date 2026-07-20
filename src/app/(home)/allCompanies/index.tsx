@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import {
   View,
   Text,
@@ -6,8 +6,8 @@ import {
   TextInput,
   StyleSheet,
   FlatList,
-  ActivityIndicator,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
@@ -15,9 +15,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import styles from "./styles";
 import { Colors, Images } from "@/theme";
-import { useGetCompanyListInfinite } from "@/services/apiService";
 import { getAvatarTheme } from "@/utils/common";
 import FilterModal from "@/components/FilterModal/FilterModal";
+import { useGetCompanyListInfinite } from "@/services/apiService";
 
 interface Company {
   id: number;
@@ -31,21 +31,11 @@ interface Company {
   small_logo_thumb_url?: string | null;
 }
 
-const FILTER_CATEGORIES = [
-  "All",
-  "Hiring",
-  "Product Hunt",
-  "AI",
-  "Fintech",
-  "Productivity",
-];
-
 export default function AllCompaniesScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
 
@@ -57,7 +47,48 @@ export default function AllCompaniesScreen() {
   const [hiringOnly, setHiringOnly] = useState(false);
   const [topCompaniesOnly, setTopCompaniesOnly] = useState(false);
 
+  const companyListPayload = useMemo(
+    () => ({
+      limit: 30,
+      search: searchQuery || undefined,
+      batch: selectedBatch || undefined,
+      industry: selectedIndustry || undefined,
+      country: selectedCountry || undefined,
+      source: selectedSource || undefined,
+      is_hiring: hiringOnly ? true : undefined,
+      top_company: topCompaniesOnly ? true : undefined,
+    }),
+    [
+      searchQuery,
+      selectedBatch,
+      selectedIndustry,
+      selectedCountry,
+      selectedSource,
+      hiringOnly,
+      topCompaniesOnly,
+    ],
+  );
+
+  // API Method
+
+  const {
+    data: companyListPages,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+  } = useGetCompanyListInfinite(companyListPayload);
+
+  const companies = useMemo(
+    () =>
+      companyListPages?.pages
+        .flatMap((page: any) => page?.companies || [])
+        .filter(Boolean) || [],
+    [companyListPages],
+  );
+
   // Active filter count calculation
+
   const activeFilterCount = useMemo(() => {
     let count = 0;
     if (selectedBatch) count++;
@@ -77,6 +108,7 @@ export default function AllCompaniesScreen() {
   ]);
 
   // Active filter items list for tag pills
+
   const activeFilterItems = useMemo(() => {
     const items: { id: string; label: string; onRemove: () => void }[] = [];
 
@@ -149,165 +181,7 @@ export default function AllCompaniesScreen() {
     topCompaniesOnly,
   ]);
 
-  const resetAllFilters = () => {
-    setSelectedBatch("");
-    setSelectedIndustry("");
-    setSelectedCountry("");
-    setSelectedSource("");
-    setHiringOnly(false);
-    setTopCompaniesOnly(false);
-    setSelectedCategory("All");
-    setSearchQuery("");
-  };
-
-  // Build payload for infinite query
-  const companyListPayload = useMemo(
-    () => ({
-      limit: 30,
-      search: searchQuery || undefined,
-      batch: selectedBatch || undefined,
-      industry: selectedIndustry || undefined,
-      country: selectedCountry || undefined,
-      source: selectedSource || undefined,
-      is_hiring: hiringOnly ? true : undefined,
-      top_company: topCompaniesOnly ? true : undefined,
-    }),
-    [
-      searchQuery,
-      selectedBatch,
-      selectedIndustry,
-      selectedCountry,
-      selectedSource,
-      hiringOnly,
-      topCompaniesOnly,
-    ],
-  );
-
-  const {
-    data: companyListPages,
-    isFetchingNextPage,
-    fetchNextPage,
-    hasNextPage,
-    isLoading,
-  } = useGetCompanyListInfinite(companyListPayload);
-
-  const companies = useMemo(
-    () =>
-      companyListPages?.pages
-        .flatMap((page: any) => page?.companies || [])
-        .filter(Boolean) || [],
-    [companyListPages],
-  );
-
-  const onLoadMore = () => {
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  };
-
-  const renderListFooter = () => {
-    if (isFetchingNextPage) {
-      return (
-        <View style={styles.loadingMoreContainer}>
-          <ActivityIndicator size="small" color={Colors.appColors.primary} />
-        </View>
-      );
-    }
-
-    return null;
-  };
-
-  // Quick category counts based on fetched data
-  const categoryCounts = useMemo(() => {
-    return {
-      All: companies.length,
-      Hiring: companies.filter((c) => Boolean(c.is_hiring)).length,
-      "Product Hunt": companies.filter((c) => c.source === "producthunt")
-        .length,
-      AI: companies.filter((c) => {
-        const desc = (c.long_description || "").toLowerCase();
-        const oneLiner = (c.one_liner || "").toLowerCase();
-        return (
-          desc.includes("ai") ||
-          desc.includes("artificial") ||
-          oneLiner.includes("ai")
-        );
-      }).length,
-      Fintech: companies.filter((c) => {
-        const desc = (c.long_description || "").toLowerCase();
-        const oneLiner = (c.one_liner || "").toLowerCase();
-        return (
-          desc.includes("finance") ||
-          desc.includes("invest") ||
-          desc.includes("tax") ||
-          desc.includes("cash") ||
-          desc.includes("rate") ||
-          oneLiner.includes("invest")
-        );
-      }).length,
-      Productivity: companies.filter((c) => {
-        const desc = (c.long_description || "").toLowerCase();
-        const oneLiner = (c.one_liner || "").toLowerCase();
-        return (
-          desc.includes("work") ||
-          desc.includes("workspace") ||
-          desc.includes("bookmark") ||
-          desc.includes("pdf") ||
-          desc.includes("mcp")
-        );
-      }).length,
-    };
-  }, [companies]);
-
-  // Client side quick category pill filtering on top of server payload
-  const filteredCompanies = useMemo(() => {
-    return companies.filter((company) => {
-      if (selectedCategory === "All") return true;
-      if (selectedCategory === "Hiring") return Boolean(company.is_hiring);
-      if (selectedCategory === "Product Hunt")
-        return company.source === "producthunt";
-      if (selectedCategory === "AI") {
-        const desc = (company.long_description || "").toLowerCase();
-        const oneLiner = (company.one_liner || "").toLowerCase();
-        return (
-          desc.includes("ai") ||
-          desc.includes("artificial") ||
-          oneLiner.includes("ai")
-        );
-      }
-      if (selectedCategory === "Fintech") {
-        const desc = (company.long_description || "").toLowerCase();
-        const oneLiner = (company.one_liner || "").toLowerCase();
-        return (
-          desc.includes("finance") ||
-          desc.includes("invest") ||
-          desc.includes("tax") ||
-          desc.includes("cash") ||
-          desc.includes("rate") ||
-          oneLiner.includes("invest")
-        );
-      }
-      if (selectedCategory === "Productivity") {
-        const desc = (company.long_description || "").toLowerCase();
-        const oneLiner = (company.one_liner || "").toLowerCase();
-        return (
-          desc.includes("work") ||
-          desc.includes("workspace") ||
-          desc.includes("bookmark") ||
-          desc.includes("pdf") ||
-          desc.includes("mcp")
-        );
-      }
-      return true;
-    });
-  }, [selectedCategory, companies]);
-
-  const onPressCompanyCard = (item: any) => {
-    router.push({
-      pathname: "/(home)/companyDetails",
-      params: { id: item.id },
-    });
-  };
+  // FlatList Method
 
   const renderCompanyItem = ({ item }: { item: Company }) => {
     const logoUrl = item?.small_logo_thumb_url;
@@ -396,22 +270,16 @@ export default function AllCompaniesScreen() {
     );
   };
 
-  const renderFilter = ({ item }: { item: string }) => {
-    const isActive = selectedCategory === item;
-    const count = categoryCounts[item as keyof typeof categoryCounts] ?? 0;
-    return (
-      <Pressable
-        onPress={() => setSelectedCategory(item)}
-        style={[styles.pill, isActive && styles.pillActive]}
-      >
-        <Text style={[styles.pillText, isActive && styles.pillTextActive]}>
-          {item}
-        </Text>
-        <Text style={[styles.pillCount, isActive && styles.pillCountActive]}>
-          {count}
-        </Text>
-      </Pressable>
-    );
+  const renderListFooter = () => {
+    if (isFetchingNextPage) {
+      return (
+        <View style={styles.loadingMoreContainer}>
+          <ActivityIndicator size="small" color={Colors.appColors.primary} />
+        </View>
+      );
+    }
+
+    return null;
   };
 
   const renderEmptyCards = () => {
@@ -440,6 +308,31 @@ export default function AllCompaniesScreen() {
     );
   };
 
+  const onLoadMore = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
+
+  // onPress Methods
+
+  const onPressCompanyCard = (item: any) => {
+    router.push({
+      pathname: "/(home)/companyDetails",
+      params: { id: item.id },
+    });
+  };
+
+  const onPressResetAllFilters = () => {
+    setSelectedBatch("");
+    setSelectedIndustry("");
+    setSelectedCountry("");
+    setSelectedSource("");
+    setHiringOnly(false);
+    setTopCompaniesOnly(false);
+    setSearchQuery("");
+  };
+
   return (
     <View style={styles.container}>
       {/* Header Bar */}
@@ -451,12 +344,9 @@ export default function AllCompaniesScreen() {
         >
           <Text style={styles.backBtnText}>←</Text>
         </Pressable>
+
         <View style={styles.headerTitleContainer}>
           <Text style={styles.headerTitle}>All Startups</Text>
-          <Text style={styles.headerSub}>
-            {filteredCompanies.length} startup
-            {filteredCompanies.length !== 1 ? "s" : ""} found
-          </Text>
         </View>
       </View>
 
@@ -514,19 +404,6 @@ export default function AllCompaniesScreen() {
         </Pressable>
       </View>
 
-      {/* Category Filter Scroll */}
-      <View style={styles.filterWrapper}>
-        <FlatList
-          horizontal
-          data={FILTER_CATEGORIES}
-          renderItem={renderFilter}
-          style={styles.filterPillsScroll}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.pillsContent}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
-
       {/* Active Filter Tags Pill Row */}
       {activeFilterItems.length > 0 && (
         <View style={styles.activeFiltersRow}>
@@ -545,7 +422,10 @@ export default function AllCompaniesScreen() {
                 <Text style={styles.activeTagClose}>✕</Text>
               </Pressable>
             ))}
-            <Pressable style={styles.clearAllBtn} onPress={resetAllFilters}>
+            <Pressable
+              style={styles.clearAllBtn}
+              onPress={() => onPressResetAllFilters()}
+            >
               <Text style={styles.clearAllText}>Clear All</Text>
             </Pressable>
           </ScrollView>
@@ -554,7 +434,7 @@ export default function AllCompaniesScreen() {
 
       {/* Startup Cards List */}
       <FlatList
-        data={filteredCompanies}
+        data={companies}
         onEndReached={onLoadMore}
         onEndReachedThreshold={0.5}
         renderItem={renderCompanyItem}
@@ -581,7 +461,7 @@ export default function AllCompaniesScreen() {
         onToggleHiringOnly={setHiringOnly}
         topCompaniesOnly={topCompaniesOnly}
         onToggleTopCompaniesOnly={setTopCompaniesOnly}
-        onReset={resetAllFilters}
+        onReset={() => onPressResetAllFilters()}
         onApply={() => {
           // Filters apply reactively via state update
         }}

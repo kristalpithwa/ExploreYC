@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: Responsive.widthPercentageToDP(5.3),
     marginTop: Responsive.heightPercentageToDP(2),
-    marginBottom: Responsive.heightPercentageToDP(1),
+    marginBottom: Responsive.heightPercentageToDP(1.5),
     gap: Responsive.widthPercentageToDP(2.5),
   },
   searchBarFlex: {
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   },
   activeFiltersRow: {
     // marginVertical: Responsive.heightPercentageToDP(0.8),
-    marginBottom: Responsive.heightPercentageToDP(1),
+    marginBottom: Responsive.heightPercentageToDP(1.5),
   },
   activeFiltersContent: {
     paddingHorizontal: Responsive.widthPercentageToDP(5.3),
