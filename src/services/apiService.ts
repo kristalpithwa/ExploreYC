@@ -111,3 +111,23 @@ export const useGetStats = () => {
     gcTime: DEFAULT_GC_TIME,
   });
 };
+
+export const useGetBatchCompanies = (payload: string) => {
+  const query = {
+    batch: payload,
+    limit: 10,
+    offset: 0,
+  };
+
+  return useQuery({
+    queryKey: ["useGetBatchCompanies", query],
+    queryFn: async () => {
+      const res = await axiosInterceptor.get("companies", {
+        params: query,
+      });
+      return res?.data || [];
+    },
+    staleTime: DEFAULT_STALE_TIME,
+    gcTime: DEFAULT_GC_TIME,
+  });
+};

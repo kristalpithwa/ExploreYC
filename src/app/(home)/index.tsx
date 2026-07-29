@@ -14,7 +14,11 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import styles from "./styles";
 import { Colors, Images, Responsive } from "@/theme";
 import { countries, industries, statistics } from "@/data/home";
-import { useGetCompanyList, useGetStats } from "@/services/apiService";
+import {
+  useGetCompanyList,
+  useGetFilterBatches,
+  useGetStats,
+} from "@/services/apiService";
 import { getAvatarTheme, INDUSTRY_EMOJIS } from "@/utils/common";
 
 export default function HomeScreen() {
@@ -26,6 +30,11 @@ export default function HomeScreen() {
 
   const { data: companyList } = useGetCompanyList({ limit: 10, offset: 0 });
   const { data: stats } = useGetStats();
+
+  const { data: batches = [], isLoading: loadingBatches } =
+    useGetFilterBatches();
+
+  console.log("batches", batches[0]);
 
   const dynamicStatistics = useMemo(() => {
     if (!stats) return statistics;
