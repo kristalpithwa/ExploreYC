@@ -131,3 +131,15 @@ export const useGetBatchCompanies = (payload: string) => {
     gcTime: DEFAULT_GC_TIME,
   });
 };
+
+export const useGetMapStartups = (params: any) => {
+  return useQuery({
+    queryKey: ["useGetMapStartups", params],
+    queryFn: async () => {
+      const res = await axiosInterceptor.get("map", { params });
+      return res?.data || { companies: [], total: 0 };
+    },
+    staleTime: DEFAULT_STALE_TIME,
+    gcTime: DEFAULT_GC_TIME,
+  });
+};

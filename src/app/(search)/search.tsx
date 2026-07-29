@@ -1,17 +1,27 @@
 import React, { useState, useMemo, useRef } from "react";
 import { View, Text, TextInput, Pressable, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
 import {
   Map,
   Camera,
   ViewAnnotation,
   type CameraRef,
 } from "@maplibre/maplibre-react-native";
-import { Colors } from "@/theme";
-import styles from "./styles";
 
-interface Startup {
+import {
+  useGetMapStartups,
+  useGetFilterBatches,
+  useGetFilterIndustries,
+} from "@/services/apiService";
+import styles from "./styles";
+import { Colors } from "@/theme";
+import BatchModal from "./components/BatchModal";
+import IndustryModal from "./components/IndustryModal";
+import SelectedStartupCard from "./components/SelectedStartupCard";
+import StartupPin from "./components/StartupPin";
+import { useRouter } from "expo-router";
+
+export interface Startup {
   id: string;
   name: string;
   batch: string;
@@ -19,125 +29,118 @@ interface Startup {
   category: string;
   logo: string;
   logoBg: string;
+  logoUrl?: string;
   coordinates: [number, number]; // [longitude, latitude]
   hiring: boolean;
   country: string;
 }
 
-const mockStartups: Startup[] = [
-  {
-    id: "1",
-    name: "Stripe",
-    batch: "Summer 2009",
-    description:
-      "Financial infrastructure platform for the internet. Payments, billing, and developer APIs.",
-    category: "Fintech",
-    logo: "S",
-    logoBg: Colors.appColors.brandStripe,
-    coordinates: [-122.3917, 37.7749],
-    hiring: true,
-    country: "United States",
-  },
-  {
-    id: "2",
-    name: "Airbnb",
-    batch: "Winter 2009",
-    description:
-      "Online marketplace for short-term homestays and experiences worldwide.",
-    category: "Travel",
-    logo: "A",
-    logoBg: Colors.appColors.brandAirbnb,
-    coordinates: [-122.4038, 37.7716],
-    hiring: false,
-    country: "United States",
-  },
-  {
-    id: "3",
-    name: "OpenAI",
-    batch: "Winter 2021",
-    description:
-      "AI research and deployment company behind ChatGPT, GPT-4, and DALL-E.",
-    category: "AI",
-    logo: "O",
-    logoBg: Colors.appColors.brandOpenAI,
-    coordinates: [-122.4148, 37.7619],
-    hiring: true,
-    country: "United States",
-  },
-  {
-    id: "4",
-    name: "Dropbox",
-    batch: "Summer 2007",
-    description:
-      "Modern workspace that keeps files organized and teams in sync with cloud storage.",
-    category: "B2B",
-    logo: "D",
-    logoBg: "#0061FE",
-    coordinates: [-122.3892, 37.777],
-    hiring: false,
-    country: "United States",
-  },
-  {
-    id: "5",
-    name: "Instacart",
-    batch: "Summer 2012",
-    description:
-      "Grocery delivery and pick-up service in the United States and Canada.",
-    category: "Fintech",
-    logo: "I",
-    logoBg: "#43B02A",
-    coordinates: [-122.3934, 37.7786],
-    hiring: true,
-    country: "United States",
-  },
-  {
-    id: "6",
-    name: "Coinbase",
-    batch: "Summer 2012",
-    description:
-      "Digital currency exchange offering cryptocurrency trading, custody, and wallet services.",
-    category: "Fintech",
-    logo: "C",
-    logoBg: "#0052FF",
-    coordinates: [-122.4018, 37.7901],
-    hiring: true,
-    country: "United States",
-  },
-];
-
-const categories = ["All", "Hiring", "AI", "Fintech", "Travel", "B2B"];
+const getLogoBg = (name: string) => {
+  const colors = [
+    "#FF3B30",
+    "#FF9500",
+    "#FFCC00",
+    "#4CD964",
+    "#5AC8FA",
+    "#007AFF",
+    "#5856D6",
+    "#FF2D55",
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return colors[Math.abs(hash) % colors.length];
+};
 
 const SF_CENTER: [number, number] = [-122.401, 37.773];
+
 const DEFAULT_ZOOM = 12.5;
 
 export default function SearchScreen() {
-  const router = useRouter();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const cameraRef = useRef<CameraRef>(null);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const [selectedBatch, setSelectedBatch] = useState<string | null>(
+    "Winter 2026",
+  );
+  const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
+  const [isHiringOnly, setIsHiringOnly] = useState(false);
+
+  const [isBatchModalVisible, setIsBatchModalVisible] = useState(false);
+  const [isIndustryModalVisible, setIsIndustryModalVisible] = useState(false);
+
+  const { data: batches = [] } = useGetFilterBatches();
+  const { data: industries = [] } = useGetFilterIndustries();
+
   const [selectedStartup, setSelectedStartup] = useState<Startup | null>(null);
+
+  const queryParams = useMemo(() => {
+    const params: any = {};
+    if (selectedBatch) params.batch = selectedBatch;
+    if (isHiringOnly) params.is_hiring = true;
+    return params;
+  }, [selectedBatch, isHiringOnly]);
+
+  const { data: mapData } = useGetMapStartups(queryParams);
+
+  const startups: Startup[] = useMemo(() => {
+    if (!mapData?.companies) return [];
+
+    const seenCoords: Record<string, number> = {};
+
+    return mapData.companies.map((c: any) => {
+      const coordKey = `${c.longitude},${c.latitude}`;
+      const count = seenCoords[coordKey] || 0;
+      seenCoords[coordKey] = count + 1;
+
+      let lng = c.longitude;
+      let lat = c.latitude;
+
+      // If multiple companies share the exact same location (e.g., generic "San Francisco"),
+      // apply a small spiral offset so the pins don't overlap perfectly.
+      if (count > 0) {
+        const angle = count * 0.5 * Math.PI; // 90 degree increments
+        const radius = 0.0015 * Math.sqrt(count); // distance increases with count
+        lng += Math.cos(angle) * radius;
+        lat += Math.sin(angle) * radius;
+      }
+
+      return {
+        id: c.id.toString(),
+        name: c.name,
+        batch: c.batch,
+        description: c.one_liner,
+        category: c.industry,
+        logo: c.name.charAt(0),
+        logoBg: getLogoBg(c.name),
+        logoUrl: c.small_logo_thumb_url,
+        coordinates: [lng, lat],
+        hiring: Boolean(c.is_hiring),
+        country: c.country,
+      };
+    });
+  }, [mapData]);
 
   const lastPinPressTimeRef = useRef(0);
 
-  // Filter startups based on search and category
+  // Filter startups based on search and industry
   const filteredStartups = useMemo(() => {
-    return mockStartups.filter((startup) => {
+    return startups.filter((startup) => {
       const matchesSearch = startup.name
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
 
-      let matchesCategory = true;
-      if (selectedCategory === "Hiring") {
-        matchesCategory = startup.hiring;
-      } else if (selectedCategory !== "All") {
-        matchesCategory = startup.category === selectedCategory;
-      }
+      const matchesIndustry = selectedIndustry
+        ? startup.category === selectedIndustry
+        : true;
 
-      return matchesSearch && matchesCategory;
+      return matchesSearch && matchesIndustry;
     });
-  }, [searchQuery, selectedCategory]);
+  }, [searchQuery, selectedIndustry, startups]);
 
   const handleSelectStartup = (startup: Startup) => {
     lastPinPressTimeRef.current = Date.now();
@@ -179,6 +182,14 @@ export default function SearchScreen() {
     });
   };
 
+  const handleOpenCompany = (value: any) => {
+    router.push({
+      pathname: "/(search)/companyDetails",
+      params: { id: value.id },
+    });
+    setSelectedStartup(null);
+  };
+
   const initialViewState = useMemo(
     () => ({
       center: SF_CENTER,
@@ -213,19 +224,11 @@ export default function SearchScreen() {
             id={`pin-${startup.id}`}
             lngLat={startup.coordinates}
           >
-            <Pressable
-              onPress={() => handleSelectStartup(startup)}
-              style={[
-                styles.pinOuter,
-                selectedStartup?.id === startup.id && styles.pinOuterSelected,
-              ]}
-            >
-              <View
-                style={[styles.pinInner, { backgroundColor: startup.logoBg }]}
-              >
-                <Text style={styles.pinText}>{startup.logo}</Text>
-              </View>
-            </Pressable>
+            <StartupPin
+              startup={startup}
+              isSelected={selectedStartup?.id === startup.id}
+              onSelect={handleSelectStartup}
+            />
           </ViewAnnotation>
         ))}
       </Map>
@@ -256,25 +259,47 @@ export default function SearchScreen() {
           style={styles.pillsScrollView}
           contentContainerStyle={styles.pillsContent}
         >
-          {categories.map((cat) => {
-            const isActive = selectedCategory === cat;
-            return (
-              <Pressable
-                key={cat}
-                onPress={() => {
-                  setSelectedCategory(cat);
-                  setSelectedStartup(null);
-                }}
-                style={[styles.pill, isActive && styles.pillActive]}
-              >
-                <Text
-                  style={[styles.pillText, isActive && styles.pillTextActive]}
-                >
-                  {cat}
-                </Text>
-              </Pressable>
-            );
-          })}
+          <Pressable
+            onPress={() => setIsBatchModalVisible(true)}
+            style={[styles.pill, selectedBatch !== null && styles.pillActive]}
+          >
+            <Text
+              style={[
+                styles.pillText,
+                selectedBatch !== null && styles.pillTextActive,
+              ]}
+            >
+              Batch: {selectedBatch || "All"} ▼
+            </Text>
+          </Pressable>
+
+          <Pressable
+            onPress={() => setIsIndustryModalVisible(true)}
+            style={[
+              styles.pill,
+              selectedIndustry !== null && styles.pillActive,
+            ]}
+          >
+            <Text
+              style={[
+                styles.pillText,
+                selectedIndustry !== null && styles.pillTextActive,
+              ]}
+            >
+              Industry: {selectedIndustry || "All"} ▼
+            </Text>
+          </Pressable>
+
+          <Pressable
+            onPress={() => setIsHiringOnly(!isHiringOnly)}
+            style={[styles.pill, isHiringOnly && styles.pillActive]}
+          >
+            <Text
+              style={[styles.pillText, isHiringOnly && styles.pillTextActive]}
+            >
+              {isHiringOnly ? "🟢 Hiring Only" : "Hiring Only"}
+            </Text>
+          </Pressable>
         </ScrollView>
       </View>
 
@@ -298,67 +323,26 @@ export default function SearchScreen() {
       </View>
 
       {/* Selected Startup Detail Card Bottom Sheet */}
-      {selectedStartup ? (
-        <View
-          style={[
-            styles.detailCard,
-            {
-              bottom: Math.max(insets.bottom, 24) + 64, // Elevate above tabs
-            },
-          ]}
-        >
-          <View style={styles.cardHeader}>
-            <View
-              style={[
-                styles.logoContainer,
-                { backgroundColor: selectedStartup.logoBg },
-              ]}
-            >
-              <Text style={styles.logoBoxText}>{selectedStartup.logo}</Text>
-            </View>
-            <View style={styles.cardTitleInfo}>
-              <Text style={styles.startupName} numberOfLines={1}>
-                {selectedStartup.name}
-              </Text>
-              <Text style={styles.startupDesc} numberOfLines={2}>
-                {selectedStartup.description}
-              </Text>
-            </View>
-          </View>
+      {selectedStartup && (
+        <SelectedStartupCard
+          selectedStartup={selectedStartup}
+          onPressOpenCompany={handleOpenCompany}
+        />
+      )}
 
-          {/* Badges Row */}
-          <View style={styles.badgesRow}>
-            <View style={styles.metaBadge}>
-              <Text style={styles.metaBadgeText}>
-                🇺🇸 {selectedStartup.country}
-              </Text>
-            </View>
-            <View style={styles.metaBadge}>
-              <Text style={styles.metaBadgeText}>{selectedStartup.batch}</Text>
-            </View>
-            {selectedStartup.hiring && (
-              <View style={[styles.metaBadge, styles.hiringBadge]}>
-                <Text style={[styles.metaBadgeText, styles.hiringBadgeText]}>
-                  🟢 Hiring
-                </Text>
-              </View>
-            )}
-          </View>
+      <BatchModal
+        visible={isBatchModalVisible}
+        onClose={() => setIsBatchModalVisible(false)}
+        batches={batches}
+        onSelectBatch={setSelectedBatch}
+      />
 
-          {/* Open Company CTA */}
-          <Pressable
-            style={styles.openBtn}
-            onPress={() =>
-              router.push({
-                pathname: "/(home)/companyDetails",
-                params: { id: selectedStartup.id },
-              })
-            }
-          >
-            <Text style={styles.openBtnText}>Open Company →</Text>
-          </Pressable>
-        </View>
-      ) : null}
+      <IndustryModal
+        visible={isIndustryModalVisible}
+        onClose={() => setIsIndustryModalVisible(false)}
+        industries={industries}
+        onSelectIndustry={setSelectedIndustry}
+      />
     </View>
   );
 }
