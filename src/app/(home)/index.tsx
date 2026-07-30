@@ -19,6 +19,7 @@ import {
   useGetCompanyList,
   useGetFilterBatches,
   useGetStats,
+  useGetFoundersLeaderboard,
 } from "@/services/apiService";
 import { getAvatarTheme, INDUSTRY_EMOJIS } from "@/utils/common";
 
@@ -31,11 +32,12 @@ export default function HomeScreen() {
 
   const { data: companyList } = useGetCompanyList({ limit: 10, offset: 0 });
   const { data: stats } = useGetStats();
+  const { data: foundersLeaderboard } = useGetFoundersLeaderboard({
+    limit: 10,
+    metric: "all",
+  });
 
-  const { data: batches = [], isLoading: loadingBatches } =
-    useGetFilterBatches();
-
-  console.log("batches", batches[0]);
+  console.log("foundersLeaderboard =>", foundersLeaderboard);
 
   const dynamicStatistics = useMemo(() => {
     // if (!stats) return statistics;
@@ -259,6 +261,74 @@ export default function HomeScreen() {
     );
   };
 
+  const renderFounderCard = ({ item, index }: { item: any; index: number }) => {
+    const avatarUrl = item?.founder?.avatar_url;
+    const name = item?.founder?.full_name || item?.founder?.slug || "";
+    const title = item?.founder?.title || "Founder";
+    const avatarTheme = getAvatarTheme(name);
+
+    return (
+      <Pressable 
+        style={styles.founderCard}
+        onPress={() => {
+          if (item?.founder?.slug) {
+            router.push({
+              pathname: "/(home)/founderDetails",
+              params: { slug: item.founder.slug },
+            });
+          }
+        }}
+      >
+        <View style={styles.founderRankBadge}>
+          <Text style={styles.founderRankText}>{item.rank}</Text>
+        </View>
+
+        <View style={styles.founderHeader}>
+          <View
+            style={[
+              styles.founderAvatarContainer,
+              !avatarUrl && { backgroundColor: avatarTheme.bg },
+            ]}
+          >
+            {avatarUrl ? (
+              <Image
+                source={{ uri: avatarUrl }}
+                style={styles.founderAvatar}
+                contentFit="cover"
+              />
+            ) : (
+              <Text
+                style={[
+                  styles.founderAvatarInitial,
+                  { color: avatarTheme.text },
+                ]}
+              >
+                {name ? name.charAt(0).toUpperCase() : ""}
+              </Text>
+            )}
+          </View>
+          <View style={styles.founderInfo}>
+            <Text style={styles.founderName} numberOfLines={1}>
+              {name}
+            </Text>
+            <Text style={styles.founderTitle} numberOfLines={1}>
+              {title}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.founderStatBox}>
+          <Text style={styles.founderStatLabel}>
+            {item?.headline_stat?.label || "Total funding"}
+          </Text>
+          <Text style={styles.founderStatValue}>
+            {item?.headline_stat?.value || "$0"}
+          </Text>
+        </View>
+      </Pressable>
+    );
+  };
+
   const renderMainContent = () => {
     return (
       <>
@@ -302,6 +372,32 @@ export default function HomeScreen() {
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
           snapToInterval={Responsive.widthPercentageToDP(79)} // card width (74.7%) + gap (4.3%)
+          contentContainerStyle={styles.horizontalScrollContent}
+        />
+
+        {/* Top Founders Section */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>🏆 Top Founders</Text>
+          <Pressable onPress={() => router.push("/(home)/founderLeaderboard")}>
+            <View style={styles.viewAllBtn}>
+              <Text style={styles.viewAllText}>View All</Text>
+              <Image
+                contentFit="contain"
+                style={styles.arrowIcon}
+                source={Images.arrow_right}
+              />
+            </View>
+          </Pressable>
+        </View>
+
+        <FlatList
+          horizontal
+          decelerationRate="fast"
+          data={foundersLeaderboard?.results || []}
+          renderItem={renderFounderCard}
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item, index) => index.toString()}
+          snapToInterval={Responsive.widthPercentageToDP(69.3)} // card width (65%) + gap (4.3%)
           contentContainerStyle={styles.horizontalScrollContent}
         />
 

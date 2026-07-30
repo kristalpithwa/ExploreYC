@@ -53,10 +53,12 @@ export const useGetCompanyDetails = (payload: any) => {
 };
 
 export const useGetFilterBatches = () => {
+  const url = "filters/batches";
+
   return useQuery({
     queryKey: ["GetFilterBatches"],
     queryFn: async () => {
-      const res = await axiosInterceptor.get("filters/batches");
+      const res = await axiosInterceptor.get(url);
       return res?.data?.batches || [];
     },
     staleTime: DEFAULT_STALE_TIME,
@@ -65,10 +67,12 @@ export const useGetFilterBatches = () => {
 };
 
 export const useGetFilterIndustries = () => {
+  const url = "filters/industries";
+
   return useQuery({
     queryKey: ["GetFilterIndustries"],
     queryFn: async () => {
-      const res = await axiosInterceptor.get("filters/industries");
+      const res = await axiosInterceptor.get(url);
       return res?.data?.industries || [];
     },
     staleTime: DEFAULT_STALE_TIME,
@@ -77,10 +81,12 @@ export const useGetFilterIndustries = () => {
 };
 
 export const useGetFilterCountries = () => {
+  const url = "filters/countries";
+
   return useQuery({
     queryKey: ["GetFilterCountries"],
     queryFn: async () => {
-      const res = await axiosInterceptor.get("filters/countries");
+      const res = await axiosInterceptor.get(url);
       return res?.data?.countries || [];
     },
     staleTime: DEFAULT_STALE_TIME,
@@ -89,10 +95,12 @@ export const useGetFilterCountries = () => {
 };
 
 export const useGetFilterSources = () => {
+  const url = "filters/sources";
+
   return useQuery({
     queryKey: ["GetFilterSources"],
     queryFn: async () => {
-      const res = await axiosInterceptor.get("filters/sources");
+      const res = await axiosInterceptor.get(url);
       return res?.data?.sources || [];
     },
     staleTime: DEFAULT_STALE_TIME,
@@ -101,10 +109,12 @@ export const useGetFilterSources = () => {
 };
 
 export const useGetStats = () => {
+  const url = "stats";
+
   return useQuery({
     queryKey: ["useGetStats"],
     queryFn: async () => {
-      const res = await axiosInterceptor.get("stats");
+      const res = await axiosInterceptor.get(url);
       return res?.data || [];
     },
     staleTime: DEFAULT_STALE_TIME,
@@ -113,6 +123,8 @@ export const useGetStats = () => {
 };
 
 export const useGetBatchCompanies = (payload: string) => {
+  const url = "companies";
+
   const query = {
     batch: payload,
     limit: 10,
@@ -122,7 +134,7 @@ export const useGetBatchCompanies = (payload: string) => {
   return useQuery({
     queryKey: ["useGetBatchCompanies", query],
     queryFn: async () => {
-      const res = await axiosInterceptor.get("companies", {
+      const res = await axiosInterceptor.get(url, {
         params: query,
       });
       return res?.data || [];
@@ -133,12 +145,71 @@ export const useGetBatchCompanies = (payload: string) => {
 };
 
 export const useGetMapStartups = (params: any) => {
+  const url = "map";
+
   return useQuery({
     queryKey: ["useGetMapStartups", params],
     queryFn: async () => {
-      const res = await axiosInterceptor.get("map", { params });
+      const res = await axiosInterceptor.get(url, { params });
       return res?.data || { companies: [], total: 0 };
     },
+    staleTime: DEFAULT_STALE_TIME,
+    gcTime: DEFAULT_GC_TIME,
+  });
+};
+
+export const useGetFoundersLeaderboard = (params: any) => {
+  const url = "founders/leaderboard";
+
+  return useQuery({
+    queryKey: ["useGetFoundersLeaderboard", params],
+    queryFn: async () => {
+      const res = await axiosInterceptor.get(url, { params });
+      return res?.data || { results: [], total: 0 };
+    },
+    staleTime: DEFAULT_STALE_TIME,
+    gcTime: DEFAULT_GC_TIME,
+  });
+};
+
+export const useGetFoundersLeaderboardInfinite = (payload: any) => {
+  const url = "founders/leaderboard";
+
+  return useInfiniteQuery({
+    queryKey: ["useGetFoundersLeaderboardInfinite", payload],
+    queryFn: async ({ pageParam = 0 }) => {
+      const currentPayload = {
+        ...payload,
+        offset: pageParam,
+      };
+
+      const res = await axiosInterceptor.get(url, { params: currentPayload });
+      return res?.data || { results: [], total: 0, metric: payload.metric };
+    },
+    getNextPageParam: (lastPage: any, allPages: any[]) => {
+      const currentOffset = allPages.length * payload.limit;
+      if (lastPage?.results?.length === payload.limit) {
+        return currentOffset;
+      }
+      return undefined;
+    },
+    initialPageParam: 0,
+    staleTime: DEFAULT_STALE_TIME,
+    gcTime: DEFAULT_GC_TIME,
+  });
+};
+
+export const useGetFounderProfile = (slug: string) => {
+  const url = `founders/${slug}`;
+
+  return useQuery({
+    queryKey: ["useGetFounderProfile", slug],
+    queryFn: async () => {
+      if (!slug) return null;
+      const res = await axiosInterceptor.get(url);
+      return res?.data;
+    },
+    enabled: !!slug,
     staleTime: DEFAULT_STALE_TIME,
     gcTime: DEFAULT_GC_TIME,
   });
