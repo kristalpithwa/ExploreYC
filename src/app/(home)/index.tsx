@@ -14,6 +14,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import styles from "./styles";
 import { Colors, Images, Responsive } from "@/theme";
 import { countries, industries, statistics } from "@/data/home";
+
 import {
   useGetCompanyList,
   useGetFilterBatches,
@@ -37,14 +38,15 @@ export default function HomeScreen() {
   console.log("batches", batches[0]);
 
   const dynamicStatistics = useMemo(() => {
-    if (!stats) return statistics;
+    // if (!stats) return statistics;
+
     const total = stats?.total_all_companies || stats?.total_companies || 0;
-    const hiring = stats.hiring || 0;
-    const countriesCount = stats.by_country
-      ? Object.keys(stats.by_country).length
+    const hiring = stats?.hiring || 0;
+    const countriesCount = stats?.by_country
+      ? Object.keys(stats?.by_country).length
       : 0;
-    const industriesCount = stats.by_industry
-      ? Object.keys(stats.by_industry).length
+    const industriesCount = stats?.by_industry
+      ? Object.keys(stats?.by_industry).length
       : 0;
 
     return [
@@ -60,14 +62,14 @@ export default function HomeScreen() {
         count: hiring.toLocaleString(),
         label: "Hiring Companies",
         icon: Images.briefcase,
-        color: Colors.appColors.green,
+        color: Colors.defaults.DARK_GREEN,
       },
       {
         id: "3",
         count: `${countriesCount}+`,
         label: "Countries",
         icon: Images.globe,
-        color: Colors.appColors.skyBlue,
+        color: Colors.defaults.BLUE,
       },
       {
         id: "4",
@@ -84,7 +86,7 @@ export default function HomeScreen() {
       const keys = Object.keys(stats.by_country);
       if (keys.length > 0) return keys;
     }
-    return countries;
+    // return countries;
   }, [stats]);
 
   const dynamicIndustries = useMemo(() => {
@@ -98,7 +100,7 @@ export default function HomeScreen() {
         }));
       }
     }
-    return industries;
+    // return industries;
   }, [stats]);
 
   // onPress Methods
@@ -117,14 +119,14 @@ export default function HomeScreen() {
   const onPressCountryPill = (item: any, index: number) => {
     setSelectedCountryIndex(index);
     router.push({
-      pathname: "/(home)/countryDetails",
+      pathname: "/(home)/allCompanies",
       params: { country: item },
     });
   };
 
   const onPressIndustryCard = (item: any) => {
     router.push({
-      pathname: "/(home)/industryDetails",
+      pathname: "/(home)/allCompanies",
       params: { industry: item.name },
     });
   };
@@ -304,7 +306,7 @@ export default function HomeScreen() {
         />
 
         {/* Latest Batch Hero Section */}
-        <View style={styles.heroSection}>
+        {/* <View style={styles.heroSection}>
           <View style={styles.heroGradientBg}>
             <View style={styles.heroTextContainer}>
               <Text style={styles.heroLabel}>Spring 2026</Text>
@@ -331,7 +333,7 @@ export default function HomeScreen() {
               <Text style={styles.heroExploreBtnText}>Explore Batch</Text>
             </Pressable>
           </View>
-        </View>
+        </View> */}
 
         {/* Statistics Grid Section */}
         <View style={styles.sectionContainer}>

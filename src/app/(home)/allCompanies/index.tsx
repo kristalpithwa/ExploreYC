@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import styles from "./styles";
@@ -41,8 +41,9 @@ export default function AllCompaniesScreen() {
 
   // Advanced Filter states driven by Backend API dropdowns
   const [selectedBatch, setSelectedBatch] = useState("");
-  const [selectedIndustry, setSelectedIndustry] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState("");
+  const { country, industry } = useLocalSearchParams<{ country?: string, industry?: string }>();
+  const [selectedIndustry, setSelectedIndustry] = useState(industry || "");
+  const [selectedCountry, setSelectedCountry] = useState(country || "");
   const [selectedSource, setSelectedSource] = useState("");
   const [hiringOnly, setHiringOnly] = useState(false);
   const [topCompaniesOnly, setTopCompaniesOnly] = useState(false);
