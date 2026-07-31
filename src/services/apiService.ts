@@ -39,10 +39,25 @@ export const useGetCompanyListInfinite = (payload: any) => {
 };
 
 export const useGetCompanyDetails = (payload: any) => {
-  const url = "companies/" + payload;
+  const isId = payload && !isNaN(payload) && !isNaN(parseFloat(payload));
+  const url = isId ? `companies/${payload}` : `company/slug/${payload}`;
 
   return useQuery({
     queryKey: ["GetCompanyDetails", payload],
+    queryFn: async () => {
+      const res = await axiosInterceptor.get(url);
+      return res?.data;
+    },
+    staleTime: DEFAULT_STALE_TIME,
+    gcTime: DEFAULT_GC_TIME,
+  });
+};
+
+export const useGetCompanyDetailsBySlug = (payload: any) => {
+  const url = `company/slug/${payload}`;
+
+  return useQuery({
+    queryKey: ["GetCompanyDetailsBySlug", payload],
     queryFn: async () => {
       const res = await axiosInterceptor.get(url);
       return res?.data;

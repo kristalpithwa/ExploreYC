@@ -15,8 +15,14 @@ import styles from "./styles";
 import { Colors } from "@/theme";
 import { getAvatarTheme } from "@/utils/common";
 import { useGetFoundersLeaderboardInfinite } from "@/services/apiService";
+import { BASE_URL } from "@/network/config";
 import { Ionicons } from "@expo/vector-icons";
-import { Responsive } from "@/theme";
+
+const getImageUrl = (url?: string) => {
+  if (!url) return null;
+  if (url.startsWith("http")) return url;
+  return BASE_URL.replace("/api", "") + url;
+};
 
 const METRICS = [
   { id: "funded", label: "Top Funded" },
@@ -49,16 +55,42 @@ export default function FounderLeaderboardScreen() {
     return leaderboardData?.pages?.flatMap((page: any) => page.results) || [];
   }, [leaderboardData]);
 
+  const renderFilterCard = ({ item: metric }: { item: any }) => {
+    return (
+      <Pressable
+        style={[
+          styles.proFilterPill,
+          selectedMetric === metric.id && styles.proFilterPillActive,
+        ]}
+        onPress={() => setSelectedMetric(metric.id)}
+      >
+        <Text
+          style={[
+            styles.proFilterPillText,
+            selectedMetric === metric.id && styles.proFilterPillTextActive,
+          ]}
+        >
+          {metric.label}
+        </Text>
+      </Pressable>
+    );
+  };
+
   const renderFounderCard = ({ item, index }: { item: any; index: number }) => {
-    const { founder, rank, highlight_stat } = item;
+    const { founder, rank, headline_stat } = item;
     const name = founder?.full_name || "Unknown";
     const title = founder?.title || "";
-    const avatarUrl = founder?.avatar_url;
+    const avatarUrl = getImageUrl(founder?.avatar_url);
     const avatarTheme = getAvatarTheme(name);
+
+    let badgeColor = Colors.appColors.primary;
+    if (rank === 1) badgeColor = "#FFD700";
+    else if (rank === 2) badgeColor = "#C0C0C0";
+    else if (rank === 3) badgeColor = "#CD7F32";
 
     return (
       <Pressable
-        style={styles.founderCard}
+        style={styles.proFounderCard}
         onPress={() => {
           if (founder?.slug) {
             router.push({
@@ -68,8 +100,8 @@ export default function FounderLeaderboardScreen() {
           }
         }}
       >
-        <View style={styles.rankBadge}>
-          <Text style={styles.rankText}>{rank}</Text>
+        <View style={[styles.proRankBadge, { backgroundColor: badgeColor }]}>
+          <Text style={styles.proRankText}>{rank}</Text>
         </View>
 
         {avatarUrl ? (
@@ -101,10 +133,18 @@ export default function FounderLeaderboardScreen() {
               {title}
             </Text>
           ) : null}
-          <View style={styles.founderStatPill}>
-            <Text style={styles.founderStatText}>{highlight_stat}</Text>
-          </View>
         </View>
+
+        {headline_stat && (
+          <View style={styles.proStatContainer}>
+            <Text style={styles.proStatValue} numberOfLines={1}>
+              {headline_stat.value}
+            </Text>
+            <Text style={styles.proStatLabel} numberOfLines={2}>
+              {headline_stat.label}
+            </Text>
+          </View>
+        )}
       </Pressable>
     );
   };
@@ -121,22 +161,29 @@ export default function FounderLeaderboardScreen() {
   const renderEmpty = () => {
     if (isLoading) {
       return (
-        <View style={styles.emptyContainer}>
+        <View style={styles.proEmptyContainer}>
           <ActivityIndicator size="large" color={Colors.appColors.primary} />
         </View>
       );
     }
     return (
-      <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>No founders found.</Text>
+      <View style={styles.proEmptyContainer}>
+        <View style={styles.proEmptyIconWrapper}>
+          <Ionicons name="search" size={40} color={Colors.appColors.primary} />
+        </View>
+        <Text style={styles.proEmptyTitle}>No Founders Found</Text>
+        <Text style={styles.proEmptySub}>
+          We couldn't find any founders matching the current criteria. Try
+          selecting a different filter.
+        </Text>
       </View>
     );
   };
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={[styles.container]}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top }]}>
         <Pressable style={styles.backBtn} onPress={() => router.back()}>
           <Text style={styles.backBtnText}>←</Text>
         </Pressable>
@@ -148,31 +195,14 @@ export default function FounderLeaderboardScreen() {
 
       {/* Metrics Filter */}
       <View>
-        <ScrollView
+        <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.filterScrollContainer}
-        >
-          {METRICS.map((metric) => (
-            <Pressable
-              key={metric.id}
-              style={[
-                styles.filterPill,
-                selectedMetric === metric.id && styles.filterPillActive,
-              ]}
-              onPress={() => setSelectedMetric(metric.id)}
-            >
-              <Text
-                style={[
-                  styles.filterPillText,
-                  selectedMetric === metric.id && styles.filterPillTextActive,
-                ]}
-              >
-                {metric.label}
-              </Text>
-            </Pressable>
-          ))}
-        </ScrollView>
+          data={METRICS}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderFilterCard}
+        />
       </View>
 
       {/* List */}

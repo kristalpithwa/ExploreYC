@@ -223,46 +223,54 @@ const styles = StyleSheet.create({
     fontSize: Responsive.convertFontScale(14),
     color: Colors.appColors.secondary,
   },
-  statsCard: {
+  proStatsGrid: {
     flexDirection: "row",
-    marginHorizontal: Responsive.widthPercentageToDP(5.3),
+    paddingHorizontal: Responsive.widthPercentageToDP(5.3),
+    gap: Responsive.widthPercentageToDP(3),
+    marginBottom: Responsive.heightPercentageToDP(3),
+  },
+  proStatCard: {
+    flex: 1,
     backgroundColor: Colors.appColors.white,
-    borderRadius: Responsive.widthPercentageToDP(2.1),
+    paddingVertical: Responsive.heightPercentageToDP(2),
+    paddingHorizontal: Responsive.widthPercentageToDP(1),
+    borderRadius: Responsive.widthPercentageToDP(4),
     borderWidth: 1,
     borderColor: Colors.appColors.borderLight,
-    paddingVertical: Responsive.heightPercentageToDP(2),
-    marginBottom: Responsive.heightPercentageToDP(3),
+    alignItems: "center",
+    justifyContent: "center",
     ...Platform.select({
       ios: {
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.04,
-        shadowRadius: 10,
+        shadowColor: Colors.appColors.black,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.03,
+        shadowRadius: 6,
       },
       android: {
         elevation: 2,
       },
     }),
   },
-  statColumn: {
-    flex: 1,
-    alignItems: "center",
+  proStatIconWrapper: {
+    width: Responsive.widthPercentageToDP(10),
+    height: Responsive.widthPercentageToDP(10),
+    borderRadius: Responsive.widthPercentageToDP(5),
     justifyContent: "center",
+    alignItems: "center",
+    marginBottom: Responsive.heightPercentageToDP(1.5),
   },
-  statBorderLeft: {
-    borderLeftWidth: 1,
-    borderLeftColor: Colors.appColors.borderLight,
-  },
-  statLabel: {
-    fontFamily: Fonts.medium,
-    fontSize: Responsive.convertFontScale(10),
-    color: Colors.appColors.tertiary,
-    marginBottom: Responsive.heightPercentageToDP(0.5),
-  },
-  statValue: {
+  proStatValue: {
     fontFamily: Fonts.bold,
     fontSize: Responsive.convertFontScale(14),
     color: Colors.appColors.secondary,
+    marginBottom: Responsive.heightPercentageToDP(0.5),
+    textAlign: "center",
+  },
+  proStatLabel: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(10),
+    color: Colors.appColors.tertiary,
+    textAlign: "center",
   },
   sectionContainer: {
     paddingHorizontal: Responsive.widthPercentageToDP(5.3),
@@ -481,17 +489,28 @@ const styles = StyleSheet.create({
     gap: Responsive.widthPercentageToDP(2.1),
   },
   tagChip: {
-    backgroundColor: Colors.appColors.grayLight,
+    backgroundColor: Colors.appColors.white,
     paddingHorizontal: Responsive.widthPercentageToDP(3.2),
     paddingVertical: Responsive.heightPercentageToDP(0.8),
     borderRadius: Responsive.widthPercentageToDP(4.3),
     borderWidth: 1,
     borderColor: Colors.appColors.borderLight,
+    ...Platform.select({
+      ios: {
+        shadowColor: Colors.appColors.black,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.03,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 1,
+      },
+    }),
   },
   tagChipText: {
     fontFamily: Fonts.medium,
     fontSize: Responsive.convertFontScale(12),
-    color: Colors.appColors.secondary,
+    color: Colors.appColors.primary,
   },
   officeMapContainer: {
     height: Responsive.heightPercentageToDP(19.7),

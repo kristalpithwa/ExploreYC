@@ -41,7 +41,10 @@ export default function AllCompaniesScreen() {
 
   // Advanced Filter states driven by Backend API dropdowns
   const [selectedBatch, setSelectedBatch] = useState("");
-  const { country, industry } = useLocalSearchParams<{ country?: string, industry?: string }>();
+  const { country, industry } = useLocalSearchParams<{
+    country?: string;
+    industry?: string;
+  }>();
   const [selectedIndustry, setSelectedIndustry] = useState(industry || "");
   const [selectedCountry, setSelectedCountry] = useState(country || "");
   const [selectedSource, setSelectedSource] = useState("");
@@ -322,7 +325,7 @@ export default function AllCompaniesScreen() {
   const onPressCompanyCard = (item: any) => {
     router.push({
       pathname: "/(home)/companyDetails",
-      params: { id: item.id },
+      params: { slug: item.slug },
     });
   };
 

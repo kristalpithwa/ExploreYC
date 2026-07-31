@@ -59,25 +59,50 @@ const styles = StyleSheet.create({
   },
   filterScrollContainer: {
     paddingHorizontal: Responsive.widthPercentageToDP(5.3),
-    paddingVertical: Responsive.heightPercentageToDP(1.5),
-    gap: Responsive.widthPercentageToDP(2.5),
+    paddingVertical: Responsive.heightPercentageToDP(2),
+    gap: Responsive.widthPercentageToDP(3),
   },
-  filterPill: {
-    paddingHorizontal: Responsive.widthPercentageToDP(4),
-    paddingVertical: Responsive.heightPercentageToDP(1),
-    borderRadius: Responsive.widthPercentageToDP(5),
-    backgroundColor: Colors.appColors.grayLight,
+  proFilterPill: {
+    paddingHorizontal: Responsive.widthPercentageToDP(5),
+    paddingVertical: Responsive.heightPercentageToDP(1.2),
+    borderRadius: Responsive.widthPercentageToDP(6),
+    backgroundColor: Colors.appColors.white,
     marginRight: Responsive.widthPercentageToDP(2.5),
+    borderWidth: 1,
+    borderColor: Colors.appColors.borderLight,
+    ...Platform.select({
+      ios: {
+        shadowColor: Colors.appColors.black,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.04,
+        shadowRadius: 5,
+      },
+      android: {
+        elevation: 1,
+      },
+    }),
   },
-  filterPillActive: {
+  proFilterPillActive: {
     backgroundColor: Colors.appColors.primary,
+    borderColor: Colors.appColors.primary,
+    ...Platform.select({
+      ios: {
+        shadowColor: Colors.appColors.primary,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.25,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
-  filterPillText: {
+  proFilterPillText: {
     fontFamily: Fonts.medium,
-    fontSize: Responsive.convertFontScale(12),
+    fontSize: Responsive.convertFontScale(13),
     color: Colors.appColors.tertiary,
   },
-  filterPillTextActive: {
+  proFilterPillTextActive: {
     color: Colors.appColors.white,
     fontFamily: Fonts.bold,
   },
@@ -86,101 +111,124 @@ const styles = StyleSheet.create({
     paddingBottom: Responsive.heightPercentageToDP(10),
     paddingTop: Responsive.heightPercentageToDP(1),
   },
-  founderCard: {
+  proFounderCard: {
     flexDirection: "row",
     backgroundColor: Colors.appColors.white,
-    padding: Responsive.widthPercentageToDP(4),
-    borderRadius: Responsive.widthPercentageToDP(4.5),
-    marginBottom: Responsive.heightPercentageToDP(1.5),
+    padding: Responsive.widthPercentageToDP(4.5),
+    borderRadius: Responsive.widthPercentageToDP(5),
+    marginBottom: Responsive.heightPercentageToDP(2),
     borderWidth: 1,
     borderColor: Colors.appColors.borderLight,
     alignItems: "center",
     ...Platform.select({
       ios: {
         shadowColor: Colors.appColors.black,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.04,
-        shadowRadius: 10,
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.05,
+        shadowRadius: 12,
       },
       android: {
-        elevation: 2,
+        elevation: 3,
       },
     }),
   },
-  rankBadge: {
-    width: Responsive.widthPercentageToDP(7),
-    height: Responsive.widthPercentageToDP(7),
-    borderRadius: Responsive.widthPercentageToDP(3.5),
-    backgroundColor: Colors.appColors.grayLight,
+  proRankBadge: {
+    width: Responsive.widthPercentageToDP(8),
+    height: Responsive.widthPercentageToDP(8),
+    borderRadius: Responsive.widthPercentageToDP(4),
     justifyContent: "center",
     alignItems: "center",
-    marginRight: Responsive.widthPercentageToDP(3),
+    marginRight: Responsive.widthPercentageToDP(3.5),
   },
-  rankText: {
+  proRankText: {
     fontFamily: Fonts.bold,
-    fontSize: Responsive.convertFontScale(11),
-    color: Colors.appColors.secondary,
+    fontSize: Responsive.convertFontScale(13),
+    color: Colors.appColors.white,
   },
   avatar: {
-    width: Responsive.widthPercentageToDP(12.5),
-    height: Responsive.widthPercentageToDP(12.5),
-    borderRadius: Responsive.widthPercentageToDP(6.25),
+    width: Responsive.widthPercentageToDP(13),
+    height: Responsive.widthPercentageToDP(13),
+    borderRadius: Responsive.widthPercentageToDP(6.5),
     marginRight: Responsive.widthPercentageToDP(3.5),
   },
   avatarInitial: {
-    width: Responsive.widthPercentageToDP(12.5),
-    height: Responsive.widthPercentageToDP(12.5),
-    borderRadius: Responsive.widthPercentageToDP(6.25),
+    width: Responsive.widthPercentageToDP(13),
+    height: Responsive.widthPercentageToDP(13),
+    borderRadius: Responsive.widthPercentageToDP(6.5),
     marginRight: Responsive.widthPercentageToDP(3.5),
     fontFamily: Fonts.bold,
     fontSize: Responsive.convertFontScale(20),
     textAlign: "center",
     textAlignVertical: "center",
-    lineHeight: Responsive.widthPercentageToDP(12.5),
+    lineHeight: Responsive.widthPercentageToDP(13),
     overflow: "hidden",
   },
   founderInfo: {
     flex: 1,
+    justifyContent: "center",
+    paddingRight: Responsive.widthPercentageToDP(2),
   },
   founderName: {
     fontFamily: Fonts.bold,
     fontSize: Responsive.convertFontScale(15),
     color: Colors.appColors.secondary,
+    marginBottom: Responsive.heightPercentageToDP(0.2),
   },
   founderTitle: {
     fontFamily: Fonts.medium,
     fontSize: Responsive.convertFontScale(12),
     color: Colors.appColors.tertiary,
-    marginTop: 2,
   },
-  founderStatPill: {
-    marginTop: Responsive.heightPercentageToDP(0.8),
-    backgroundColor: Colors.appColors.primaryLight,
-    paddingHorizontal: Responsive.widthPercentageToDP(2.5),
-    paddingVertical: Responsive.heightPercentageToDP(0.5),
-    borderRadius: Responsive.widthPercentageToDP(2),
-    alignSelf: "flex-start",
+  proStatContainer: {
+    alignItems: "flex-end",
+    justifyContent: "center",
+    maxWidth: Responsive.widthPercentageToDP(25),
   },
-  founderStatText: {
+  proStatValue: {
     fontFamily: Fonts.bold,
-    fontSize: Responsive.convertFontScale(11),
+    fontSize: Responsive.convertFontScale(14),
     color: Colors.appColors.primary,
+    marginBottom: Responsive.heightPercentageToDP(0.3),
+  },
+  proStatLabel: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(9),
+    color: Colors.appColors.tertiary,
+    textAlign: "right",
   },
   loaderContainer: {
     padding: Responsive.heightPercentageToDP(2),
     justifyContent: "center",
     alignItems: "center",
   },
-  emptyContainer: {
-    paddingTop: Responsive.heightPercentageToDP(10),
+  proEmptyContainer: {
+    paddingTop: Responsive.heightPercentageToDP(15),
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: Responsive.widthPercentageToDP(10),
   },
-  emptyText: {
+  proEmptyIconWrapper: {
+    width: Responsive.widthPercentageToDP(20),
+    height: Responsive.widthPercentageToDP(20),
+    borderRadius: Responsive.widthPercentageToDP(10),
+    backgroundColor: Colors.opacityColors.primaryOpacity10,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: Responsive.heightPercentageToDP(2.5),
+  },
+  proEmptyTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(18),
+    color: Colors.appColors.secondary,
+    marginBottom: Responsive.heightPercentageToDP(1),
+    textAlign: "center",
+  },
+  proEmptySub: {
     fontFamily: Fonts.medium,
-    fontSize: Responsive.convertFontScale(14),
+    fontSize: Responsive.convertFontScale(13),
     color: Colors.appColors.tertiary,
-    marginTop: 10,
+    textAlign: "center",
+    lineHeight: Responsive.convertFontScale(18),
   }
 });
 

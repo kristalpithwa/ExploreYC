@@ -13,15 +13,14 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import styles from "./styles";
 import { Colors, Images, Responsive } from "@/theme";
-import { countries, industries, statistics } from "@/data/home";
 
 import {
   useGetCompanyList,
-  useGetFilterBatches,
   useGetStats,
   useGetFoundersLeaderboard,
 } from "@/services/apiService";
 import { getAvatarTheme, INDUSTRY_EMOJIS } from "@/utils/common";
+import { BASE_URL } from "@/network/config";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -34,10 +33,8 @@ export default function HomeScreen() {
   const { data: stats } = useGetStats();
   const { data: foundersLeaderboard } = useGetFoundersLeaderboard({
     limit: 10,
-    metric: "all",
+    metric: "funded",
   });
-
-  console.log("foundersLeaderboard =>", foundersLeaderboard);
 
   const dynamicStatistics = useMemo(() => {
     // if (!stats) return statistics;
@@ -105,6 +102,12 @@ export default function HomeScreen() {
     // return industries;
   }, [stats]);
 
+  const getImageUrl = (url?: string) => {
+    if (!url) return null;
+    if (url.startsWith("http")) return url;
+    return BASE_URL.replace("/api", "") + url;
+  };
+
   // onPress Methods
 
   const onPressViewAll = () => {
@@ -114,7 +117,7 @@ export default function HomeScreen() {
   const onPressCompanyCard = (item: any) => {
     router.push({
       pathname: "/(home)/companyDetails",
-      params: { id: item.id },
+      params: { slug: item.slug },
     });
   };
 
@@ -130,6 +133,13 @@ export default function HomeScreen() {
     router.push({
       pathname: "/(home)/allCompanies",
       params: { industry: item.name },
+    });
+  };
+
+  const onPressFounderCard = (item: any) => {
+    router.push({
+      pathname: "/(home)/founderDetails",
+      params: { slug: item.founder.slug },
     });
   };
 
@@ -262,68 +272,90 @@ export default function HomeScreen() {
   };
 
   const renderFounderCard = ({ item, index }: { item: any; index: number }) => {
-    const avatarUrl = item?.founder?.avatar_url;
+    const avatarUrl = getImageUrl(item?.founder?.avatar_url);
     const name = item?.founder?.full_name || item?.founder?.slug || "";
     const title = item?.founder?.title || "Founder";
     const avatarTheme = getAvatarTheme(name);
 
+    const isTop3 = item.rank <= 3;
+    const rankColors = ["#FFD700", "#C0C0C0", "#CD7F32"]; // Gold, Silver, Bronze
+    const rankBg = isTop3
+      ? rankColors[item.rank - 1]
+      : Colors.appColors.primary;
+
     return (
-      <Pressable 
-        style={styles.founderCard}
-        onPress={() => {
-          if (item?.founder?.slug) {
-            router.push({
-              pathname: "/(home)/founderDetails",
-              params: { slug: item.founder.slug },
-            });
-          }
-        }}
+      <Pressable
+        style={styles.proFounderCard}
+        onPress={() => onPressFounderCard(item)}
       >
-        <View style={styles.founderRankBadge}>
-          <Text style={styles.founderRankText}>{item.rank}</Text>
+        <View style={styles.proFounderCover}>
+          <View style={[styles.proRankBadge, { backgroundColor: rankBg }]}>
+            <Text style={styles.proRankText}>#{item.rank}</Text>
+          </View>
         </View>
 
-        <View style={styles.founderHeader}>
+        <View style={styles.proAvatarWrapper}>
           <View
             style={[
-              styles.founderAvatarContainer,
+              styles.proAvatarContainer,
               !avatarUrl && { backgroundColor: avatarTheme.bg },
             ]}
           >
             {avatarUrl ? (
               <Image
                 source={{ uri: avatarUrl }}
-                style={styles.founderAvatar}
+                style={styles.proAvatar}
                 contentFit="cover"
               />
             ) : (
               <Text
-                style={[
-                  styles.founderAvatarInitial,
-                  { color: avatarTheme.text },
-                ]}
+                style={[styles.proAvatarInitial, { color: avatarTheme.text }]}
               >
                 {name ? name.charAt(0).toUpperCase() : ""}
               </Text>
             )}
           </View>
-          <View style={styles.founderInfo}>
-            <Text style={styles.founderName} numberOfLines={1}>
-              {name}
-            </Text>
-            <Text style={styles.founderTitle} numberOfLines={1}>
-              {title}
-            </Text>
+        </View>
+
+        <View style={styles.proFounderInfo}>
+          <Text style={styles.proFounderName} numberOfLines={1}>
+            {name}
+          </Text>
+          <Text style={styles.proFounderTitle} numberOfLines={1}>
+            {title}
+          </Text>
+
+          <View style={styles.proBadgesRow}>
+            {item?.stats?.batches?.[0] && (
+              <View style={styles.proBatchBadge}>
+                <Text style={styles.proBatchText}>{item.stats.batches[0]}</Text>
+              </View>
+            )}
+            {item?.stats?.companies_count > 0 && (
+              <View style={styles.proCompanyBadge}>
+                <Text style={styles.proCompanyText}>
+                  {item.stats.companies_count} Startup
+                  {item.stats.companies_count > 1 ? "s" : ""}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
 
-        <View style={styles.founderStatBox}>
-          <Text style={styles.founderStatLabel}>
-            {item?.headline_stat?.label || "Total funding"}
-          </Text>
-          <Text style={styles.founderStatValue}>
-            {item?.headline_stat?.value || "$0"}
-          </Text>
+        <View style={styles.proStatDivider} />
+
+        <View style={styles.proStatBox}>
+          <View style={styles.proStatItem}>
+            <Text style={styles.proStatLabel}>
+              {item?.headline_stat?.label || "Total funding"}
+            </Text>
+            <Text style={styles.proStatValue}>
+              {item?.headline_stat?.value || "$0"}
+            </Text>
+          </View>
+          <View style={styles.proArrowBtn}>
+            <Image source={Images.arrow_right} style={styles.proArrowIcon} />
+          </View>
         </View>
       </Pressable>
     );
@@ -397,7 +429,7 @@ export default function HomeScreen() {
           renderItem={renderFounderCard}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
-          snapToInterval={Responsive.widthPercentageToDP(69.3)} // card width (65%) + gap (4.3%)
+          snapToInterval={Responsive.widthPercentageToDP(74.3)} // card width (70%) + gap (4.3%)
           contentContainerStyle={styles.horizontalScrollContent}
         />
 

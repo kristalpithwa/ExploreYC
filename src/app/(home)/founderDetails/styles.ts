@@ -16,12 +16,15 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.appColors.background,
   },
   headerRow: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    zIndex: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: Responsive.widthPercentageToDP(5.3),
-    paddingTop: Responsive.heightPercentageToDP(1.5),
-    paddingBottom: Responsive.heightPercentageToDP(1.5),
+    paddingVertical: Responsive.heightPercentageToDP(1.5),
   },
   backBtn: {
     width: Responsive.widthPercentageToDP(10.6),
@@ -53,14 +56,44 @@ const styles = StyleSheet.create({
   },
 
   // Profile Section
+  proCoverBg: {
+    height: Responsive.heightPercentageToDP(15),
+    backgroundColor: Colors.opacityColors.primaryOpacity15,
+  },
+  proRankBadge: {
+    position: "absolute",
+    top: -Responsive.heightPercentageToDP(2.5),
+    right: Responsive.widthPercentageToDP(5.3),
+    backgroundColor: Colors.appColors.primary,
+    paddingHorizontal: Responsive.widthPercentageToDP(3),
+    paddingVertical: Responsive.heightPercentageToDP(0.8),
+    borderRadius: Responsive.widthPercentageToDP(4),
+    shadowColor: Colors.appColors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 4,
+    zIndex: 10,
+  },
+  proRankText: {
+    color: Colors.appColors.white,
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(12),
+  },
   profileSection: {
     alignItems: "center",
     paddingHorizontal: Responsive.widthPercentageToDP(5.3),
     paddingBottom: Responsive.heightPercentageToDP(3),
+    backgroundColor: Colors.appColors.white,
     borderBottomWidth: 1,
     borderBottomColor: Colors.appColors.borderLight,
-    backgroundColor: Colors.appColors.white,
-    paddingTop: Responsive.heightPercentageToDP(2),
+    borderTopLeftRadius: Responsive.widthPercentageToDP(6),
+    borderTopRightRadius: Responsive.widthPercentageToDP(6),
+    marginTop: -Responsive.heightPercentageToDP(4),
+  },
+  avatarWrapper: {
+    marginTop: -Responsive.heightPercentageToDP(7),
+    alignItems: "center",
   },
   avatarContainer: {
     width: Responsive.widthPercentageToDP(26),
@@ -101,7 +134,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: Fonts.bold,
-    fontSize: Responsive.convertFontScale(22),
+    fontSize: Responsive.convertFontScale(24),
     color: Colors.appColors.secondary,
     textAlign: "center",
     marginBottom: Responsive.heightPercentageToDP(0.5),
@@ -109,9 +142,18 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: Fonts.medium,
     fontSize: Responsive.convertFontScale(14),
+    color: Colors.appColors.primary,
+    textAlign: "center",
+    marginBottom: Responsive.heightPercentageToDP(1),
+  },
+  bioText: {
+    fontFamily: Fonts.regular,
+    fontSize: Responsive.convertFontScale(14),
     color: Colors.appColors.tertiary,
     textAlign: "center",
-    marginBottom: Responsive.heightPercentageToDP(2),
+    lineHeight: Responsive.heightPercentageToDP(2.6),
+    marginBottom: Responsive.heightPercentageToDP(2.5),
+    paddingHorizontal: Responsive.widthPercentageToDP(2),
   },
   socialRow: {
     flexDirection: "row",
@@ -147,29 +189,36 @@ const styles = StyleSheet.create({
   statsGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: Responsive.widthPercentageToDP(3.3),
+    justifyContent: "space-between",
+    gap: Responsive.widthPercentageToDP(3),
   },
   statCard: {
-    width:
-      (Responsive.widthPercentageToDP(100) -
-        Responsive.widthPercentageToDP(14)) /
-      2,
+    width: (Responsive.widthPercentageToDP(100) - Responsive.widthPercentageToDP(13.6)) / 2,
     backgroundColor: Colors.appColors.white,
     padding: Responsive.widthPercentageToDP(4),
     borderRadius: Responsive.widthPercentageToDP(4),
     borderWidth: 1,
     borderColor: Colors.appColors.borderLight,
+    marginBottom: Responsive.heightPercentageToDP(1.5),
     ...Platform.select({
       ios: {
         shadowColor: Colors.appColors.black,
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.02,
-        shadowRadius: 5,
+        shadowOpacity: 0.03,
+        shadowRadius: 6,
       },
       android: {
-        elevation: 1,
+        elevation: 2,
       },
     }),
+  },
+  statIconWrapper: {
+    width: Responsive.widthPercentageToDP(10),
+    height: Responsive.widthPercentageToDP(10),
+    borderRadius: Responsive.widthPercentageToDP(5),
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: Responsive.heightPercentageToDP(1.5),
   },
   statValue: {
     fontFamily: Fonts.bold,
@@ -186,81 +235,127 @@ const styles = StyleSheet.create({
   // Companies List
   companiesContainer: {
     paddingHorizontal: Responsive.widthPercentageToDP(5.3),
-    paddingBottom: Responsive.heightPercentageToDP(3),
+    paddingBottom: Responsive.heightPercentageToDP(5),
   },
-  companyCard: {
+  proCompanyCard: {
     backgroundColor: Colors.appColors.white,
-    padding: Responsive.widthPercentageToDP(4),
-    borderRadius: Responsive.widthPercentageToDP(4.5),
-    marginBottom: Responsive.heightPercentageToDP(1.5),
+    padding: Responsive.widthPercentageToDP(4.5),
+    borderRadius: Responsive.widthPercentageToDP(5),
+    marginBottom: Responsive.heightPercentageToDP(2),
     borderWidth: 1,
     borderColor: Colors.appColors.borderLight,
     ...Platform.select({
       ios: {
         shadowColor: Colors.appColors.black,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.03,
-        shadowRadius: 10,
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.05,
+        shadowRadius: 12,
       },
       android: {
-        elevation: 2,
+        elevation: 3,
       },
     }),
   },
-  companyHeader: {
+  proCompanyHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: Responsive.heightPercentageToDP(1),
-  },
-  companyName: {
-    fontFamily: Fonts.bold,
-    fontSize: Responsive.convertFontScale(16),
-    color: Colors.appColors.secondary,
-    flex: 1,
-    marginRight: Responsive.widthPercentageToDP(2),
-  },
-  companyBatchPill: {
-    backgroundColor: Colors.appColors.primaryLight,
-    paddingHorizontal: Responsive.widthPercentageToDP(2.5),
-    paddingVertical: Responsive.heightPercentageToDP(0.5),
-    borderRadius: Responsive.widthPercentageToDP(2),
-  },
-  companyBatchText: {
-    fontFamily: Fonts.bold,
-    fontSize: Responsive.convertFontScale(10),
-    color: Colors.appColors.primary,
-  },
-  companyTitle: {
-    fontFamily: Fonts.semiBold,
-    fontSize: Responsive.convertFontScale(12),
-    color: Colors.appColors.primary,
+    alignItems: "center",
     marginBottom: Responsive.heightPercentageToDP(0.5),
   },
-  companyOneLiner: {
+  proCompanyTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+    gap: Responsive.widthPercentageToDP(2),
+  },
+  proCompanyName: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(18),
+    color: Colors.appColors.secondary,
+  },
+  statusBadge: {
+    paddingHorizontal: Responsive.widthPercentageToDP(2),
+    paddingVertical: Responsive.heightPercentageToDP(0.4),
+    borderRadius: Responsive.widthPercentageToDP(1.5),
+  },
+  statusActive: {
+    backgroundColor: "rgba(46, 125, 50, 0.1)",
+  },
+  statusInactive: {
+    backgroundColor: "rgba(126, 139, 151, 0.1)",
+  },
+  statusText: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(9),
+    textTransform: "uppercase",
+  },
+  statusActiveText: {
+    color: "#2E7D32",
+  },
+  statusInactiveText: {
+    color: Colors.appColors.tertiary,
+  },
+  proCompanyRole: {
+    fontFamily: Fonts.semiBold,
+    fontSize: Responsive.convertFontScale(13),
+    color: Colors.appColors.primary,
+    marginBottom: Responsive.heightPercentageToDP(1),
+  },
+  proCompanyOneLiner: {
     fontFamily: Fonts.regular,
     fontSize: Responsive.convertFontScale(13),
     color: Colors.appColors.tertiary,
-    lineHeight: Responsive.heightPercentageToDP(2.4),
-    marginBottom: Responsive.heightPercentageToDP(1.5),
+    lineHeight: Responsive.heightPercentageToDP(2.2),
+    marginBottom: Responsive.heightPercentageToDP(2),
   },
-  companyFooter: {
+  proCompanyBadges: {
+    flexDirection: "row",
+    gap: Responsive.widthPercentageToDP(2),
+    marginBottom: Responsive.heightPercentageToDP(2),
+  },
+  locationPill: {
     flexDirection: "row",
     alignItems: "center",
-    gap: Responsive.widthPercentageToDP(3),
+    backgroundColor: Colors.appColors.grayLight,
+    paddingHorizontal: Responsive.widthPercentageToDP(2.5),
+    paddingVertical: Responsive.heightPercentageToDP(0.5),
+    borderRadius: Responsive.widthPercentageToDP(2),
+    gap: Responsive.widthPercentageToDP(1),
+  },
+  locationText: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(10),
+    color: Colors.appColors.tertiary,
+  },
+  proCompanyFooter: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Responsive.widthPercentageToDP(4),
     borderTopWidth: 1,
     borderTopColor: Colors.appColors.borderLight,
     paddingTop: Responsive.heightPercentageToDP(1.5),
   },
-  companyFooterItem: {
+  proCompanyFooterItem: {
     flexDirection: "row",
     alignItems: "center",
-    gap: Responsive.widthPercentageToDP(1),
+    gap: Responsive.widthPercentageToDP(1.5),
   },
-  companyFooterText: {
-    fontFamily: Fonts.medium,
-    fontSize: Responsive.convertFontScale(11),
+  footerIconWrapper: {
+    width: Responsive.widthPercentageToDP(6),
+    height: Responsive.widthPercentageToDP(6),
+    borderRadius: Responsive.widthPercentageToDP(3),
+    backgroundColor: Colors.opacityColors.primaryOpacity10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  proCompanyFooterText: {
+    fontFamily: Fonts.regular,
+    fontSize: Responsive.convertFontScale(12),
     color: Colors.appColors.tertiary,
+  },
+  boldText: {
+    fontFamily: Fonts.bold,
+    color: Colors.appColors.secondary,
   },
 });
 

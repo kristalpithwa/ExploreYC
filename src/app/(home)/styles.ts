@@ -259,101 +259,169 @@ const styles = StyleSheet.create({
     marginTop: Responsive.heightPercentageToDP(1.5),
   },
   
-  founderCard: {
-    width: Responsive.widthPercentageToDP(65),
+  proFounderCard: {
+    width: Responsive.widthPercentageToDP(70),
     backgroundColor: Colors.appColors.white,
-    borderRadius: Responsive.widthPercentageToDP(4.8),
-    padding: Responsive.widthPercentageToDP(4.5),
+    borderRadius: Responsive.widthPercentageToDP(5.5),
+    overflow: "hidden",
     borderWidth: 1,
     borderColor: Colors.appColors.borderLight,
     ...Platform.select({
       ios: {
         shadowColor: Colors.appColors.black,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.03,
-        shadowRadius: 12,
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.06,
+        shadowRadius: 16,
       },
       android: {
-        elevation: 3,
+        elevation: 6,
       },
     }),
   },
-  founderHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: Responsive.heightPercentageToDP(1.5),
+  proFounderCover: {
+    height: Responsive.heightPercentageToDP(7.5),
+    backgroundColor: Colors.opacityColors.primaryOpacity15,
   },
-  founderAvatarContainer: {
-    width: Responsive.widthPercentageToDP(13.9),
-    height: Responsive.widthPercentageToDP(13.9),
-    borderRadius: Responsive.widthPercentageToDP(13.9) / 2,
-    backgroundColor: Colors.appColors.grayLight,
+  proRankBadge: {
+    position: "absolute",
+    top: Responsive.heightPercentageToDP(1.5),
+    right: Responsive.widthPercentageToDP(3),
+    paddingHorizontal: Responsive.widthPercentageToDP(2.5),
+    paddingVertical: Responsive.heightPercentageToDP(0.5),
+    borderRadius: Responsive.widthPercentageToDP(3),
+    shadowColor: Colors.appColors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  proRankText: {
+    color: Colors.appColors.white,
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(11),
+  },
+  proAvatarWrapper: {
+    alignItems: "center",
+    marginTop: -Responsive.heightPercentageToDP(4.5),
+  },
+  proAvatarContainer: {
+    width: Responsive.widthPercentageToDP(18),
+    height: Responsive.widthPercentageToDP(18),
+    borderRadius: Responsive.widthPercentageToDP(18) / 2,
+    backgroundColor: Colors.appColors.white,
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 3,
+    borderColor: Colors.appColors.white,
     overflow: "hidden",
+    ...Platform.select({
+      ios: {
+        shadowColor: Colors.appColors.black,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
-  founderAvatar: {
+  proAvatar: {
     width: "100%",
     height: "100%",
   },
-  founderAvatarInitial: {
+  proAvatarInitial: {
     fontFamily: Fonts.bold,
-    fontSize: Responsive.convertFontScale(20),
-    color: Colors.appColors.secondary,
+    fontSize: Responsive.convertFontScale(24),
   },
-  founderInfo: {
-    marginLeft: Responsive.widthPercentageToDP(3),
-    flex: 1,
+  proFounderInfo: {
+    alignItems: "center",
+    paddingHorizontal: Responsive.widthPercentageToDP(4),
+    marginTop: Responsive.heightPercentageToDP(1),
   },
-  founderName: {
+  proFounderName: {
     fontFamily: Fonts.bold,
-    fontSize: Responsive.convertFontScale(15),
+    fontSize: Responsive.convertFontScale(17),
     color: Colors.appColors.secondary,
-    marginBottom: Responsive.heightPercentageToDP(0.2),
+    marginBottom: Responsive.heightPercentageToDP(0.3),
   },
-  founderTitle: {
+  proFounderTitle: {
     fontFamily: Fonts.medium,
     fontSize: Responsive.convertFontScale(12),
     color: Colors.appColors.tertiary,
   },
-  founderStatBox: {
-    backgroundColor: Colors.appColors.background,
-    borderRadius: Responsive.widthPercentageToDP(2.5),
-    padding: Responsive.widthPercentageToDP(3),
+  proBadgesRow: {
+    flexDirection: "row",
+    gap: Responsive.widthPercentageToDP(2),
+    marginTop: Responsive.heightPercentageToDP(1.5),
+  },
+  proBatchBadge: {
+    paddingHorizontal: Responsive.widthPercentageToDP(2.5),
+    paddingVertical: Responsive.heightPercentageToDP(0.5),
+    borderRadius: Responsive.widthPercentageToDP(2),
+    backgroundColor: Colors.opacityColors.primaryOpacity10,
+    borderWidth: 1,
+    borderColor: Colors.opacityColors.primaryOpacity30,
+  },
+  proBatchText: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(10),
+    color: Colors.appColors.primary,
+  },
+  proCompanyBadge: {
+    paddingHorizontal: Responsive.widthPercentageToDP(2.5),
+    paddingVertical: Responsive.heightPercentageToDP(0.5),
+    borderRadius: Responsive.widthPercentageToDP(2),
+    backgroundColor: "rgba(88, 95, 108, 0.08)",
+    borderWidth: 1,
+    borderColor: "rgba(88, 95, 108, 0.15)",
+  },
+  proCompanyText: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(10),
+    color: Colors.appColors.tertiary,
+  },
+  proStatDivider: {
+    height: 1,
+    backgroundColor: Colors.appColors.borderLight,
+    marginVertical: Responsive.heightPercentageToDP(1.8),
+    marginHorizontal: Responsive.widthPercentageToDP(4),
+  },
+  proStatBox: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: Responsive.heightPercentageToDP(1),
+    paddingHorizontal: Responsive.widthPercentageToDP(4),
+    paddingBottom: Responsive.heightPercentageToDP(2),
   },
-  founderStatLabel: {
+  proStatItem: {
+    flex: 1,
+  },
+  proStatLabel: {
     fontFamily: Fonts.medium,
-    fontSize: Responsive.convertFontScale(11),
-    color: Colors.appColors.tertiary,
+    fontSize: Responsive.convertFontScale(10),
+    color: Colors.appColors.grayMuted,
     textTransform: "uppercase",
+    letterSpacing: 0.5,
+    marginBottom: Responsive.heightPercentageToDP(0.2),
   },
-  founderStatValue: {
+  proStatValue: {
     fontFamily: Fonts.bold,
-    fontSize: Responsive.convertFontScale(14),
-    color: Colors.appColors.primary,
+    fontSize: Responsive.convertFontScale(16),
+    color: Colors.appColors.secondary,
   },
-  founderRankBadge: {
-    position: "absolute",
-    top: -10,
-    right: -10,
-    backgroundColor: Colors.defaults.DARK_GREEN,
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+  proArrowBtn: {
+    width: Responsive.widthPercentageToDP(8),
+    height: Responsive.widthPercentageToDP(8),
+    borderRadius: Responsive.widthPercentageToDP(4),
+    backgroundColor: Colors.appColors.grayLight,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 2,
-    borderColor: Colors.appColors.white,
-    zIndex: 10,
   },
-  founderRankText: {
-    color: Colors.appColors.white,
-    fontFamily: Fonts.bold,
-    fontSize: Responsive.convertFontScale(11),
+  proArrowIcon: {
+    width: Responsive.widthPercentageToDP(3.5),
+    height: Responsive.heightPercentageToDP(1.6),
+    tintColor: Colors.appColors.secondary,
   },
   tagContainer: {
     flexDirection: "row",

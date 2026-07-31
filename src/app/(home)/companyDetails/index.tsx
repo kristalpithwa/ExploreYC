@@ -11,18 +11,21 @@ import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Map, Camera, ViewAnnotation } from "@maplibre/maplibre-react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import styles from "./styles";
 import { Colors, Responsive } from "@/theme";
-import { useGetCompanyDetails } from "@/services/apiService";
+import { useGetCompanyDetailsBySlug } from "@/services/apiService";
 import { formatUSD, getAvatarTheme, getHeroImage } from "@/utils/common";
 
 export default function CompanyDetailScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { slug } = useLocalSearchParams<{ slug: string }>();
 
-  const { data: companyDetails } = useGetCompanyDetails(id);
+  const { data: companyDetails } = useGetCompanyDetailsBySlug(slug || "");
+
+  console.log("companyDetails =>", companyDetails);
 
   const rawJson = companyDetails?.raw_json;
 
@@ -351,25 +354,55 @@ export default function CompanyDetailScreen() {
           )}
         </View>
 
-        {/* Core Stats Card */}
-        <View style={styles.statsCard}>
-          <View style={styles.statColumn}>
-            <Text style={styles.statLabel}>TEAM SIZE</Text>
-            <Text style={styles.statValue}>
+        {/* Core Stats Grid */}
+        <View style={styles.proStatsGrid}>
+          <View style={styles.proStatCard}>
+            <View
+              style={[
+                styles.proStatIconWrapper,
+                { backgroundColor: "rgba(126, 139, 151, 0.1)" },
+              ]}
+            >
+              <Ionicons
+                name="people"
+                size={20}
+                color={Colors.appColors.grayMuted}
+              />
+            </View>
+            <Text style={styles.proStatValue}>
               {companyDetails?.team_size || "N/A"}
             </Text>
+            <Text style={styles.proStatLabel}>Team Size</Text>
           </View>
-          <View style={[styles.statColumn, styles.statBorderLeft]}>
-            <Text style={styles.statLabel}>TOTAL FUNDING</Text>
-            <Text style={styles.statValue}>
+
+          <View style={styles.proStatCard}>
+            <View
+              style={[
+                styles.proStatIconWrapper,
+                { backgroundColor: "rgba(52, 168, 83, 0.1)" },
+              ]}
+            >
+              <Ionicons name="cash" size={20} color="#34A853" />
+            </View>
+            <Text style={styles.proStatValue}>
               {formatUSD(companyDetails?.funding_total_usd)}
             </Text>
+            <Text style={styles.proStatLabel}>Total Funding</Text>
           </View>
-          <View style={[styles.statColumn, styles.statBorderLeft]}>
-            <Text style={styles.statLabel}>FOUNDED</Text>
-            <Text style={styles.statValue}>
+
+          <View style={styles.proStatCard}>
+            <View
+              style={[
+                styles.proStatIconWrapper,
+                { backgroundColor: "rgba(66, 133, 244, 0.1)" },
+              ]}
+            >
+              <Ionicons name="business" size={20} color="#4285F4" />
+            </View>
+            <Text style={styles.proStatValue}>
               {companyDetails?.year_founded || "N/A"}
             </Text>
+            <Text style={styles.proStatLabel}>Founded</Text>
           </View>
         </View>
 
