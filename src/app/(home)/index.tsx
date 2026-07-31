@@ -509,19 +509,7 @@ export default function HomeScreen() {
     <View style={styles.mainContainer}>
       {/* Top Header */}
       <View style={[styles.header, { paddingTop: insets.top }]}>
-        <View style={styles.headerLeft}>
-          <Text style={styles.greetingText}>👋 Good Morning</Text>
-          <Text style={styles.appTitleText}>ExploreYC</Text>
-        </View>
-
-        <Pressable style={styles.notificationButton}>
-          <Image
-            source={Images.bell}
-            style={styles.bellIcon}
-            tintColor={Colors.appColors.grayDark}
-          />
-          <View style={styles.notificationBadge} />
-        </Pressable>
+        <Text style={styles.appTitleText}>ExploreYC</Text>
       </View>
 
       <FlatList

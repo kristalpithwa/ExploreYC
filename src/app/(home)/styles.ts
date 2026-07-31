@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: Responsive.widthPercentageToDP(5.3),
     paddingVertical: Responsive.heightPercentageToDP(1.5),
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: Responsive.heightPercentageToDP(1.5),
   },
-  
+
   proFounderCard: {
     width: Responsive.widthPercentageToDP(70),
     backgroundColor: Colors.appColors.white,
