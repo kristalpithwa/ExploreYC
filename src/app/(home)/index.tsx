@@ -1,26 +1,19 @@
 import { useMemo, useState } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  Pressable,
-  TextInput,
-  StyleSheet,
-} from "react-native";
+import { View, Text, FlatList, Pressable, StyleSheet } from "react-native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import styles from "./styles";
-import { Colors, Images, Responsive } from "@/theme";
-
 import {
-  useGetCompanyList,
   useGetStats,
+  useGetCompanyList,
   useGetFoundersLeaderboard,
 } from "@/services/apiService";
-import { getAvatarTheme, INDUSTRY_EMOJIS } from "@/utils/common";
+
+import styles from "./styles";
 import { BASE_URL } from "@/network/config";
+import { Colors, Images, Responsive } from "@/theme";
+import { getAvatarTheme, INDUSTRY_EMOJIS } from "@/utils/common";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -29,8 +22,8 @@ export default function HomeScreen() {
     number | null
   >(null);
 
-  const { data: companyList } = useGetCompanyList({ limit: 10, offset: 0 });
   const { data: stats } = useGetStats();
+  const { data: companyList } = useGetCompanyList({ limit: 10, offset: 0 });
   const { data: foundersLeaderboard } = useGetFoundersLeaderboard({
     limit: 10,
     metric: "funded",
@@ -364,23 +357,6 @@ export default function HomeScreen() {
   const renderMainContent = () => {
     return (
       <>
-        {/* Search Bar Section */}
-        <View style={styles.searchSection}>
-          <View style={styles.searchContainer}>
-            <Image
-              contentFit="contain"
-              source={Images.search}
-              style={styles.searchIcon}
-            />
-
-            <TextInput
-              style={styles.searchInput}
-              placeholderTextColor={Colors.appColors.tertiary}
-              placeholder="Search YC companies, founders, AI startups..."
-            />
-          </View>
-        </View>
-
         {/* Trending Startups Section */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>🔥 Trending Startups</Text>

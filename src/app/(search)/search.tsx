@@ -6,6 +6,7 @@ import {
   Camera,
   ViewAnnotation,
   type CameraRef,
+  type MapRef,
 } from "@maplibre/maplibre-react-native";
 
 import {
@@ -15,8 +16,8 @@ import {
 } from "@/services/apiService";
 import styles from "./styles";
 import { Colors } from "@/theme";
-import BatchModal from "./components/BatchModal";
-import IndustryModal from "./components/IndustryModal";
+import BatchModal from "@/components/BatchModal";
+import IndustryModal from "@/components/IndustryModal";
 import SelectedStartupCard from "./components/SelectedStartupCard";
 import StartupPin from "./components/StartupPin";
 import { useRouter } from "expo-router";
@@ -61,6 +62,7 @@ export default function SearchScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const cameraRef = useRef<CameraRef>(null);
+  const mapRef = useRef<MapRef>(null);
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -121,6 +123,7 @@ export default function SearchScreen() {
         coordinates: [lng, lat],
         hiring: Boolean(c.is_hiring),
         country: c.country,
+        slug: c.slug,
       };
     });
   }, [mapData]);
@@ -168,24 +171,30 @@ export default function SearchScreen() {
     });
   };
 
-  const handleZoomIn = () => {
-    cameraRef.current?.flyTo({
-      zoom: 14.5,
-      duration: 500,
-    });
+  const handleZoomIn = async () => {
+    const currentZoom = await mapRef.current?.getZoom();
+    if (currentZoom !== undefined) {
+      cameraRef.current?.flyTo({
+        zoom: currentZoom + 1,
+        duration: 500,
+      });
+    }
   };
 
-  const handleZoomOut = () => {
-    cameraRef.current?.flyTo({
-      zoom: 11,
-      duration: 500,
-    });
+  const handleZoomOut = async () => {
+    const currentZoom = await mapRef.current?.getZoom();
+    if (currentZoom !== undefined) {
+      cameraRef.current?.flyTo({
+        zoom: currentZoom - 1,
+        duration: 500,
+      });
+    }
   };
 
   const handleOpenCompany = (value: any) => {
     router.push({
       pathname: "/(search)/companyDetails",
-      params: { id: value.id },
+      params: { slug: value.slug },
     });
     setSelectedStartup(null);
   };
@@ -202,6 +211,7 @@ export default function SearchScreen() {
     <View style={styles.container}>
       {/* Maplibre Map View */}
       <Map
+        ref={mapRef}
         style={styles.map}
         mapStyle="https://tiles.openfreemap.org/styles/bright"
         logo={false}

@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Pressable, View, Text, ScrollView } from "react-native";
-import styles from "../styles";
+import styles from "@/app/(search)/styles";
 
 interface IndustryModalProps {
   visible: boolean;
