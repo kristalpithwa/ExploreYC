@@ -229,3 +229,17 @@ export const useGetFounderProfile = (slug: string) => {
     gcTime: DEFAULT_GC_TIME,
   });
 };
+
+export const useGetHiringAnalytics = () => {
+  const url = "hiring/analytics";
+
+  return useQuery({
+    queryKey: ["useGetHiringAnalytics"],
+    queryFn: async () => {
+      const res = await axiosInterceptor.get(url);
+      return res?.data;
+    },
+    staleTime: DEFAULT_STALE_TIME,
+    gcTime: DEFAULT_GC_TIME,
+  });
+};

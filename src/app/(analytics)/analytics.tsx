@@ -1,252 +1,297 @@
-import React from "react";
-import { View, Text, ScrollView } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import React, { useMemo } from "react";
+import {
+  Text,
+  View,
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useGetStats } from "@/services/apiService";
+import colors from "@/theme/Colors";
+import { getSortedBatches, batchToShortFormat } from "@/utils/batchUtils";
+import { StatCard } from "./components/StatCard";
+import { ProgressBarChart } from "./components/ProgressBarChart";
+import { BarChart } from "./components/BarChart";
 import styles from "./styles";
+import { useRouter } from "expo-router";
 
 export default function AnalyticsScreen() {
-  const insets = useSafeAreaInsets();
+  const router = useRouter();
+  const { data: stats, isLoading, isError } = useGetStats();
+
+  const activeCompanies = stats?.by_status?.["Active"] || 0;
+  const totalBatches = stats?.by_batch ? Object.keys(stats.by_batch).length : 0;
+  const totalCountries = stats?.by_country
+    ? Object.keys(stats.by_country).length
+    : 0;
+  const totalIndustries = stats?.by_industry
+    ? Object.keys(stats.by_industry).length
+    : 0;
+
+  // Prepare industry data (top 10)
+  const industryData = useMemo(() => {
+    if (!stats?.by_industry) return [];
+    return Object.entries(stats.by_industry)
+      .sort(([, a], [, b]) => (b as number) - (a as number))
+      .slice(0, 10)
+      .map(([industry, count]) => ({ name: industry, value: count as number }));
+  }, [stats?.by_industry]);
+
+  const maxIndustryValue =
+    industryData.length > 0 ? Math.max(...industryData.map((d) => d.value)) : 0;
+
+  // Prepare country data (top 10)
+  const countryData = useMemo(() => {
+    if (!stats?.by_country) return [];
+    return Object.entries(stats.by_country)
+      .sort(([, a], [, b]) => (b as number) - (a as number))
+      .slice(0, 10)
+      .map(([country, count]) => ({ name: country, value: count as number }));
+  }, [stats?.by_country]);
+
+  const maxCountryValue =
+    countryData.length > 0 ? Math.max(...countryData.map((d) => d.value)) : 0;
+
+  // Status distribution
+  const statusData = useMemo(() => {
+    if (!stats?.by_status) return [];
+    return Object.entries(stats.by_status).map(([status, count]) => ({
+      name: status,
+      value: count as number,
+    }));
+  }, [stats?.by_status]);
+
+  const maxStatusValue =
+    statusData.length > 0 ? Math.max(...statusData.map((d) => d.value)) : 0;
+
+  // Prepare batch timeline data (last 20 batches)
+  const batchTimelineData = useMemo(() => {
+    if (!stats?.by_batch) return [];
+    return getSortedBatches(stats.by_batch)
+      .slice(0, 20) // Get the 20 most recent
+      .reverse() // Reverse to show oldest to newest
+      .map((b) => ({ label: batchToShortFormat(b.name), value: b.count }));
+  }, [stats?.by_batch]);
+
+  const maxBatchValue =
+    batchTimelineData.length > 0
+      ? Math.max(...batchTimelineData.map((d) => d.value))
+      : 0;
+
+  if (isLoading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color={colors.appColors.primary} />
+      </View>
+    );
+  }
+
+  if (isError || !stats) {
+    return (
+      <View style={styles.loaderContainer}>
+        <Text>Error loading analytics data.</Text>
+      </View>
+    );
+  }
 
   return (
-    <View style={styles.mainContainer}>
-      {/* Top App Bar */}
-      <View style={[styles.header, { paddingTop: insets.top }]}>
-        <Text style={styles.headerTitle}>Analytics</Text>
+    <ScrollView
+      style={styles.mainContainer}
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Header */}
+      <View style={styles.headerContainer}>
+        <Text style={styles.commandText}>$ analyze --data yc-portfolio</Text>
+        <Text style={styles.title}>YC Portfolio Analytics</Text>
+        <Text style={styles.subtitle}>
+          Insights and trends across the Y Combinator portfolio
+        </Text>
       </View>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[
-          styles.scrollContent,
-          { paddingBottom: insets.bottom + 100 }, // Generous padding to avoid bottom floating tab bar
-        ]}
-      >
-        {/* Title Section */}
-        <View style={styles.titleSection}>
-          <Text style={styles.mainTitle}>YC &amp; a16z Ecosystem Insights</Text>
-          <Text style={styles.subTitle}>
-            Real-time data from 5,000+ startups.
+      {/* Quick Stats Grid */}
+      <View style={styles.statsGrid}>
+        <StatCard
+          title="active"
+          value={activeCompanies.toLocaleString()}
+          iconName="trending-up"
+          color={colors.defaults.GREEN}
+        />
+        <StatCard
+          title="industries"
+          value={totalIndustries}
+          iconName="business"
+          color={colors.defaults.ORANGE}
+        />
+        <StatCard
+          title="countries"
+          value={totalCountries}
+          iconName="earth"
+          color={colors.defaults.PURPLE}
+        />
+        <StatCard
+          title="batches"
+          value={totalBatches}
+          iconName="calendar"
+          color={colors.defaults.BLUE}
+        />
+      </View>
+
+      {/* Banners Grid */}
+      <View style={styles.bannersGrid}>
+        <TouchableOpacity
+          style={[
+            styles.bannerCard,
+            { borderColor: "rgba(251, 101, 30, 0.3)" },
+          ]}
+          onPress={() => router.push("/(analytics)/batches")}
+        >
+          <View style={styles.bannerHeader}>
+            <Text style={styles.bannerTitle}>All Batches Analytics</Text>
+            <View
+              style={[
+                styles.bannerBadge,
+                {
+                  backgroundColor: "rgba(16, 185, 129, 0.2)",
+                  borderColor: "rgba(16, 185, 129, 0.3)",
+                },
+              ]}
+            >
+              <Text style={[styles.bannerBadgeText, { color: "#34d399" }]}>
+                NEW
+              </Text>
+            </View>
+          </View>
+          <Text style={styles.bannerDesc}>
+            Comprehensive trends and insights across all {totalBatches} YC
+            batches
+          </Text>
+          <View style={{ marginTop: 12 }}>
+            <Ionicons name="sparkles" size={20} color="#FB651E" />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.bannerCard,
+            { borderColor: "rgba(59, 130, 246, 0.3)" },
+          ]}
+          onPress={() => router.push("/(analytics)/hiring")}
+        >
+          <View style={styles.bannerHeader}>
+            <Text style={styles.bannerTitle}>Hiring Board Analytics</Text>
+            <View
+              style={[
+                styles.bannerBadge,
+                {
+                  backgroundColor: "rgba(59, 130, 246, 0.2)",
+                  borderColor: "rgba(59, 130, 246, 0.3)",
+                },
+              ]}
+            >
+              <Text style={[styles.bannerBadgeText, { color: "#60a5fa" }]}>
+                LIVE
+              </Text>
+            </View>
+          </View>
+          <Text style={styles.bannerDesc}>
+            Salary insights, hiring trends, and job market intelligence
+          </Text>
+          <View style={{ marginTop: 12 }}>
+            <Ionicons name="briefcase" size={20} color="#3b82f6" />
+          </View>
+        </TouchableOpacity>
+      </View>
+
+      {/* Detailed Analytics Section */}
+      <View style={styles.detailedAnalyticsHeader}>
+        <Text style={styles.dollarSign}>$</Text>
+        <Text style={styles.detailedAnalyticsTitle}>Detailed Analytics</Text>
+      </View>
+
+      {/* Batch Growth Timeline */}
+      <View style={styles.card}>
+        <View style={styles.sectionTitleContainer}>
+          <Ionicons
+            name="trending-up"
+            size={18}
+            color={colors.defaults.ORANGE}
+            style={styles.sectionIcon}
+          />
+          <Text style={styles.sectionTitle}>Batch Growth Timeline</Text>
+          <Text style={[styles.subtitle, { marginLeft: "auto", fontSize: 10 }]}>
+            last 20
           </Text>
         </View>
+        <BarChart
+          data={batchTimelineData}
+          maxValue={maxBatchValue}
+          color={colors.defaults.ORANGE}
+          height={150}
+        />
+        <Text style={[styles.commandText, { marginTop: 16 }]}>
+          &gt; Peak: {maxBatchValue} companies
+        </Text>
+      </View>
 
-        {/* Summary Grid 2x2 */}
-        <View style={styles.summaryGrid}>
-          {/* Companies Stat */}
-          <View style={[styles.bentoCard, styles.statCard]}>
-            <View style={[styles.statIconBox, styles.statIconBoxOrange]}>
-              <Text style={styles.statEmojiTextOrange}>🏢</Text>
-            </View>
-            <View>
-              <Text style={styles.statNumber}>5,017</Text>
-              <Text style={styles.statLabel}>Companies</Text>
-            </View>
-          </View>
 
-          {/* Hiring Stat */}
-          <View style={[styles.bentoCard, styles.statCard]}>
-            <View style={[styles.statIconBox, styles.statIconBoxGray]}>
-              <Text style={styles.statEmojiText}>💼</Text>
-            </View>
-            <View>
-              <Text style={styles.statNumber}>1,188</Text>
-              <Text style={styles.statLabel}>Hiring</Text>
-            </View>
-          </View>
-
-          {/* Countries Stat */}
-          <View style={[styles.bentoCard, styles.statCard]}>
-            <View style={[styles.statIconBox, styles.statIconBoxGray]}>
-              <Text style={styles.statEmojiText}>🌍</Text>
-            </View>
-            <View>
-              <Text style={styles.statNumber}>45</Text>
-              <Text style={styles.statLabel}>Countries</Text>
-            </View>
-          </View>
-
-          {/* Industries Stat */}
-          <View style={[styles.bentoCard, styles.statCard]}>
-            <View style={[styles.statIconBox, styles.statIconBoxOrange]}>
-              <Text style={styles.statEmojiTextOrange}>⚙️</Text>
-            </View>
-            <View>
-              <Text style={styles.statNumber}>12</Text>
-              <Text style={styles.statLabel}>Industries</Text>
-            </View>
-          </View>
+      {/* Top Industries */}
+      <View style={styles.card}>
+        <View style={styles.sectionTitleContainer}>
+          <Ionicons
+            name="business"
+            size={18}
+            color={colors.appColors.brandBlue}
+            style={styles.sectionIcon}
+          />
+          <Text style={styles.sectionTitle}>Top Industries</Text>
         </View>
+        <ProgressBarChart
+          data={industryData}
+          maxValue={maxIndustryValue}
+          color={colors.appColors.brandBlue}
+        />
+      </View>
 
-        {/* Bento Grid Content */}
-        <View style={styles.bentoGrid}>
-          {/* Top Locations */}
-          <View style={styles.bentoCard}>
-            <Text style={styles.bentoTitle}>Top Locations</Text>
-            <View style={styles.locationsList}>
-              {/* US Bar */}
-              <View style={styles.locationRow}>
-                <View style={styles.locationLabels}>
-                  <View style={styles.locationNameRow}>
-                    <Text style={styles.locationFlag}>🇺🇸</Text>
-                    <Text style={styles.locationName}>United States</Text>
-                  </View>
-                  <Text style={styles.locationValue}>3,901</Text>
-                </View>
-                <View style={styles.progressBarTrack}>
-                  <View
-                    style={[styles.progressBarFill, styles.progressBarFillUS]}
-                  />
-                </View>
-              </View>
-
-              {/* India Bar */}
-              <View style={styles.locationRow}>
-                <View style={styles.locationLabels}>
-                  <View style={styles.locationNameRow}>
-                    <Text style={styles.locationFlag}>🇮🇳</Text>
-                    <Text style={styles.locationName}>India</Text>
-                  </View>
-                  <Text style={styles.locationValue}>214</Text>
-                </View>
-                <View style={styles.progressBarTrack}>
-                  <View
-                    style={[
-                      styles.progressBarFill,
-                      styles.progressBarFillIndia,
-                    ]}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-
-          {/* AI Insights Section */}
-          <View style={[styles.bentoCard, styles.aiCard]}>
-            <View style={styles.aiHeaderRow}>
-              <Text style={styles.aiIconText}>✨</Text>
-              <Text style={styles.aiTitle}>AI Insights</Text>
-            </View>
-            <View style={styles.aiInsightsList}>
-              <View style={styles.aiInsightItem}>
-                <View style={styles.aiInsightIconBox}>
-                  <Text style={styles.aiInsightIcon}>📈</Text>
-                </View>
-                <Text style={styles.aiInsightText}>
-                  <Text style={styles.aiInsightBold}>B2B SaaS </Text>
-                  dominates, making up over 40% of recent batches.
-                </Text>
-              </View>
-
-              <View style={styles.aiInsightItem}>
-                <View style={styles.aiInsightIconBox}>
-                  <Text style={styles.aiInsightIcon}>👥</Text>
-                </View>
-                <Text style={styles.aiInsightText}>
-                  Hiring is concentrated in
-                  <Text style={styles.aiInsightBold}> AI infrastructure </Text>
-                  companies in SF.
-                </Text>
-              </View>
-
-              <View style={styles.aiInsightItem}>
-                <View style={styles.aiInsightIconBox}>
-                  <Text style={styles.aiInsightIcon}>🌐</Text>
-                </View>
-                <Text style={styles.aiInsightText}>
-                  International representation grew 12% in the last cohort.
-                </Text>
-              </View>
-            </View>
-          </View>
-
-          {/* Industry Distribution Donut Mock */}
-          <View style={styles.bentoCard}>
-            <Text style={styles.bentoTitle}>Top Industries</Text>
-            <View style={styles.donutSection}>
-              <View style={styles.donutContainer}>
-                {/* Visual Segments */}
-                <View style={styles.donutOverlaySegment1} />
-                <View style={styles.donutOverlaySegment2} />
-                <View style={styles.donutCenterText}>
-                  <Text style={styles.donutNumber}>4</Text>
-                  <Text style={styles.donutLabel}>Sectors</Text>
-                </View>
-              </View>
-
-              <View style={styles.donutLegendGrid}>
-                <View style={styles.legendItem}>
-                  <View
-                    style={[styles.legendColor, styles.legendColorPrimary]}
-                  />
-                  <Text style={styles.legendText}>B2B</Text>
-                </View>
-                <View style={styles.legendItem}>
-                  <View style={[styles.legendColor, styles.legendColorPeach]} />
-                  <Text style={styles.legendText}>AI</Text>
-                </View>
-                <View style={styles.legendItem}>
-                  <View style={[styles.legendColor, styles.legendColorMuted]} />
-                  <Text style={styles.legendText}>Fintech</Text>
-                </View>
-                <View style={styles.legendItem}>
-                  <View style={[styles.legendColor, styles.legendColorLight]} />
-                  <Text style={styles.legendText}>Health</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-
-          {/* Recent Batches Vertical Bars */}
-          <View style={[styles.bentoCard, styles.recentBatchesCard]}>
-            <Text style={styles.bentoTitle}>Recent Batches</Text>
-            <View style={styles.barChartContainer}>
-              {/* S23 */}
-              <View style={styles.verticalBarGroup}>
-                <View style={styles.verticalBarTrack}>
-                  <View
-                    style={[styles.verticalBarFill, styles.verticalBarS23]}
-                  />
-                </View>
-                <Text style={styles.verticalBarLabel}>S23</Text>
-              </View>
-
-              {/* W24 */}
-              <View style={styles.verticalBarGroup}>
-                <View style={styles.verticalBarTrack}>
-                  <View
-                    style={[styles.verticalBarFill, styles.verticalBarW24]}
-                  />
-                </View>
-                <Text style={styles.verticalBarLabel}>W24</Text>
-              </View>
-
-              {/* S24 */}
-              <View style={styles.verticalBarGroup}>
-                <View style={styles.verticalBarTrack}>
-                  <View
-                    style={[styles.verticalBarFill, styles.verticalBarS24]}
-                  />
-                </View>
-                <Text
-                  style={[
-                    styles.verticalBarLabel,
-                    styles.verticalBarLabelActive,
-                  ]}
-                >
-                  S24
-                </Text>
-              </View>
-            </View>
-          </View>
-
-          {/* Coming Soon Placeholder */}
-          <View style={[styles.bentoCard, styles.placeholderCard]}>
-            <Text style={styles.placeholderIcon}>📊</Text>
-            <Text style={styles.placeholderTitle}>Source Distribution</Text>
-            <View style={styles.comingSoonBadge}>
-              <Text style={styles.comingSoonText}>Coming Soon</Text>
-            </View>
-          </View>
+      {/* Company Status */}
+      <View style={styles.card}>
+        <View style={styles.sectionTitleContainer}>
+          <Ionicons
+            name="briefcase"
+            size={18}
+            color={colors.defaults.GREEN}
+            style={styles.sectionIcon}
+          />
+          <Text style={styles.sectionTitle}>Company Status</Text>
         </View>
-      </ScrollView>
-    </View>
+        <ProgressBarChart
+          data={statusData}
+          maxValue={maxStatusValue}
+          color={colors.defaults.GREEN}
+        />
+      </View>
+
+      {/* Geographic Distribution */}
+      <View style={styles.card}>
+        <View style={styles.sectionTitleContainer}>
+          <Ionicons
+            name="earth"
+            size={18}
+            color={colors.defaults.PURPLE}
+            style={styles.sectionIcon}
+          />
+          <Text style={styles.sectionTitle}>Geographic Distribution</Text>
+          <Text style={[styles.subtitle, { marginLeft: "auto", fontSize: 10 }]}>
+            top 10
+          </Text>
+        </View>
+        <ProgressBarChart
+          data={countryData}
+          maxValue={maxCountryValue}
+          color={colors.defaults.PURPLE}
+        />
+      </View>
+    </ScrollView>
   );
 }
