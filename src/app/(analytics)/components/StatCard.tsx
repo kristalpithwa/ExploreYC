@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import colors from "../../../theme/Colors";
+import { Colors, Fonts, Responsive } from "../../../theme";
 
 interface StatCardProps {
   title: string;
@@ -12,47 +12,50 @@ interface StatCardProps {
 
 export const StatCard: React.FC<StatCardProps> = ({ title, value, iconName, color }) => {
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { borderLeftColor: color, borderLeftWidth: 3 }]}>
       <View style={styles.header}>
-        <Ionicons name={iconName} size={16} color={color} />
+        <View style={[styles.iconWrapper, { backgroundColor: `${color}15` }]}>
+          <Ionicons name={iconName} size={Responsive.convertFontScale(16)} color={color} />
+        </View>
         <Text style={styles.title}>{title}</Text>
       </View>
-      <Text style={[styles.value, { color }]}>{value}</Text>
+      <Text style={[styles.value, { color: Colors.appColors.secondary }]}>{value}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    flex: 1,
-    backgroundColor: colors.appColors.white,
-    padding: 16,
-    borderRadius: 8,
+    backgroundColor: Colors.appColors.white,
+    padding: Responsive.widthPercentageToDP(4),
+    borderRadius: Responsive.widthPercentageToDP(3),
     borderWidth: 1,
-    borderColor: colors.appColors.borderLight,
-    shadowColor: colors.appColors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-    margin: 4,
-    minWidth: "45%",
+    borderColor: Colors.opacityColors.blackOpacity4,
+    shadowColor: Colors.appColors.black,
+    shadowOffset: { width: 0, height: Responsive.heightPercentageToDP(1) },
+    shadowOpacity: 0.04,
+    shadowRadius: Responsive.widthPercentageToDP(3),
+    elevation: 3,
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 8,
+    marginBottom: Responsive.heightPercentageToDP(1.5),
+  },
+  iconWrapper: {
+    padding: Responsive.widthPercentageToDP(1.5),
+    borderRadius: Responsive.widthPercentageToDP(2),
+    marginRight: Responsive.widthPercentageToDP(2),
   },
   title: {
-    fontSize: 12,
-    color: colors.appColors.grayMuted,
-    marginLeft: 6,
-    fontFamily: "SpaceMono-Regular", // Replicating font-mono
-    textTransform: "lowercase",
+    fontSize: Responsive.convertFontScale(12),
+    color: Colors.appColors.grayMuted,
+    fontFamily: Fonts.medium,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
   value: {
-    fontSize: 24,
-    fontWeight: "bold",
-    fontFamily: "SpaceMono-Bold",
+    fontSize: Responsive.convertFontScale(24),
+    fontFamily: Fonts.bold,
   },
 });

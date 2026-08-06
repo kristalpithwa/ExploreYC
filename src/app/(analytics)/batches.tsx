@@ -173,30 +173,38 @@ export default function BatchesAnalyticsScreen() {
       </View>
 
       <View style={styles.statsGrid}>
-        <StatCard
-          title="batches"
-          value={batchStats.totalBatches}
-          iconName="calendar"
-          color={colors.defaults.ORANGE}
-        />
-        <StatCard
-          title="avg size"
-          value={batchStats.avgBatchSize}
-          iconName="people"
-          color={colors.appColors.brandBlue}
-        />
-        <StatCard
-          title="growth"
-          value={`${batchStats.growthRate > 0 ? "+" : ""}${batchStats.growthRate.toFixed(1)}%`}
-          iconName="trending-up"
-          color={colors.defaults.GREEN}
-        />
-        <StatCard
-          title="largest"
-          value={batchStats.largestBatch.count}
-          iconName="business"
-          color={colors.defaults.PURPLE}
-        />
+        <View style={styles.statCardWrapper}>
+          <StatCard
+            title="batches"
+            value={batchStats.totalBatches}
+            iconName="calendar"
+            color={colors.defaults.ORANGE}
+          />
+        </View>
+        <View style={styles.statCardWrapper}>
+          <StatCard
+            title="avg size"
+            value={batchStats.avgBatchSize}
+            iconName="people"
+            color={colors.appColors.brandBlue}
+          />
+        </View>
+        <View style={styles.statCardWrapper}>
+          <StatCard
+            title="growth"
+            value={`${batchStats.growthRate > 0 ? "+" : ""}${batchStats.growthRate.toFixed(1)}%`}
+            iconName="trending-up"
+            color={colors.defaults.GREEN}
+          />
+        </View>
+        <View style={styles.statCardWrapper}>
+          <StatCard
+            title="largest"
+            value={batchStats.largestBatch.count}
+            iconName="business"
+            color={colors.defaults.PURPLE}
+          />
+        </View>
       </View>
 
       {/* Batch Size Evolution Chart */}

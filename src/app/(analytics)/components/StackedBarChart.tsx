@@ -1,6 +1,6 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import colors from "../../../theme/Colors";
+import { Colors, Fonts, Responsive } from "../../../theme";
 
 interface StackedBarChartProps {
   data: {
@@ -45,25 +45,25 @@ export const StackedBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    paddingTop: 8,
+    paddingTop: Responsive.heightPercentageToDP(1),
   },
   row: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: Responsive.heightPercentageToDP(1.5),
   },
   rowLabel: {
-    width: 60,
-    fontSize: 12,
-    color: colors.appColors.grayMuted,
-    fontFamily: "SpaceMono-Regular",
+    width: Responsive.widthPercentageToDP(15),
+    fontSize: Responsive.convertFontScale(11),
+    color: Colors.appColors.grayMuted,
+    fontFamily: Fonts.medium,
   },
   barBackground: {
     flex: 1,
-    height: 16,
+    height: Responsive.heightPercentageToDP(2),
     flexDirection: "row",
-    backgroundColor: colors.opacityColors.blackOpacity10,
-    borderRadius: 4,
+    backgroundColor: Colors.opacityColors.blackOpacity10,
+    borderRadius: Responsive.heightPercentageToDP(1),
     overflow: "hidden",
   },
   segment: {

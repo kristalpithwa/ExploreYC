@@ -129,34 +129,42 @@ export default function HiringAnalyticsScreen() {
       </View>
 
       <View style={styles.statsGrid}>
-        <StatCard
-          title="avg salary"
-          value={
-            analytics.avgSalary
-              ? `$${(analytics.avgSalary / 1000).toFixed(0)}K`
-              : "N/A"
-          }
-          iconName="cash"
-          color={colors.defaults.GREEN}
-        />
-        <StatCard
-          title="total jobs"
-          value={analytics.totalJobs?.toLocaleString() || 0}
-          iconName="briefcase"
-          color={colors.defaults.ORANGE}
-        />
-        <StatCard
-          title="% remote"
-          value={`${analytics.remoteStats?.remotePercentage || 0}%`}
-          iconName="globe"
-          color={colors.appColors.brandBlue}
-        />
-        <StatCard
-          title="companies"
-          value={analytics.totalCompanies?.toLocaleString() || 0}
-          iconName="business"
-          color={colors.defaults.PURPLE}
-        />
+        <View style={styles.statCardWrapper}>
+          <StatCard
+            title="avg salary"
+            value={
+              analytics.avgSalary
+                ? `$${(analytics.avgSalary / 1000).toFixed(0)}K`
+                : "N/A"
+            }
+            iconName="cash"
+            color={colors.defaults.GREEN}
+          />
+        </View>
+        <View style={styles.statCardWrapper}>
+          <StatCard
+            title="total jobs"
+            value={analytics.totalJobs?.toLocaleString() || 0}
+            iconName="briefcase"
+            color={colors.defaults.ORANGE}
+          />
+        </View>
+        <View style={styles.statCardWrapper}>
+          <StatCard
+            title="% remote"
+            value={`${analytics.remoteStats?.remotePercentage || 0}%`}
+            iconName="globe"
+            color={colors.appColors.brandBlue}
+          />
+        </View>
+        <View style={styles.statCardWrapper}>
+          <StatCard
+            title="companies"
+            value={analytics.totalCompanies?.toLocaleString() || 0}
+            iconName="business"
+            color={colors.defaults.PURPLE}
+          />
+        </View>
       </View>
 
       {/* Salary Insights */}

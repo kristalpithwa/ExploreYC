@@ -112,30 +112,38 @@ export default function AnalyticsScreen() {
 
       {/* Quick Stats Grid */}
       <View style={styles.statsGrid}>
-        <StatCard
-          title="active"
-          value={activeCompanies.toLocaleString()}
-          iconName="trending-up"
-          color={colors.defaults.GREEN}
-        />
-        <StatCard
-          title="industries"
-          value={totalIndustries}
-          iconName="business"
-          color={colors.defaults.ORANGE}
-        />
-        <StatCard
-          title="countries"
-          value={totalCountries}
-          iconName="earth"
-          color={colors.defaults.PURPLE}
-        />
-        <StatCard
-          title="batches"
-          value={totalBatches}
-          iconName="calendar"
-          color={colors.defaults.BLUE}
-        />
+        <View style={styles.statCardWrapper}>
+          <StatCard
+            title="active"
+            value={activeCompanies.toLocaleString()}
+            iconName="trending-up"
+            color={colors.defaults.GREEN}
+          />
+        </View>
+        <View style={styles.statCardWrapper}>
+          <StatCard
+            title="industries"
+            value={totalIndustries}
+            iconName="business"
+            color={colors.defaults.ORANGE}
+          />
+        </View>
+        <View style={styles.statCardWrapper}>
+          <StatCard
+            title="countries"
+            value={totalCountries}
+            iconName="earth"
+            color={colors.defaults.PURPLE}
+          />
+        </View>
+        <View style={styles.statCardWrapper}>
+          <StatCard
+            title="batches"
+            value={totalBatches}
+            iconName="calendar"
+            color={colors.defaults.BLUE}
+          />
+        </View>
       </View>
 
       {/* Banners Grid */}

@@ -5,8 +5,9 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
   withDelay,
+  withSpring,
 } from "react-native-reanimated";
-import colors from "../../../theme/Colors";
+import { Colors, Fonts, Responsive } from "../../../theme";
 
 interface ProgressBarChartProps {
   data: { name: string; value: number }[];
@@ -47,7 +48,7 @@ const ProgressBarItem: React.FC<{
   useEffect(() => {
     progressWidth.value = withDelay(
       100 + index * 50,
-      withTiming(percentage, { duration: 800 })
+      withSpring(percentage, { damping: 15, stiffness: 80 })
     );
   }, [percentage, index, progressWidth]);
 
@@ -80,38 +81,39 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   itemContainer: {
-    marginBottom: 12,
+    marginBottom: Responsive.heightPercentageToDP(1.5),
   },
   labelContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 4,
+    marginBottom: Responsive.heightPercentageToDP(0.5),
   },
   nameText: {
     flex: 1,
-    fontSize: 13,
-    color: colors.appColors.secondary,
-    fontFamily: "SpaceMono-Regular",
-    paddingRight: 8,
+    fontSize: Responsive.convertFontScale(13),
+    color: Colors.appColors.secondary,
+    fontFamily: Fonts.medium,
+    paddingRight: Responsive.widthPercentageToDP(2),
   },
   indexText: {
-    color: colors.appColors.grayMuted,
-    fontSize: 11,
+    color: Colors.appColors.grayMuted,
+    fontSize: Responsive.convertFontScale(11),
+    fontFamily: Fonts.medium,
   },
   valueText: {
-    fontSize: 12,
-    color: colors.appColors.grayMuted,
-    fontFamily: "SpaceMono-Regular",
+    fontSize: Responsive.convertFontScale(12),
+    color: Colors.appColors.grayMuted,
+    fontFamily: Fonts.medium,
   },
   progressBarBackground: {
-    height: 6,
-    backgroundColor: colors.opacityColors.blackOpacity10,
-    borderRadius: 3,
+    height: Responsive.heightPercentageToDP(1),
+    backgroundColor: Colors.opacityColors.blackOpacity10,
+    borderRadius: Responsive.heightPercentageToDP(0.5),
     overflow: "hidden",
   },
   progressBarFill: {
     height: "100%",
-    borderRadius: 3,
+    borderRadius: Responsive.heightPercentageToDP(0.5),
   },
 });

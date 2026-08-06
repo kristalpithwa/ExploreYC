@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withTiming,
   withDelay,
+  withSpring,
 } from "react-native-reanimated";
-import colors from "../../../theme/Colors";
+import { Colors, Fonts, Responsive } from "../../../theme";
 
 interface BarChartProps {
   data: { label: string; value: number }[];
@@ -19,10 +19,10 @@ export const BarChart: React.FC<BarChartProps> = ({
   data,
   maxValue,
   color,
-  height = 200,
+  height = Responsive.heightPercentageToDP(20),
 }) => {
   return (
-    <View style={[styles.container, { height: height + 40 }]}>
+    <View style={[styles.container, { height: height + Responsive.heightPercentageToDP(4) }]}>
       <View style={styles.chartArea}>
         {data.map((item, index) => (
           <BarItem
@@ -53,8 +53,8 @@ const BarItem: React.FC<{
 
   useEffect(() => {
     progressHeight.value = withDelay(
-      100 + index * 30,
-      withTiming(percentage, { duration: 800 })
+      100 + index * 40,
+      withSpring(percentage, { damping: 14, stiffness: 90 })
     );
   }, [percentage, index, progressHeight]);
 
@@ -91,31 +91,31 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "space-between",
-    paddingHorizontal: 8,
+    paddingHorizontal: Responsive.widthPercentageToDP(2),
   },
   barContainer: {
     alignItems: "center",
     flex: 1,
-    marginHorizontal: 2,
+    marginHorizontal: Responsive.widthPercentageToDP(0.5),
   },
   barBackground: {
     width: "100%",
-    maxWidth: 24,
-    backgroundColor: colors.opacityColors.blackOpacity10,
-    borderRadius: 4,
+    maxWidth: Responsive.widthPercentageToDP(6),
+    backgroundColor: Colors.opacityColors.blackOpacity10,
+    borderRadius: Responsive.widthPercentageToDP(1),
     justifyContent: "flex-end",
     overflow: "hidden",
   },
   barFill: {
     width: "100%",
-    borderRadius: 4,
+    borderRadius: Responsive.widthPercentageToDP(1),
   },
   labelText: {
-    marginTop: 8,
-    fontSize: 10,
-    color: colors.appColors.grayMuted,
-    fontFamily: "SpaceMono-Regular",
+    marginTop: Responsive.heightPercentageToDP(1),
+    fontSize: Responsive.convertFontScale(9),
+    color: Colors.appColors.grayMuted,
+    fontFamily: Fonts.medium,
     textAlign: "center",
-    height: 30,
+    height: Responsive.heightPercentageToDP(3.5),
   },
 });
