@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router";
 
 import CustomTabBar from "@/components/CustomTabBar/CustomTabBar";
+import { tabConfig } from "@/data/tabConfig";
 
 const Router = () => {
   return (
@@ -15,6 +16,7 @@ const Router = () => {
         name="(home)"
         options={{
           title: "Home",
+          href: tabConfig.showHome ? undefined : null,
         }}
       />
 
@@ -22,6 +24,7 @@ const Router = () => {
         name="(job)"
         options={{
           title: "Job",
+          href: tabConfig.showJob ? undefined : null,
         }}
       />
 
@@ -29,6 +32,7 @@ const Router = () => {
         name="(discover)"
         options={{
           title: "Discover",
+          href: tabConfig.showDiscover ? undefined : null,
         }}
       />
 
@@ -36,6 +40,7 @@ const Router = () => {
         name="(analytics)"
         options={{
           title: "Analytics",
+          href: tabConfig.showAnalytics ? undefined : null,
         }}
       />
     </Tabs>

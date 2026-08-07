@@ -4,6 +4,7 @@ import { Image } from "expo-image";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import styles from "./styles";
+import { tabConfig as globalTabConfig } from "@/data/tabConfig";
 
 export default function CustomTabBar({
   state,
@@ -30,6 +31,11 @@ export default function CustomTabBar({
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key] as any;
         const isFocused = state.index === index;
+
+        if (route.name === "(home)" && !globalTabConfig.showHome) return null;
+        if (route.name === "(job)" && !globalTabConfig.showJob) return null;
+        if (route.name === "(discover)" && !globalTabConfig.showDiscover) return null;
+        if (route.name === "(analytics)" && !globalTabConfig.showAnalytics) return null;
 
         // Skip rendering if tabBarVisible or equivalent options hide it
         if (options.href === null) return null;
