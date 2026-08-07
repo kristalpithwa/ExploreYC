@@ -696,6 +696,205 @@ const styles = StyleSheet.create({
     width: Responsive.widthPercentageToDP(3.7),
     height: Responsive.heightPercentageToDP(1.75),
   },
+  validatorCard: {
+    backgroundColor: Colors.appColors.white,
+    marginHorizontal: Responsive.widthPercentageToDP(5.3),
+    marginTop: Responsive.heightPercentageToDP(2),
+    marginBottom: Responsive.heightPercentageToDP(2),
+    borderRadius: Responsive.widthPercentageToDP(4),
+    padding: Responsive.widthPercentageToDP(6),
+    // Shadow
+    shadowColor: Colors.appColors.black,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.05,
+    shadowRadius: 16,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: Colors.opacityColors.blackOpacity4,
+  },
+  validatorHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: Responsive.heightPercentageToDP(3),
+  },
+  validatorIconContainer: {
+    width: Responsive.widthPercentageToDP(14),
+    height: Responsive.widthPercentageToDP(14),
+    backgroundColor: "#3B82F6", // Primary blue from screenshot
+    borderRadius: Responsive.widthPercentageToDP(4),
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#3B82F6",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  validatorLiveBadge: {
+    backgroundColor: "#D1FAE5", // Light green bg
+    paddingHorizontal: Responsive.widthPercentageToDP(3),
+    paddingVertical: Responsive.heightPercentageToDP(0.5),
+    borderRadius: Responsive.widthPercentageToDP(4),
+    borderWidth: 1,
+    borderColor: "#A7F3D0",
+  },
+  validatorLiveText: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(10),
+    color: "#059669", // Dark green text
+    letterSpacing: 1,
+  },
+  validatorTitle: {
+    fontFamily: Fonts.bold, // The screenshot uses a monospace font, we'll stick to bold for consistency or use Courier if available, but Fonts.bold is safer
+    fontSize: Responsive.convertFontScale(24),
+    color: Colors.appColors.secondary,
+    marginBottom: Responsive.heightPercentageToDP(1.5),
+  },
+  validatorDesc: {
+    fontFamily: Fonts.medium, // Screenshot uses a monospace/typewriter font here too.
+    fontSize: Responsive.convertFontScale(13),
+    color: Colors.appColors.grayDark,
+    lineHeight: Responsive.convertFontScale(20),
+    marginBottom: Responsive.heightPercentageToDP(3),
+  },
+  validatorList: {
+    gap: Responsive.heightPercentageToDP(1.5),
+    marginBottom: Responsive.heightPercentageToDP(3),
+  },
+  validatorListItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Responsive.widthPercentageToDP(3),
+  },
+  validatorListIconBox: {
+    width: Responsive.widthPercentageToDP(5.5),
+    height: Responsive.widthPercentageToDP(5.5),
+    borderRadius: Responsive.widthPercentageToDP(3),
+    backgroundColor: "#D1FAE5",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  validatorListText: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(13),
+    color: Colors.appColors.secondary,
+  },
+  validatorDivider: {
+    height: 1,
+    backgroundColor: Colors.opacityColors.blackOpacity4,
+    marginBottom: Responsive.heightPercentageToDP(2),
+  },
+  validatorFooter: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  validatorFooterText: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(14),
+    color: "#3B82F6",
+  },
+  predictorCard: {
+    backgroundColor: "#FEF2F2", // Light pinkish red
+    marginHorizontal: Responsive.widthPercentageToDP(5.3),
+    marginBottom: Responsive.heightPercentageToDP(2),
+    borderRadius: Responsive.widthPercentageToDP(4),
+    padding: Responsive.widthPercentageToDP(6),
+    shadowColor: "#E11D48",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.05,
+    shadowRadius: 16,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: "#FECACA",
+  },
+  predictorHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: Responsive.heightPercentageToDP(3),
+  },
+  predictorIconContainer: {
+    width: Responsive.widthPercentageToDP(14),
+    height: Responsive.widthPercentageToDP(14),
+    backgroundColor: "#E11D48", // Primary pink/red
+    borderRadius: Responsive.widthPercentageToDP(4),
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#E11D48",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  predictorBetaBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FECDD3",
+    paddingHorizontal: Responsive.widthPercentageToDP(3),
+    paddingVertical: Responsive.heightPercentageToDP(0.5),
+    borderRadius: Responsive.widthPercentageToDP(4),
+    borderWidth: 1,
+    borderColor: "#FDA4AF",
+    gap: 4,
+  },
+  predictorBetaText: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(10),
+    color: "#BE123C", // Darker red text
+    letterSpacing: 1,
+  },
+  predictorTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(24),
+    color: Colors.appColors.secondary,
+    marginBottom: Responsive.heightPercentageToDP(1.5),
+  },
+  predictorDesc: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(13),
+    color: Colors.appColors.grayDark,
+    lineHeight: Responsive.convertFontScale(20),
+    marginBottom: Responsive.heightPercentageToDP(3),
+  },
+  predictorList: {
+    gap: Responsive.heightPercentageToDP(1.5),
+    marginBottom: Responsive.heightPercentageToDP(3),
+  },
+  predictorListItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Responsive.widthPercentageToDP(3),
+  },
+  predictorListIconBox: {
+    width: Responsive.widthPercentageToDP(5.5),
+    height: Responsive.widthPercentageToDP(5.5),
+    borderRadius: Responsive.widthPercentageToDP(3),
+    backgroundColor: "#D1FAE5",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  predictorListText: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(13),
+    color: Colors.appColors.secondary,
+  },
+  predictorDivider: {
+    height: 1,
+    backgroundColor: "#FECACA",
+    marginBottom: Responsive.heightPercentageToDP(2),
+  },
+  predictorFooter: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  predictorFooterText: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(14),
+    color: "#E11D48",
+  },
 });
 
 export default styles;

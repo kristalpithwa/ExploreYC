@@ -1,5 +1,5 @@
 import { axiosInterceptor } from "@/network/apiClient";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery, useMutation } from "@tanstack/react-query";
 
 export const DEFAULT_STALE_TIME = 1000 * 60 * 5;
 export const DEFAULT_GC_TIME = 1000 * 60 * 5;
@@ -256,7 +256,15 @@ export const useGetHiringJobsInfinite = (payload: any) => {
       };
 
       const res = await axiosInterceptor.get(url, { params: currentPayload });
-      return res?.data || { jobs: [], total: 0, page: 1, total_pages: 1, has_next: false };
+      return (
+        res?.data || {
+          jobs: [],
+          total: 0,
+          page: 1,
+          total_pages: 1,
+          has_next: false,
+        }
+      );
     },
     getNextPageParam: (lastPage: any) => {
       if (lastPage?.has_next) {
@@ -283,3 +291,26 @@ export const useGetHiringBoardStats = () => {
     gcTime: DEFAULT_GC_TIME,
   });
 };
+
+export const useValidateIdeaMutation = () => {
+  const url = "validate-idea";
+
+  return useMutation({
+    mutationFn: async (payload: { idea: string; max_similar?: number }) => {
+      const res = await axiosInterceptor.post(url, payload);
+      return res?.data;
+    },
+  });
+};
+
+export const usePredictSuccessMutation = () => {
+  const url = "gamified-predict";
+
+  return useMutation({
+    mutationFn: async (payload: any) => {
+      const res = await axiosInterceptor.post(url, payload);
+      return res?.data;
+    },
+  });
+};
+

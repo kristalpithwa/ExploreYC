@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { View, Text, FlatList, Pressable, StyleSheet } from "react-native";
 import { Image } from "expo-image";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -354,6 +355,113 @@ export default function HomeScreen() {
     );
   };
 
+  const renderIdeaValidator = () => {
+    return (
+      <Pressable 
+        style={styles.validatorCard}
+        onPress={() => router.push("/(home)/ideaValidator")}
+      >
+        <View style={styles.validatorHeaderRow}>
+          <View style={styles.validatorIconContainer}>
+            <Ionicons name="search" size={24} color="#FFFFFF" />
+            {/* Using a small checkmark overlay as in the design */}
+            <View style={{ position: 'absolute', bottom: 6, right: 6, backgroundColor: '#FFFFFF', borderRadius: 6, width: 12, height: 12, justifyContent: 'center', alignItems: 'center' }}>
+              <Ionicons name="checkmark-sharp" size={10} color="#3B82F6" />
+            </View>
+          </View>
+          <View style={styles.validatorLiveBadge}>
+            <Text style={styles.validatorLiveText}>LIVE</Text>
+          </View>
+        </View>
+
+        <Text style={styles.validatorTitle}>Idea Validator</Text>
+        <Text style={styles.validatorDesc}>
+          Check if your startup idea already exists in the YC portfolio. Get instant feedback on market crowding.
+        </Text>
+
+        <View style={styles.validatorList}>
+          <View style={styles.validatorListItem}>
+            <View style={styles.validatorListIconBox}>
+              <Ionicons name="checkmark-sharp" size={12} color="#059669" />
+            </View>
+            <Text style={styles.validatorListText}>Search 5,000+ YC companies</Text>
+          </View>
+          <View style={styles.validatorListItem}>
+            <View style={styles.validatorListIconBox}>
+              <Ionicons name="checkmark-sharp" size={12} color="#059669" />
+            </View>
+            <Text style={styles.validatorListText}>Industry breakdown & analysis</Text>
+          </View>
+          <View style={styles.validatorListItem}>
+            <View style={styles.validatorListIconBox}>
+              <Ionicons name="checkmark-sharp" size={12} color="#059669" />
+            </View>
+            <Text style={styles.validatorListText}>Green light / Crowded indicator</Text>
+          </View>
+        </View>
+
+        <View style={styles.validatorDivider} />
+
+        <View style={styles.validatorFooter}>
+          <Text style={styles.validatorFooterText}>Try it free →</Text>
+          <Ionicons name="arrow-forward" size={16} color="#3B82F6" />
+        </View>
+      </Pressable>
+    );
+  };
+
+  const renderSuccessPredictor = () => {
+    return (
+      <Pressable 
+        style={styles.predictorCard}
+        onPress={() => router.push("/(home)/successPredictor")}
+      >
+        <View style={styles.predictorHeaderRow}>
+          <View style={styles.predictorIconContainer}>
+            <Ionicons name="sparkles" size={24} color="#FFFFFF" />
+          </View>
+          <View style={styles.predictorBetaBadge}>
+            <Ionicons name="flame-outline" size={12} color="#BE123C" />
+            <Text style={styles.predictorBetaText}>BETA</Text>
+          </View>
+        </View>
+
+        <Text style={styles.predictorTitle}>Success Predictor</Text>
+        <Text style={styles.predictorDesc}>
+          AI-powered startup success predictions. Get scored against 5,772 YC companies and unlock achievements.
+        </Text>
+
+        <View style={styles.predictorList}>
+          <View style={styles.predictorListItem}>
+            <View style={styles.predictorListIconBox}>
+              <Ionicons name="checkmark-sharp" size={12} color="#059669" />
+            </View>
+            <Text style={styles.predictorListText}>Multi-dimensional scoring</Text>
+          </View>
+          <View style={styles.predictorListItem}>
+            <View style={styles.predictorListIconBox}>
+              <Ionicons name="checkmark-sharp" size={12} color="#059669" />
+            </View>
+            <Text style={styles.predictorListText}>Find similar YC companies</Text>
+          </View>
+          <View style={styles.predictorListItem}>
+            <View style={styles.predictorListIconBox}>
+              <Ionicons name="checkmark-sharp" size={12} color="#059669" />
+            </View>
+            <Text style={styles.predictorListText}>Share & compare predictions</Text>
+          </View>
+        </View>
+
+        <View style={styles.predictorDivider} />
+
+        <View style={styles.predictorFooter}>
+          <Text style={styles.predictorFooterText}>Try it out →</Text>
+          <Ionicons name="arrow-forward" size={16} color="#E11D48" />
+        </View>
+      </Pressable>
+    );
+  };
+
   const renderMainContent = () => {
     return (
       <>
@@ -409,35 +517,11 @@ export default function HomeScreen() {
           contentContainerStyle={styles.horizontalScrollContent}
         />
 
-        {/* Latest Batch Hero Section */}
-        {/* <View style={styles.heroSection}>
-          <View style={styles.heroGradientBg}>
-            <View style={styles.heroTextContainer}>
-              <Text style={styles.heroLabel}>Spring 2026</Text>
-              <Text style={styles.heroTitle}>🚀 Latest YC Batch</Text>
-            </View>
-            <View style={styles.heroStatsContainer}>
-              <View style={styles.heroStatBadge}>
-                <Text style={styles.heroStatValue}>500</Text>
-                <Text style={styles.heroStatLabel}>Companies</Text>
-              </View>
-              <View style={styles.heroStatBadge}>
-                <Text style={styles.heroStatValue}>120</Text>
-                <Text style={styles.heroStatLabel}>Hiring</Text>
-              </View>
-              <View style={styles.heroStatBadge}>
-                <Text style={styles.heroStatValue}>80</Text>
-                <Text style={styles.heroStatLabel}>AI Startups</Text>
-              </View>
-            </View>
-            <Pressable
-              style={styles.heroExploreBtn}
-              onPress={() => router.push("/(home)/batchExplorer")}
-            >
-              <Text style={styles.heroExploreBtnText}>Explore Batch</Text>
-            </Pressable>
-          </View>
-        </View> */}
+        {/* Idea Validator Section */}
+        {renderIdeaValidator()}
+
+        {/* Success Predictor Section */}
+        {renderSuccessPredictor()}
 
         {/* Statistics Grid Section */}
         <View style={styles.sectionContainer}>
