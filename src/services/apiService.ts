@@ -243,3 +243,43 @@ export const useGetHiringAnalytics = () => {
     gcTime: DEFAULT_GC_TIME,
   });
 };
+
+export const useGetHiringJobsInfinite = (payload: any) => {
+  const url = "hiring/jobs/paginated";
+
+  return useInfiniteQuery({
+    queryKey: ["useGetHiringJobsInfinite", payload],
+    queryFn: async ({ pageParam = 1 }) => {
+      const currentPayload = {
+        ...payload,
+        page: pageParam,
+      };
+
+      const res = await axiosInterceptor.get(url, { params: currentPayload });
+      return res?.data || { jobs: [], total: 0, page: 1, total_pages: 1, has_next: false };
+    },
+    getNextPageParam: (lastPage: any) => {
+      if (lastPage?.has_next) {
+        return lastPage.page + 1;
+      }
+      return undefined;
+    },
+    initialPageParam: 1,
+    staleTime: DEFAULT_STALE_TIME,
+    gcTime: DEFAULT_GC_TIME,
+  });
+};
+
+export const useGetHiringBoardStats = () => {
+  const url = "hiring/stats";
+
+  return useQuery({
+    queryKey: ["useGetHiringBoardStats"],
+    queryFn: async () => {
+      const res = await axiosInterceptor.get(url);
+      return res?.data || {};
+    },
+    staleTime: DEFAULT_STALE_TIME,
+    gcTime: DEFAULT_GC_TIME,
+  });
+};
