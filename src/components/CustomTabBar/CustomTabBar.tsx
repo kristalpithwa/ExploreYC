@@ -15,8 +15,8 @@ export default function CustomTabBar({
   // Define tab configuration.
   const tabConfig: Record<string, { label: string; icon: any }> = {
     "(home)": { label: "Home", icon: Images.home },
+    "(job)": { label: "Jobs", icon: Images.search },
     "(discover)": { label: "Discover", icon: Images.discover },
-    "(search)": { label: "Search", icon: Images.search },
     "(analytics)": { label: "Analytics", icon: Images.analytics },
   };
 

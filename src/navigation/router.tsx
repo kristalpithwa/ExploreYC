@@ -19,16 +19,16 @@ const Router = () => {
       />
 
       <Tabs.Screen
-        name="(discover)"
+        name="(job)"
         options={{
-          title: "Discover",
+          title: "Job",
         }}
       />
 
       <Tabs.Screen
-        name="(search)"
+        name="(discover)"
         options={{
-          title: "Search",
+          title: "Discover",
         }}
       />
 

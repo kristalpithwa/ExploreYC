@@ -1,584 +1,358 @@
-import { useState, useMemo } from "react";
-import {
-  View,
-  Text,
-  Pressable,
-  TextInput,
-  FlatList,
-  Dimensions,
-} from "react-native";
-
-import { Image } from "expo-image";
+import React, { useState, useMemo, useRef } from "react";
+import { View, Text, TextInput, Pressable, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-} from "react-native-reanimated";
+import {
+  Map,
+  Camera,
+  ViewAnnotation,
+  type CameraRef,
+  type MapRef,
+} from "@maplibre/maplibre-react-native";
 
-import { Colors, Images, Responsive } from "@/theme";
+import {
+  useGetMapStartups,
+  useGetFilterBatches,
+  useGetFilterIndustries,
+} from "@/services/apiService";
 import styles from "./styles";
-import FilterModal from "../../components/FilterModal/FilterModal";
+import { Colors } from "@/theme";
+import BatchModal from "@/components/BatchModal";
+import IndustryModal from "@/components/IndustryModal";
+import SelectedStartupCard from "./components/SelectedStartupCard";
+import StartupPin from "./components/StartupPin";
+import { useRouter } from "expo-router";
 
-interface Startup {
+export interface Startup {
   id: string;
   name: string;
-  logo: string;
-  logoBg: string;
   batch: string;
   description: string;
   category: string;
-  bookmarked: boolean;
+  logo: string;
+  logoBg: string;
+  logoUrl?: string;
+  coordinates: [number, number]; // [longitude, latitude]
   hiring: boolean;
-  tags: string[];
-  stage: string;
-  valuation: string;
-  status: string;
+  country: string;
 }
 
-const mockStartups: Startup[] = [
-  {
-    id: "1",
-    name: "SynthGrid",
-    logo: "S",
-    logoBg: Colors.appColors.primary,
-    batch: "W24 • 🇺🇸",
-    description:
-      "Generative infrastructure for industrial manufacturing robots. Scaling precision with AI.",
-    category: "AI",
-    bookmarked: false,
-    hiring: true,
-    tags: ["W24", "AI", "USA", "YC"],
-    stage: "Series A",
-    valuation: "$12.4M Raised",
-    status: "Active",
-  },
-  {
-    id: "2",
-    name: "VaultFlow",
-    logo: "V",
-    logoBg: Colors.appColors.brandBlue,
-    batch: "S23 • 🇬🇧",
-    description:
-      "Automated treasury management for high-growth tech companies. Integrated with 50+ global banks.",
-    category: "Fintech",
-    bookmarked: true,
-    hiring: true,
-    tags: ["S23", "Fintech", "UK", "a16z"],
-    stage: "Seed",
-    valuation: "$4.5M Raised",
-    status: "Active",
-  },
-  {
-    id: "3",
-    name: "Lumina Health",
-    logo: "L",
-    logoBg: Colors.appColors.brandGreen,
-    batch: "W24 • 🇺🇸",
-    description:
-      "AI-powered diagnostic assistant for rural clinics. Bringing specialty care to everyone.",
-    category: "Healthtech",
-    bookmarked: false,
-    hiring: false,
-    tags: ["W24", "Healthtech", "USA", "YC"],
-    stage: "Pre-Seed",
-    valuation: "$1.2M Raised",
-    status: "Active",
-  },
-];
+const getLogoBg = (name: string) => {
+  const colors = [
+    "#FF3B30",
+    "#FF9500",
+    "#FFCC00",
+    "#4CD964",
+    "#5AC8FA",
+    "#007AFF",
+    "#5856D6",
+    "#FF2D55",
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return colors[Math.abs(hash) % colors.length];
+};
 
-const quickFilters = [
-  { id: "hiring", label: "Hiring", icon: Images.briefcase },
-  { id: "ai", label: "AI", icon: Images.category },
-  { id: "usa", label: "USA", icon: Images.globe },
-  { id: "top", label: "Top Companies", icon: Images.building },
-];
+const SF_CENTER: [number, number] = [-122.401, 37.773];
 
-export default function DiscoverScreen() {
-  const router = useRouter();
+const DEFAULT_ZOOM = 12.5;
+
+export default function SearchScreen() {
   const insets = useSafeAreaInsets();
-  const screenWidth = Dimensions.get("window").width;
+  const router = useRouter();
+  const cameraRef = useRef<CameraRef>(null);
+  const mapRef = useRef<MapRef>(null);
 
-  // Search & Filter States
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState(0); // 0: All, 1: YC, 2: a16z
-  const [selectedPills, setSelectedPills] = useState<string[]>([]);
-  const [bookmarks, setBookmarks] = useState<Record<string, boolean>>({
-    "2": true, // VaultFlow bookmarked initially
-  });
 
-  // Filter Modal States
-  const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
-  const [selectedBatch, setSelectedBatch] = useState("All Batches");
-  const [selectedIndustry, setSelectedIndustry] = useState("All Industries");
-  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([
-    "Active",
-  ]);
-  const [hiringOnly, setHiringOnly] = useState(true);
-  const [topCompaniesOnly, setTopCompaniesOnly] = useState(false);
-  const [foundedRange, setFoundedRange] = useState<[number, number]>([
-    2010, 2026,
-  ]);
+  const [selectedBatch, setSelectedBatch] = useState<string | null>(
+    "Winter 2026",
+  );
+  const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
+  const [isHiringOnly, setIsHiringOnly] = useState(false);
 
-  // Calculate sliding indicator animation values
-  const paddingHorizontal = screenWidth * 0.053 * 2;
-  const containerWidth = screenWidth - paddingHorizontal;
-  const tabWidth = (containerWidth - 8) / 3;
+  const [isBatchModalVisible, setIsBatchModalVisible] = useState(false);
+  const [isIndustryModalVisible, setIsIndustryModalVisible] = useState(false);
 
-  const indicatorTranslateX = useSharedValue(0);
+  const { data: batches = [] } = useGetFilterBatches();
+  const { data: industries = [] } = useGetFilterIndustries();
 
-  const handleTabPress = (index: number) => {
-    setActiveTab(index);
-    indicatorTranslateX.value = withSpring(index * tabWidth, {
-      damping: 15,
-      stiffness: 120,
+  const [selectedStartup, setSelectedStartup] = useState<Startup | null>(null);
+
+  const queryParams = useMemo(() => {
+    const params: any = {};
+    if (selectedBatch) params.batch = selectedBatch;
+    if (isHiringOnly) params.is_hiring = true;
+    return params;
+  }, [selectedBatch, isHiringOnly]);
+
+  const { data: mapData } = useGetMapStartups(queryParams);
+
+  const startups: Startup[] = useMemo(() => {
+    if (!mapData?.companies) return [];
+
+    const seenCoords: Record<string, number> = {};
+
+    return mapData.companies.map((c: any) => {
+      const coordKey = `${c.longitude},${c.latitude}`;
+      const count = seenCoords[coordKey] || 0;
+      seenCoords[coordKey] = count + 1;
+
+      let lng = c.longitude;
+      let lat = c.latitude;
+
+      // If multiple companies share the exact same location (e.g., generic "San Francisco"),
+      // apply a small spiral offset so the pins don't overlap perfectly.
+      if (count > 0) {
+        const angle = count * 0.5 * Math.PI; // 90 degree increments
+        const radius = 0.0015 * Math.sqrt(count); // distance increases with count
+        lng += Math.cos(angle) * radius;
+        lat += Math.sin(angle) * radius;
+      }
+
+      return {
+        id: c.id.toString(),
+        name: c.name,
+        batch: c.batch,
+        description: c.one_liner,
+        category: c.industry,
+        logo: c.name.charAt(0),
+        logoBg: getLogoBg(c.name),
+        logoUrl: c.small_logo_thumb_url,
+        coordinates: [lng, lat],
+        hiring: Boolean(c.is_hiring),
+        country: c.country,
+        slug: c.slug,
+      };
     });
-  };
+  }, [mapData]);
 
-  const indicatorAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateX: indicatorTranslateX.value }],
-      width: tabWidth,
-    };
-  });
+  const lastPinPressTimeRef = useRef(0);
 
-  const handlePillPress = (id: string) => {
-    if (selectedPills.includes(id)) {
-      setSelectedPills(selectedPills.filter((p) => p !== id));
-    } else {
-      setSelectedPills([...selectedPills, id]);
-    }
-  };
-
-  const toggleBookmark = (id: string) => {
-    setBookmarks((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
-
-  const toggleStatus = (status: string) => {
-    if (selectedStatuses.includes(status)) {
-      setSelectedStatuses(selectedStatuses.filter((s) => s !== status));
-    } else {
-      setSelectedStatuses([...selectedStatuses, status]);
-    }
-  };
-
-  const resetFilters = () => {
-    setSelectedBatch("All Batches");
-    setSelectedIndustry("All Industries");
-    setSelectedStatuses(["Active"]);
-    setHiringOnly(true);
-    setTopCompaniesOnly(false);
-    setFoundedRange([2010, 2026]);
-    setActiveTab(0);
-    indicatorTranslateX.value = withSpring(0, {
-      damping: 15,
-      stiffness: 120,
-    });
-    setSelectedPills([]);
-  };
-
-  // Filter mock startups based on active tab, search query, and applied filters
+  // Filter startups based on search and industry
   const filteredStartups = useMemo(() => {
-    return mockStartups.filter((item) => {
-      // 1. Tab filter (All, YC, a16z)
-      if (activeTab === 1 && !item.tags.includes("YC")) return false;
-      if (activeTab === 2 && !item.tags.includes("a16z")) return false;
+    return startups.filter((startup) => {
+      const matchesSearch = startup.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
 
-      // 2. Search query filter
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        const matchesName = item.name.toLowerCase().includes(query);
-        const matchesDesc = item.description.toLowerCase().includes(query);
-        const matchesCategory = item.category.toLowerCase().includes(query);
-        if (!matchesName && !matchesDesc && !matchesCategory) return false;
-      }
+      const matchesIndustry = selectedIndustry
+        ? startup.category === selectedIndustry
+        : true;
 
-      // 3. Quick pills filter (from horizontal scroll list)
-      if (selectedPills.length > 0) {
-        for (const pill of selectedPills) {
-          if (pill === "hiring" && !item.hiring) return false;
-          if (pill === "ai" && item.category !== "AI") return false;
-          if (pill === "usa" && !item.tags.includes("USA")) return false;
-          if (pill === "top" && !item.valuation.includes("M Raised"))
-            return false;
-        }
-      }
-
-      // 4. Batch filter
-      if (selectedBatch !== "All Batches") {
-        if (!item.batch.includes(selectedBatch)) return false;
-      }
-
-      // 5. Industry filter
-      if (selectedIndustry !== "All Industries") {
-        if (item.category !== selectedIndustry) return false;
-      }
-
-      // 6. Status filter
-      if (selectedStatuses.length > 0) {
-        if (!selectedStatuses.includes(item.status)) return false;
-      }
-
-      // 7. Hiring Only toggle
-      if (hiringOnly && !item.hiring) return false;
-
-      // 8. Top Companies toggle
-      if (topCompaniesOnly && !item.tags.includes("YC")) return false;
-
-      return true;
+      return matchesSearch && matchesIndustry;
     });
-  }, [
-    activeTab,
-    searchQuery,
-    selectedPills,
-    selectedBatch,
-    selectedIndustry,
-    selectedStatuses,
-    hiringOnly,
-    topCompaniesOnly,
-  ]);
+  }, [searchQuery, selectedIndustry, startups]);
 
-  const renderHeader = () => {
-    return (
-      <View style={[styles.header, { paddingTop: insets.top }]}>
-        <View style={styles.logoContainer}>
-          <Text style={styles.logoText}>Discover</Text>
-          <Text style={styles.logoText}>Find startups from YC & a16z</Text>
-        </View>
-
-        <Image
-          source="https://lh3.googleusercontent.com/aida-public/AB6AXuCt-7PX5Fn-j-CecPsBgfD93M3Od4IdpNU5PvTf4at0TtsbAve_wdJ01dGXfjMNT8-4GeKt2PBK8ZrS4VC67z5ef4wBruwDeg6AyDiWVvcuIEJ3mtgS-rkLJpLWmSlyFe66QHhtIs4-xbcDUQAxJjMujAxUuwCaJrEpC_ntw_ssz0Deghft43ftH1Uevw0xTUFwn0ltiJDPKujZ9UGjM-_O6Xrjw8dtGUx4V3UzGCzZil68FlSt9zvOJrzCse8QX27Aog53ydVkcM6P"
-          style={styles.avatar}
-        />
-      </View>
-    );
+  const handleSelectStartup = (startup: Startup) => {
+    lastPinPressTimeRef.current = Date.now();
+    setSelectedStartup(startup);
+    cameraRef.current?.flyTo({
+      center: startup.coordinates,
+      zoom: 14.5,
+      duration: 1000,
+    });
   };
 
-  const renderListHeader = () => {
-    return (
-      <View>
-        {/* Hero Title Section */}
-        {/* <View style={styles.heroSection}>
-          <Text style={styles.heroTitle}>Discover</Text>
-          <Text style={styles.heroSubtitle}>Find startups from YC & a16z</Text>
-        </View> */}
-
-        {/* Search Bar */}
-        <View style={styles.searchSection}>
-          <View style={styles.searchContainer}>
-            <Image
-              source={Images.search}
-              style={styles.searchIcon}
-              contentFit="contain"
-            />
-            <TextInput
-              placeholder="Search startups, batches, or tech..."
-              placeholderTextColor={Colors.appColors.grayMuted}
-              style={styles.searchInput}
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              returnKeyType="search"
-            />
-            <View style={styles.searchRightIcons}>
-              <Pressable style={styles.searchBtn}>
-                <Image
-                  source={Images.bell}
-                  style={styles.searchRightIcon}
-                  contentFit="contain"
-                />
-              </Pressable>
-              <View style={styles.searchDivider} />
-              <Pressable
-                style={styles.searchBtn}
-                onPress={() => setIsFilterModalVisible(true)}
-              >
-                <Image
-                  source={Images.category}
-                  style={styles.searchRightIcon}
-                  contentFit="contain"
-                />
-              </Pressable>
-            </View>
-          </View>
-        </View>
-
-        {/* Segmented control tab bar */}
-        <View style={styles.tabsSection}>
-          <View style={styles.tabsContainer}>
-            <Animated.View
-              style={[styles.tabIndicator, indicatorAnimatedStyle]}
-            />
-            <Pressable
-              style={styles.tabButton}
-              onPress={() => handleTabPress(0)}
-            >
-              <Text
-                style={[
-                  styles.tabButtonText,
-                  {
-                    color:
-                      activeTab === 0
-                        ? Colors.appColors.white
-                        : Colors.appColors.tertiary,
-                    fontWeight: activeTab === 0 ? "700" : "500",
-                  },
-                ]}
-              >
-                All
-              </Text>
-            </Pressable>
-            <Pressable
-              style={styles.tabButton}
-              onPress={() => handleTabPress(1)}
-            >
-              <Text
-                style={[
-                  styles.tabButtonText,
-                  {
-                    color:
-                      activeTab === 1
-                        ? Colors.appColors.white
-                        : Colors.appColors.tertiary,
-                    fontWeight: activeTab === 1 ? "700" : "500",
-                  },
-                ]}
-              >
-                YC
-              </Text>
-            </Pressable>
-            <Pressable
-              style={styles.tabButton}
-              onPress={() => handleTabPress(2)}
-            >
-              <Text
-                style={[
-                  styles.tabButtonText,
-                  {
-                    color:
-                      activeTab === 2
-                        ? Colors.appColors.white
-                        : Colors.appColors.tertiary,
-                    fontWeight: activeTab === 2 ? "700" : "500",
-                  },
-                ]}
-              >
-                a16z
-              </Text>
-            </Pressable>
-          </View>
-        </View>
-
-        {/* Horizontal Quick Filters */}
-        <View style={styles.filtersSection}>
-          <FlatList
-            horizontal
-            data={quickFilters}
-            keyExtractor={(item) => item.id}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.filtersContent}
-            renderItem={({ item }) => {
-              const isActive = selectedPills.includes(item.id);
-              return (
-                <Pressable
-                  style={[
-                    styles.filterPill,
-                    isActive && styles.filterPillActive,
-                  ]}
-                  onPress={() => handlePillPress(item.id)}
-                >
-                  <Image
-                    source={item.icon}
-                    style={[
-                      styles.filterIcon,
-                      {
-                        tintColor: isActive
-                          ? Colors.appColors.primary
-                          : Colors.appColors.tertiary,
-                      },
-                    ]}
-                    contentFit="contain"
-                  />
-                  <Text
-                    style={[
-                      styles.filterPillText,
-                      isActive && styles.filterPillTextActive,
-                    ]}
-                  >
-                    {item.label}
-                  </Text>
-                </Pressable>
-              );
-            }}
-          />
-        </View>
-
-        {/* Results Header */}
-        <View style={styles.listHeader}>
-          <Text style={styles.listCountText}>
-            {filteredStartups.length} Companies Found
-          </Text>
-          <Pressable style={styles.sortButton}>
-            <Image
-              source={Images.arrow_right}
-              style={[styles.sortIcon, { transform: [{ rotate: "90deg" }] }]}
-              contentFit="contain"
-            />
-            <Text style={styles.sortText}>Sort: Relevance</Text>
-          </Pressable>
-        </View>
-        <View style={{ height: 12 }} />
-      </View>
-    );
+  const handleMapPress = () => {
+    if (Date.now() - lastPinPressTimeRef.current < 200) {
+      return;
+    }
+    setSelectedStartup(null);
   };
 
-  const renderStartupCard = ({ item: startup }: { item: Startup }) => {
-    const isBookmarked = !!bookmarks[startup.id];
-    return (
-      <View
-        style={[
-          styles.card,
-          { marginHorizontal: Responsive.widthPercentageToDP(5.3) },
-        ]}
-      >
-        <View style={styles.cardHeader}>
-          <View
-            style={[
-              styles.cardLogoContainer,
-              { backgroundColor: startup.logoBg },
-            ]}
-          >
-            <Text style={styles.cardLogoText}>{startup.logo}</Text>
-          </View>
-
-          <View style={styles.cardTitleContainer}>
-            <Text style={styles.cardTitle}>{startup.name}</Text>
-            <View style={styles.cardStatusRow}>
-              <View style={styles.statusDot} />
-              <Text style={styles.statusText}>{startup.status}</Text>
-            </View>
-          </View>
-
-          <Pressable
-            style={styles.bookmarkBtn}
-            onPress={() => toggleBookmark(startup.id)}
-          >
-            <Image
-              source={Images.bookmark}
-              style={styles.bookmarkIcon}
-              tintColor={
-                isBookmarked
-                  ? Colors.appColors.primary
-                  : Colors.appColors.bookmarkInactive
-              }
-              contentFit="contain"
-            />
-          </Pressable>
-        </View>
-
-        <Text style={styles.cardDescription} numberOfLines={2}>
-          {startup.description}
-        </Text>
-
-        <View style={styles.cardTagsContainer}>
-          {startup.tags.map((tag) => {
-            const isSpecial = tag === "YC" || tag === "a16z";
-            return (
-              <View
-                key={tag}
-                style={[styles.tag, isSpecial && styles.specialTag]}
-              >
-                <Text
-                  style={[styles.tagText, isSpecial && styles.specialTagText]}
-                >
-                  {tag}
-                </Text>
-              </View>
-            );
-          })}
-        </View>
-
-        <View style={styles.cardFooter}>
-          <View style={styles.footerLeft}>
-            <Text style={styles.footerStage}>{startup.stage}</Text>
-            <Text style={styles.footerValuation}>{startup.valuation}</Text>
-          </View>
-
-          <Pressable
-            style={styles.viewDetailsBtn}
-            onPress={() =>
-              router.push({
-                pathname: "/(home)/companyDetails",
-                params: { id: startup.id },
-              })
-            }
-          >
-            <Text style={styles.viewDetailsText}>View Details</Text>
-            <Image
-              source={Images.arrow_right}
-              style={styles.viewDetailsIcon}
-              tintColor={Colors.appColors.primary}
-              contentFit="contain"
-            />
-          </Pressable>
-        </View>
-      </View>
-    );
+  const handleResetCamera = () => {
+    setSelectedStartup(null);
+    cameraRef.current?.flyTo({
+      center: SF_CENTER,
+      zoom: DEFAULT_ZOOM,
+      duration: 1000,
+    });
   };
+
+  const handleZoomIn = async () => {
+    const currentZoom = await mapRef.current?.getZoom();
+    if (currentZoom !== undefined) {
+      cameraRef.current?.flyTo({
+        zoom: currentZoom + 1,
+        duration: 500,
+      });
+    }
+  };
+
+  const handleZoomOut = async () => {
+    const currentZoom = await mapRef.current?.getZoom();
+    if (currentZoom !== undefined) {
+      cameraRef.current?.flyTo({
+        zoom: currentZoom - 1,
+        duration: 500,
+      });
+    }
+  };
+
+  const handleOpenCompany = (value: any) => {
+    router.push({
+      pathname: "/(discover)/companyDetails",
+      params: { slug: value.slug },
+    });
+    setSelectedStartup(null);
+  };
+
+  const initialViewState = useMemo(
+    () => ({
+      center: SF_CENTER,
+      zoom: DEFAULT_ZOOM,
+    }),
+    [],
+  );
 
   return (
-    <View style={styles.mainContainer}>
-      {/* Header */}
-      {renderHeader()}
-
-      {/* Flat Scrollable List */}
-      <FlatList
-        data={filteredStartups}
-        renderItem={renderStartupCard}
-        ListHeaderComponent={renderListHeader}
-        ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-        keyExtractor={(item) => item.id}
-        keyboardShouldPersistTaps="handled"
-      />
-
-      {/* Filter Bottom Sheet Modal */}
-      <FilterModal
-        visible={isFilterModalVisible}
-        onClose={() => setIsFilterModalVisible(false)}
-        activeTab={activeTab}
-        onTabPress={handleTabPress}
-        selectedBatch={selectedBatch}
-        onSelectBatch={setSelectedBatch}
-        selectedIndustry={selectedIndustry}
-        onSelectIndustry={setSelectedIndustry}
-        selectedStatuses={selectedStatuses}
-        onToggleStatus={toggleStatus}
-        hiringOnly={hiringOnly}
-        onToggleHiringOnly={setHiringOnly}
-        topCompaniesOnly={topCompaniesOnly}
-        onToggleTopCompaniesOnly={setTopCompaniesOnly}
-        foundedRange={foundedRange}
-        onSelectFoundedRange={setFoundedRange}
-        onReset={resetFilters}
-      />
-
-      {/* Floating Action Button */}
-      <Pressable
-        style={styles.fab}
-        onPress={() => setIsFilterModalVisible(true)}
+    <View style={styles.container}>
+      {/* Maplibre Map View */}
+      <Map
+        ref={mapRef}
+        style={styles.map}
+        mapStyle="https://tiles.openfreemap.org/styles/bright"
+        logo={false}
+        attribution={false}
+        onPress={handleMapPress}
       >
-        <Image
-          source={Images.category}
-          style={styles.fabIcon}
-          contentFit="contain"
+        <Camera ref={cameraRef} initialViewState={initialViewState} />
+
+        {/* Static Map Cluster Indicator (Stitch style) */}
+        <ViewAnnotation id="cluster-sf" lngLat={[-122.38, 37.75]}>
+          <View style={styles.clusterPin}>
+            <Text style={styles.clusterText}>140</Text>
+          </View>
+        </ViewAnnotation>
+
+        {/* Startup Pins */}
+        {filteredStartups.map((startup) => (
+          <ViewAnnotation
+            key={startup.id}
+            id={`pin-${startup.id}`}
+            lngLat={startup.coordinates}
+          >
+            <StartupPin
+              startup={startup}
+              isSelected={selectedStartup?.id === startup.id}
+              onSelect={handleSelectStartup}
+            />
+          </ViewAnnotation>
+        ))}
+      </Map>
+
+      {/* Floating Header UI */}
+      <View
+        style={[styles.topControlsContainer, { paddingTop: insets.top + 10 }]}
+      >
+        {/* Search Bar */}
+        <View style={styles.searchBarContainer}>
+          <Text style={styles.searchIcon}>🔍</Text>
+          <TextInput
+            placeholder="Search companies..."
+            placeholderTextColor={Colors.appColors.grayMuted}
+            style={styles.searchInput}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+          <Pressable style={styles.filterBtn}>
+            <Text style={styles.filterBtnText}>⚙️</Text>
+          </Pressable>
+        </View>
+
+        {/* Filter Chips Horizontal Scroll */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.pillsScrollView}
+          contentContainerStyle={styles.pillsContent}
+        >
+          <Pressable
+            onPress={() => setIsBatchModalVisible(true)}
+            style={[styles.pill, selectedBatch !== null && styles.pillActive]}
+          >
+            <Text
+              style={[
+                styles.pillText,
+                selectedBatch !== null && styles.pillTextActive,
+              ]}
+            >
+              Batch: {selectedBatch || "All"} ▼
+            </Text>
+          </Pressable>
+
+          <Pressable
+            onPress={() => setIsIndustryModalVisible(true)}
+            style={[
+              styles.pill,
+              selectedIndustry !== null && styles.pillActive,
+            ]}
+          >
+            <Text
+              style={[
+                styles.pillText,
+                selectedIndustry !== null && styles.pillTextActive,
+              ]}
+            >
+              Industry: {selectedIndustry || "All"} ▼
+            </Text>
+          </Pressable>
+
+          <Pressable
+            onPress={() => setIsHiringOnly(!isHiringOnly)}
+            style={[styles.pill, isHiringOnly && styles.pillActive]}
+          >
+            <Text
+              style={[styles.pillText, isHiringOnly && styles.pillTextActive]}
+            >
+              {isHiringOnly ? "🟢 Hiring Only" : "Hiring Only"}
+            </Text>
+          </Pressable>
+        </ScrollView>
+      </View>
+
+      {/* Floating Map Controls */}
+      <View style={styles.floatingMapControls}>
+        <Pressable onPress={handleResetCamera} style={styles.mapControlBtn}>
+          <Text style={styles.mapControlIcon}>🎯</Text>
+        </Pressable>
+
+        <View style={styles.zoomControlsGroup}>
+          <Pressable
+            onPress={handleZoomIn}
+            style={[styles.zoomBtn, styles.zoomBtnBorder]}
+          >
+            <Text style={styles.mapControlIcon}>＋</Text>
+          </Pressable>
+          <Pressable onPress={handleZoomOut} style={styles.zoomBtn}>
+            <Text style={styles.mapControlIcon}>－</Text>
+          </Pressable>
+        </View>
+      </View>
+
+      {/* Selected Startup Detail Card Bottom Sheet */}
+      {selectedStartup && (
+        <SelectedStartupCard
+          selectedStartup={selectedStartup}
+          onPressOpenCompany={handleOpenCompany}
         />
-        <Text style={styles.fabText}>Filters</Text>
-      </Pressable>
+      )}
+
+      <BatchModal
+        visible={isBatchModalVisible}
+        onClose={() => setIsBatchModalVisible(false)}
+        batches={batches}
+        onSelectBatch={setSelectedBatch}
+      />
+
+      <IndustryModal
+        visible={isIndustryModalVisible}
+        onClose={() => setIsIndustryModalVisible(false)}
+        industries={industries}
+        onSelectIndustry={setSelectedIndustry}
+      />
     </View>
   );
 }
