@@ -6,19 +6,22 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useGetStats } from "@/services/apiService";
 import { getSortedBatches, batchToShortFormat } from "@/utils/batchUtils";
 import { StatCard } from "./components/StatCard";
 import { BarChart } from "./components/BarChart";
 import { ProgressBarChart } from "./components/ProgressBarChart";
 import { StackedBarChart } from "./components/StackedBarChart";
-import colors from "@/theme/Colors";
+import { Colors, Responsive } from "@/theme";
 import styles from "./styles";
 
 export default function BatchesAnalyticsScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { data: stats, isLoading, isError } = useGetStats();
 
   const sortedBatches = useMemo(() => {
@@ -32,11 +35,11 @@ export default function BatchesAnalyticsScreen() {
     const avgBatchSize = Math.round(totalCompanies / sortedBatches.length);
     const largestBatch = sortedBatches.reduce(
       (max, b) => (b.count > max.count ? b : max),
-      sortedBatches[0]
+      sortedBatches[0],
     );
     const smallestBatch = sortedBatches.reduce(
       (min, b) => (b.count < min.count ? b : min),
-      sortedBatches[0]
+      sortedBatches[0],
     );
 
     const oldestBatch = sortedBatches[sortedBatches.length - 1];
@@ -73,8 +76,11 @@ export default function BatchesAnalyticsScreen() {
       .slice(0, 8)
       .map(([industry, count]) => ({ name: industry, value: count as number }));
   }, [stats?.by_industry]);
+
   const maxIndustryValue =
-    industryTrends.length > 0 ? Math.max(...industryTrends.map((i) => i.value)) : 0;
+    industryTrends.length > 0
+      ? Math.max(...industryTrends.map((i) => i.value))
+      : 0;
 
   const countryTrends = useMemo(() => {
     if (!stats?.by_country) return [];
@@ -83,17 +89,36 @@ export default function BatchesAnalyticsScreen() {
       .slice(0, 8)
       .map(([country, count]) => ({ name: country, value: count as number }));
   }, [stats?.by_country]);
+
   const maxCountryValue =
-    countryTrends.length > 0 ? Math.max(...countryTrends.map((c) => c.value)) : 0;
+    countryTrends.length > 0
+      ? Math.max(...countryTrends.map((c) => c.value))
+      : 0;
 
   const industryMixData = useMemo(() => {
     if (!stats?.by_batch_industry || !sortedBatches.length) return [];
 
     const INDUSTRY_COLORS = [
-      '#FB651E', '#3B82F6', '#8B5CF6', '#10B981', '#F59E0B',
-      '#EF4444', '#06B6D4', '#EC4899', '#84CC16', '#F97316',
-      '#6366F1', '#14B8A6', '#E11D48', '#A855F7', '#0EA5E9',
-      '#D946EF', '#22C55E', '#FACC15', '#64748B', '#78716C',
+      "#FB651E",
+      "#3B82F6",
+      "#8B5CF6",
+      "#10B981",
+      "#F59E0B",
+      "#EF4444",
+      "#06B6D4",
+      "#EC4899",
+      "#84CC16",
+      "#F97316",
+      "#6366F1",
+      "#14B8A6",
+      "#E11D48",
+      "#A855F7",
+      "#0EA5E9",
+      "#D946EF",
+      "#22C55E",
+      "#FACC15",
+      "#64748B",
+      "#78716C",
     ];
 
     // get all unique industries across all batches
@@ -111,7 +136,7 @@ export default function BatchesAnalyticsScreen() {
     // We'll show the top 8 recent batches for mobile layout
     return sortedBatches.slice(0, 8).map((batch) => {
       const industries = (stats.by_batch_industry as any)[batch.name] || {};
-      
+
       const segments = Object.entries(industries).map(([key, value]) => ({
         key,
         value: value as number,
@@ -131,7 +156,7 @@ export default function BatchesAnalyticsScreen() {
   if (isLoading || !batchStats) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color={colors.appColors.primary} />
+        <ActivityIndicator size="large" color={Colors.appColors.primary} />
       </View>
     );
   }
@@ -147,38 +172,37 @@ export default function BatchesAnalyticsScreen() {
   return (
     <ScrollView
       style={styles.mainContainer}
-      contentContainerStyle={styles.scrollContent}
+      contentContainerStyle={[
+        styles.scrollContent,
+        { paddingTop: insets.top + Responsive.heightPercentageToDP(2) },
+      ]}
       showsVerticalScrollIndicator={false}
     >
-      <TouchableOpacity
-        onPress={() => router.back()}
-        style={{ flexDirection: "row", alignItems: "center", marginBottom: 16 }}
-      >
+      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
         <Ionicons
           name="arrow-back"
-          size={16}
-          color={colors.appColors.grayMuted}
+          size={Responsive.convertFontScale(16)}
+          color={Colors.appColors.grayMuted}
         />
-        <Text style={[styles.commandText, { marginLeft: 8, marginBottom: 0 }]}>
-          $ cd ../analytics
-        </Text>
       </TouchableOpacity>
 
       <View style={styles.headerContainer}>
-        <Text style={styles.commandText}>$ analyze --all-batches --verbose</Text>
         <Text style={styles.title}>All Batches Analytics</Text>
         <Text style={styles.subtitle}>
           Comprehensive trends and insights across all YC batches
         </Text>
       </View>
 
-      <View style={styles.statsGrid}>
+      <Animated.View
+        style={styles.statsGrid}
+        entering={FadeInDown.delay(100).springify()}
+      >
         <View style={styles.statCardWrapper}>
           <StatCard
             title="batches"
             value={batchStats.totalBatches}
             iconName="calendar"
-            color={colors.defaults.ORANGE}
+            color={Colors.defaults.ORANGE}
           />
         </View>
         <View style={styles.statCardWrapper}>
@@ -186,7 +210,7 @@ export default function BatchesAnalyticsScreen() {
             title="avg size"
             value={batchStats.avgBatchSize}
             iconName="people"
-            color={colors.appColors.brandBlue}
+            color={Colors.appColors.brandBlue}
           />
         </View>
         <View style={styles.statCardWrapper}>
@@ -194,7 +218,7 @@ export default function BatchesAnalyticsScreen() {
             title="growth"
             value={`${batchStats.growthRate > 0 ? "+" : ""}${batchStats.growthRate.toFixed(1)}%`}
             iconName="trending-up"
-            color={colors.defaults.GREEN}
+            color={Colors.defaults.GREEN}
           />
         </View>
         <View style={styles.statCardWrapper}>
@@ -202,42 +226,53 @@ export default function BatchesAnalyticsScreen() {
             title="largest"
             value={batchStats.largestBatch.count}
             iconName="business"
-            color={colors.defaults.PURPLE}
+            color={Colors.defaults.PURPLE}
           />
         </View>
-      </View>
+      </Animated.View>
 
       {/* Batch Size Evolution Chart */}
-      <View style={styles.card}>
+      <Animated.View
+        style={styles.card}
+        entering={FadeInDown.delay(200).springify()}
+      >
         <View style={styles.sectionTitleContainer}>
           <Ionicons
             name="trending-up"
             size={18}
-            color={colors.defaults.ORANGE}
+            color={Colors.defaults.ORANGE}
             style={styles.sectionIcon}
           />
           <Text style={styles.sectionTitle}>Batch Size Evolution</Text>
         </View>
         {/* Render a subset if there are too many batches to fit on mobile */}
         <BarChart
-          data={chartData.slice(-15)} 
+          data={chartData.slice(-15)}
           maxValue={maxBatchSize}
-          color={colors.defaults.ORANGE}
-          height={150}
+          color={Colors.defaults.ORANGE}
+          height={Responsive.heightPercentageToDP(18)}
         />
-        <Text style={[styles.commandText, { marginTop: 16 }]}>
+        <Text
+          style={[
+            styles.commandText,
+            { marginTop: Responsive.heightPercentageToDP(2) },
+          ]}
+        >
           &gt; Range: {batchStats.smallestBatch.count} -{" "}
           {batchStats.largestBatch.count} companies
         </Text>
-      </View>
+      </Animated.View>
 
       {/* Top Industries */}
-      <View style={styles.card}>
+      <Animated.View
+        style={styles.card}
+        entering={FadeInDown.delay(300).springify()}
+      >
         <View style={styles.sectionTitleContainer}>
           <Ionicons
             name="briefcase"
             size={18}
-            color={colors.appColors.brandBlue}
+            color={Colors.appColors.brandBlue}
             style={styles.sectionIcon}
           />
           <Text style={styles.sectionTitle}>Top Industries</Text>
@@ -245,17 +280,20 @@ export default function BatchesAnalyticsScreen() {
         <ProgressBarChart
           data={industryTrends}
           maxValue={maxIndustryValue}
-          color={colors.appColors.brandBlue}
+          color={Colors.appColors.brandBlue}
         />
-      </View>
+      </Animated.View>
 
       {/* Top Countries */}
-      <View style={styles.card}>
+      <Animated.View
+        style={styles.card}
+        entering={FadeInDown.delay(400).springify()}
+      >
         <View style={styles.sectionTitleContainer}>
           <Ionicons
             name="earth"
             size={18}
-            color={colors.defaults.PURPLE}
+            color={Colors.defaults.PURPLE}
             style={styles.sectionIcon}
           />
           <Text style={styles.sectionTitle}>Top Countries</Text>
@@ -263,60 +301,109 @@ export default function BatchesAnalyticsScreen() {
         <ProgressBarChart
           data={countryTrends}
           maxValue={maxCountryValue}
-          color={colors.defaults.PURPLE}
+          color={Colors.defaults.PURPLE}
         />
-      </View>
+      </Animated.View>
 
       {/* Industry Mix by Batch */}
       {industryMixData.length > 0 && (
-        <View style={styles.card}>
+        <Animated.View
+          style={styles.card}
+          entering={FadeInDown.delay(500).springify()}
+        >
           <View style={styles.sectionTitleContainer}>
             <Ionicons
               name="layers"
               size={18}
-              color={colors.appColors.brandBlue}
+              color={Colors.appColors.brandBlue}
               style={styles.sectionIcon}
             />
             <Text style={styles.sectionTitle}>Industry Mix by Batch</Text>
-            <Text style={[styles.subtitle, { marginLeft: "auto", fontSize: 10 }]}>
+            <Text
+              style={[
+                styles.subtitle,
+                {
+                  marginLeft: "auto",
+                  fontSize: Responsive.convertFontScale(10),
+                },
+              ]}
+            >
               recent 8
             </Text>
           </View>
           <StackedBarChart data={industryMixData} />
-        </View>
+        </Animated.View>
       )}
 
       {/* Complete Batch History */}
-      <View style={styles.card}>
+      <Animated.View
+        style={styles.card}
+        entering={FadeInDown.delay(600).springify()}
+      >
         <View style={styles.sectionTitleContainer}>
           <Ionicons
             name="calendar"
             size={18}
-            color={colors.defaults.GREEN}
+            color={Colors.defaults.GREEN}
             style={styles.sectionIcon}
           />
           <Text style={styles.sectionTitle}>Complete Batch History</Text>
         </View>
-        
+
         <View style={styles.tableHeader}>
           <Text style={[styles.tableHeaderText, { flex: 0.5 }]}>#</Text>
           <Text style={[styles.tableHeaderText, { flex: 1 }]}>batch</Text>
-          <Text style={[styles.tableHeaderText, { flex: 1.5, textAlign: "right" }]}>companies</Text>
-          <Text style={[styles.tableHeaderText, { flex: 1, textAlign: "right" }]}>%</Text>
+          <Text
+            style={[styles.tableHeaderText, { flex: 1.5, textAlign: "right" }]}
+          >
+            companies
+          </Text>
+          <Text
+            style={[styles.tableHeaderText, { flex: 1, textAlign: "right" }]}
+          >
+            %
+          </Text>
         </View>
-        
+
         {sortedBatches.map((batch, index) => {
-          const percentage = ((batch.count / batchStats.totalCompanies) * 100).toFixed(1);
+          const percentage = (
+            (batch.count / batchStats.totalCompanies) *
+            100
+          ).toFixed(1);
           return (
             <View key={batch.name} style={styles.tableRow}>
-              <Text style={[styles.tableRowText, { flex: 0.5, color: colors.appColors.grayMuted }]}>{index + 1}</Text>
-              <Text style={[styles.tableRowText, { flex: 1 }]}>{batchToShortFormat(batch.name)}</Text>
-              <Text style={[styles.tableRowText, { flex: 1.5, textAlign: "right" }]}>{batch.count.toLocaleString()}</Text>
-              <Text style={[styles.tableRowText, { flex: 1, textAlign: "right", color: colors.appColors.grayMuted }]}>{percentage}%</Text>
+              <Text
+                style={[
+                  styles.tableRowText,
+                  { flex: 0.5, color: Colors.appColors.grayMuted },
+                ]}
+              >
+                {index + 1}
+              </Text>
+              <Text style={[styles.tableRowText, { flex: 1 }]}>
+                {batchToShortFormat(batch.name)}
+              </Text>
+              <Text
+                style={[styles.tableRowText, { flex: 1.5, textAlign: "right" }]}
+              >
+                {batch.count.toLocaleString()}
+              </Text>
+              <Text
+                style={[
+                  styles.tableRowText,
+                  {
+                    flex: 1,
+                    textAlign: "right",
+                    color: Colors.appColors.grayMuted,
+                  },
+                ]}
+              >
+                {percentage}%
+              </Text>
             </View>
           );
         })}
-      </View>
+      </Animated.View>
     </ScrollView>
   );
 }

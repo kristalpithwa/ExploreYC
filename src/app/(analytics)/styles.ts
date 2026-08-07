@@ -6,6 +6,50 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.appColors.background,
   },
+  backButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: Colors.appColors.white,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: Responsive.heightPercentageToDP(2),
+    borderWidth: 1,
+    borderColor: Colors.opacityColors.blackOpacity4,
+    // Soft shadow for premium feel
+    shadowColor: Colors.appColors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: Responsive.widthPercentageToDP(5.3),
+    paddingVertical: Responsive.heightPercentageToDP(1.5),
+    backgroundColor: Colors.appColors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.opacityColors.blackOpacity4,
+  },
+  headerLeft: {
+    alignItems: "center",
+  },
+  avatar: {
+    width: Responsive.widthPercentageToDP(10.7),
+    height: Responsive.heightPercentageToDP(5),
+    borderRadius: Responsive.widthPercentageToDP(5.3),
+  },
+  headerTexts: {
+    justifyContent: "center",
+  },
+  appTitleText: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(20),
+    color: Colors.appColors.primary,
+    letterSpacing: -0.2,
+  },
   loaderContainer: {
     flex: 1,
     justifyContent: "center",
@@ -18,7 +62,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     marginBottom: Responsive.heightPercentageToDP(3.5),
-    marginTop: Responsive.heightPercentageToDP(1),
+    // marginTop: Responsive.heightPercentageToDP(1),
   },
   commandText: {
     fontSize: Responsive.convertFontScale(11),
@@ -44,11 +88,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+    gap: Responsive.widthPercentageToDP(3), // horizontal and vertical gap
     marginBottom: Responsive.heightPercentageToDP(3.5),
   },
   statCardWrapper: {
-    width: "48%",
-    marginBottom: Responsive.heightPercentageToDP(2),
+    width: "47%", // slightly less than 50% to allow gap to work without overflowing
   },
   sectionTitleContainer: {
     flexDirection: "row",
@@ -169,6 +213,36 @@ const styles = StyleSheet.create({
     fontSize: Responsive.convertFontScale(13),
     fontFamily: Fonts.medium,
     color: Colors.appColors.secondary,
+  },
+  flex1: { flex: 1 },
+  flex15: { flex: 1.5 },
+  flex2: { flex: 2 },
+  textRight: { textAlign: "right" },
+  textBold: { fontFamily: Fonts.bold },
+  textOrange: { color: Colors.defaults.ORANGE },
+  textMuted: { color: Colors.appColors.grayMuted },
+  earlyStageContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: Responsive.heightPercentageToDP(1),
+  },
+  earlyStageCol: {
+    flex: 1,
+    alignItems: "center",
+  },
+  earlyStageLabel: {
+    fontSize: Responsive.convertFontScale(10),
+    color: Colors.appColors.grayMuted,
+    fontFamily: "SpaceMono-Regular",
+  },
+  earlyStageValue: {
+    fontSize: Responsive.convertFontScale(24),
+    fontFamily: Fonts.bold,
+    color: Colors.defaults.ORANGE,
+  },
+  earlyStageSubtext: {
+    fontSize: Responsive.convertFontScale(10),
+    color: Colors.appColors.grayMuted,
   },
 });
 

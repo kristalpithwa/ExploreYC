@@ -100,8 +100,7 @@ const styles = StyleSheet.create({
   },
   barBackground: {
     width: "100%",
-    maxWidth: Responsive.widthPercentageToDP(6),
-    backgroundColor: Colors.opacityColors.blackOpacity10,
+    maxWidth: Responsive.widthPercentageToDP(8), // Make bars a bit wider
     borderRadius: Responsive.widthPercentageToDP(1),
     justifyContent: "flex-end",
     overflow: "hidden",

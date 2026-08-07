@@ -6,17 +6,20 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useGetHiringAnalytics } from "@/services/apiService";
 import { StatCard } from "./components/StatCard";
 import { ProgressBarChart } from "./components/ProgressBarChart";
 import { BarChart } from "./components/BarChart";
-import colors from "@/theme/Colors";
+import { Colors, Responsive } from "@/theme";
 import styles from "./styles";
 
 export default function HiringAnalyticsScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { data: analytics, isLoading, error } = useGetHiringAnalytics();
 
   const roleDistribution = useMemo(() => {
@@ -79,12 +82,14 @@ export default function HiringAnalyticsScreen() {
   }, [analytics?.topBatches]);
 
   const maxTopBatches =
-    topBatches.length > 0 ? Math.max(...topBatches.map((d: any) => d.value)) : 0;
+    topBatches.length > 0
+      ? Math.max(...topBatches.map((d: any) => d.value))
+      : 0;
 
   if (isLoading || !analytics) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color={colors.appColors.primary} />
+        <ActivityIndicator size="large" color={Colors.appColors.primary} />
       </View>
     );
   }
@@ -100,27 +105,21 @@ export default function HiringAnalyticsScreen() {
   return (
     <ScrollView
       style={styles.mainContainer}
-      contentContainerStyle={styles.scrollContent}
+      contentContainerStyle={[
+        styles.scrollContent,
+        { paddingTop: insets.top + Responsive.heightPercentageToDP(2) },
+      ]}
       showsVerticalScrollIndicator={false}
     >
-      <TouchableOpacity
-        onPress={() => router.back()}
-        style={{ flexDirection: "row", alignItems: "center", marginBottom: 16 }}
-      >
+      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
         <Ionicons
           name="arrow-back"
-          size={16}
-          color={colors.appColors.grayMuted}
+          size={Responsive.convertFontScale(16)}
+          color={Colors.appColors.grayMuted}
         />
-        <Text style={[styles.commandText, { marginLeft: 8, marginBottom: 0 }]}>
-          $ cd ../analytics
-        </Text>
       </TouchableOpacity>
 
       <View style={styles.headerContainer}>
-        <Text style={[styles.commandText, { color: colors.defaults.ORANGE }]}>
-          $ fetch --jobs --analytics
-        </Text>
         <Text style={styles.title}>Hiring Market Intelligence</Text>
         <Text style={styles.subtitle}>
           Real-time insights from {analytics.totalJobs?.toLocaleString() || 0}{" "}
@@ -128,7 +127,10 @@ export default function HiringAnalyticsScreen() {
         </Text>
       </View>
 
-      <View style={styles.statsGrid}>
+      <Animated.View
+        style={styles.statsGrid}
+        entering={FadeInDown.delay(100).springify()}
+      >
         <View style={styles.statCardWrapper}>
           <StatCard
             title="avg salary"
@@ -138,7 +140,7 @@ export default function HiringAnalyticsScreen() {
                 : "N/A"
             }
             iconName="cash"
-            color={colors.defaults.GREEN}
+            color={Colors.defaults.GREEN}
           />
         </View>
         <View style={styles.statCardWrapper}>
@@ -146,7 +148,7 @@ export default function HiringAnalyticsScreen() {
             title="total jobs"
             value={analytics.totalJobs?.toLocaleString() || 0}
             iconName="briefcase"
-            color={colors.defaults.ORANGE}
+            color={Colors.defaults.ORANGE}
           />
         </View>
         <View style={styles.statCardWrapper}>
@@ -154,7 +156,7 @@ export default function HiringAnalyticsScreen() {
             title="% remote"
             value={`${analytics.remoteStats?.remotePercentage || 0}%`}
             iconName="globe"
-            color={colors.appColors.brandBlue}
+            color={Colors.appColors.brandBlue}
           />
         </View>
         <View style={styles.statCardWrapper}>
@@ -162,18 +164,21 @@ export default function HiringAnalyticsScreen() {
             title="companies"
             value={analytics.totalCompanies?.toLocaleString() || 0}
             iconName="business"
-            color={colors.defaults.PURPLE}
+            color={Colors.defaults.PURPLE}
           />
         </View>
-      </View>
+      </Animated.View>
 
       {/* Salary Insights */}
-      <View style={styles.card}>
+      <Animated.View
+        style={styles.card}
+        entering={FadeInDown.delay(200).springify()}
+      >
         <View style={styles.sectionTitleContainer}>
           <Ionicons
             name="cash"
             size={18}
-            color={colors.defaults.GREEN}
+            color={Colors.defaults.GREEN}
             style={styles.sectionIcon}
           />
           <Text style={styles.sectionTitle}>Avg Salary by Role</Text>
@@ -181,80 +186,146 @@ export default function HiringAnalyticsScreen() {
         <BarChart
           data={salaryByRole}
           maxValue={maxSalary}
-          color={colors.defaults.GREEN}
-          height={180}
+          color={Colors.defaults.GREEN}
+          height={Responsive.heightPercentageToDP(20)}
         />
-      </View>
+      </Animated.View>
 
       {/* Highest Paying Roles */}
-      <View style={styles.card}>
+      <Animated.View
+        style={styles.card}
+        entering={FadeInDown.delay(300).springify()}
+      >
         <View style={styles.sectionTitleContainer}>
           <Ionicons
             name="trending-up"
             size={18}
-            color={colors.defaults.GREEN}
+            color={Colors.defaults.GREEN}
             style={styles.sectionIcon}
           />
           <Text style={styles.sectionTitle}>Top Paying Roles</Text>
         </View>
         <View style={styles.tableHeader}>
-          <Text style={[styles.tableHeaderText, { flex: 1.5 }]}>role</Text>
-          <Text style={[styles.tableHeaderText, { flex: 1, textAlign: "right" }]}>jobs</Text>
-          <Text style={[styles.tableHeaderText, { flex: 1.5, textAlign: "right" }]}>avg salary</Text>
+          <Text style={[styles.tableHeaderText, styles.flex15]}>role</Text>
+          <Text
+            style={[styles.tableHeaderText, styles.flex1, styles.textRight]}
+          >
+            jobs
+          </Text>
+          <Text
+            style={[styles.tableHeaderText, styles.flex15, styles.textRight]}
+          >
+            avg salary
+          </Text>
         </View>
-        {analytics?.highestPayingRoles?.slice(0, 8).map((role: any, idx: number) => (
-          <View key={idx} style={styles.tableRow}>
-            <Text style={[styles.tableRowText, { flex: 1.5, color: colors.defaults.ORANGE }]} numberOfLines={1}>
-              {role.role}
-            </Text>
-            <Text style={[styles.tableRowText, { flex: 1, textAlign: "right", color: colors.appColors.grayMuted }]}>
-              {role.jobCount}
-            </Text>
-            <Text style={[styles.tableRowText, { flex: 1.5, textAlign: "right", fontWeight: "bold" }]}>
-              ${(role.avgSalary / 1000).toFixed(0)}K
-            </Text>
-          </View>
-        ))}
-      </View>
+        {analytics?.highestPayingRoles
+          ?.slice(0, 8)
+          .map((role: any, idx: number) => (
+            <View key={idx} style={styles.tableRow}>
+              <Text
+                style={[styles.tableRowText, styles.flex15, styles.textOrange]}
+                numberOfLines={1}
+              >
+                {role.role}
+              </Text>
+              <Text
+                style={[
+                  styles.tableRowText,
+                  styles.flex1,
+                  styles.textRight,
+                  styles.textMuted,
+                ]}
+              >
+                {role.jobCount}
+              </Text>
+              <Text
+                style={[
+                  styles.tableRowText,
+                  styles.flex15,
+                  styles.textRight,
+                  styles.textBold,
+                ]}
+              >
+                ${(role.avgSalary / 1000).toFixed(0)}K
+              </Text>
+            </View>
+          ))}
+      </Animated.View>
 
       {/* Top Paying Companies */}
-      <View style={styles.card}>
+      <Animated.View
+        style={styles.card}
+        entering={FadeInDown.delay(400).springify()}
+      >
         <View style={styles.sectionTitleContainer}>
           <Ionicons
             name="business"
             size={18}
-            color={colors.defaults.GREEN}
+            color={Colors.defaults.GREEN}
             style={styles.sectionIcon}
           />
           <Text style={styles.sectionTitle}>Top Paying Companies</Text>
         </View>
+
         <View style={styles.tableHeader}>
-          <Text style={[styles.tableHeaderText, { flex: 1.5 }]}>company</Text>
-          <Text style={[styles.tableHeaderText, { flex: 1, textAlign: "right" }]}>batch</Text>
-          <Text style={[styles.tableHeaderText, { flex: 1.5, textAlign: "right" }]}>avg salary</Text>
+          <Text style={[styles.tableHeaderText, styles.flex15]}>company</Text>
+          <Text
+            style={[styles.tableHeaderText, styles.flex1, styles.textRight]}
+          >
+            batch
+          </Text>
+          <Text
+            style={[styles.tableHeaderText, styles.flex15, styles.textRight]}
+          >
+            avg salary
+          </Text>
         </View>
-        {analytics?.topPayingCompanies?.slice(0, 8).map((company: any, idx: number) => (
-          <View key={idx} style={styles.tableRow}>
-            <Text style={[styles.tableRowText, { flex: 1.5 }]} numberOfLines={1}>
-              {company.name}
-            </Text>
-            <Text style={[styles.tableRowText, { flex: 1, textAlign: "right", color: colors.appColors.grayMuted }]}>
-              {company.batch}
-            </Text>
-            <Text style={[styles.tableRowText, { flex: 1.5, textAlign: "right", fontWeight: "bold", color: colors.defaults.ORANGE }]}>
-              ${(company.avgSalary / 1000).toFixed(0)}K
-            </Text>
-          </View>
-        ))}
-      </View>
+
+        {analytics?.topPayingCompanies
+          ?.slice(0, 8)
+          .map((company: any, idx: number) => (
+            <View key={idx} style={styles.tableRow}>
+              <Text
+                style={[styles.tableRowText, styles.flex15]}
+                numberOfLines={1}
+              >
+                {company.name}
+              </Text>
+              <Text
+                style={[
+                  styles.tableRowText,
+                  styles.flex1,
+                  styles.textRight,
+                  styles.textMuted,
+                ]}
+              >
+                {company.batch}
+              </Text>
+              <Text
+                style={[
+                  styles.tableRowText,
+                  styles.flex15,
+                  styles.textRight,
+                  styles.textBold,
+                  styles.textOrange,
+                ]}
+              >
+                ${(company.avgSalary / 1000).toFixed(0)}K
+              </Text>
+            </View>
+          ))}
+      </Animated.View>
 
       {/* Role Distribution */}
-      <View style={styles.card}>
+      <Animated.View
+        style={styles.card}
+        entering={FadeInDown.delay(500).springify()}
+      >
         <View style={styles.sectionTitleContainer}>
           <Ionicons
             name="pie-chart"
             size={18}
-            color={colors.defaults.PURPLE}
+            color={Colors.defaults.PURPLE}
             style={styles.sectionIcon}
           />
           <Text style={styles.sectionTitle}>Role Distribution</Text>
@@ -262,17 +333,20 @@ export default function HiringAnalyticsScreen() {
         <ProgressBarChart
           data={roleDistribution}
           maxValue={maxRoleDist}
-          color={colors.defaults.PURPLE}
+          color={Colors.defaults.PURPLE}
         />
-      </View>
+      </Animated.View>
 
       {/* Top 10 Locations */}
-      <View style={styles.card}>
+      <Animated.View
+        style={styles.card}
+        entering={FadeInDown.delay(600).springify()}
+      >
         <View style={styles.sectionTitleContainer}>
           <Ionicons
             name="map"
             size={18}
-            color={colors.appColors.brandBlue}
+            color={Colors.appColors.brandBlue}
             style={styles.sectionIcon}
           />
           <Text style={styles.sectionTitle}>Top Hiring Locations</Text>
@@ -280,17 +354,20 @@ export default function HiringAnalyticsScreen() {
         <ProgressBarChart
           data={locationBreakdown}
           maxValue={maxLocDist}
-          color={colors.appColors.brandBlue}
+          color={Colors.appColors.brandBlue}
         />
-      </View>
+      </Animated.View>
 
       {/* Job Type Distribution */}
-      <View style={styles.card}>
+      <Animated.View
+        style={styles.card}
+        entering={FadeInDown.delay(700).springify()}
+      >
         <View style={styles.sectionTitleContainer}>
           <Ionicons
             name="briefcase"
             size={18}
-            color={colors.defaults.PURPLE}
+            color={Colors.defaults.PURPLE}
             style={styles.sectionIcon}
           />
           <Text style={styles.sectionTitle}>Job Type Distribution</Text>
@@ -298,17 +375,20 @@ export default function HiringAnalyticsScreen() {
         <ProgressBarChart
           data={jobTypeBreakdown}
           maxValue={maxJobType}
-          color={colors.defaults.PURPLE}
+          color={Colors.defaults.PURPLE}
         />
-      </View>
+      </Animated.View>
 
       {/* Remote vs On-site */}
-      <View style={styles.card}>
+      <Animated.View
+        style={styles.card}
+        entering={FadeInDown.delay(800).springify()}
+      >
         <View style={styles.sectionTitleContainer}>
           <Ionicons
             name="desktop"
             size={18}
-            color={colors.defaults.ORANGE}
+            color={Colors.defaults.ORANGE}
             style={styles.sectionIcon}
           />
           <Text style={styles.sectionTitle}>Remote vs On-site</Text>
@@ -322,49 +402,67 @@ export default function HiringAnalyticsScreen() {
             (analytics.remoteStats?.remote || 0) +
             (analytics.remoteStats?.onsite || 0)
           }
-          color={colors.defaults.ORANGE}
+          color={Colors.defaults.ORANGE}
         />
-      </View>
+      </Animated.View>
 
       {/* Early Stage Hiring Stats */}
       {analytics?.earlyStageStats && (
-        <View style={styles.card}>
+        <Animated.View
+          style={styles.card}
+          entering={FadeInDown.delay(900).springify()}
+        >
           <View style={styles.sectionTitleContainer}>
             <Ionicons
               name="flash"
               size={18}
-              color={colors.defaults.ORANGE}
+              color={Colors.defaults.ORANGE}
               style={styles.sectionIcon}
             />
             <Text style={styles.sectionTitle}>Early Stage Hiring</Text>
           </View>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 8 }}>
-            <View style={{ flex: 1, alignItems: "center" }}>
-              <Text style={{ fontSize: 10, color: colors.appColors.grayMuted, fontFamily: "SpaceMono-Regular" }}>early companies</Text>
-              <Text style={{ fontSize: 24, fontWeight: "bold", color: colors.defaults.ORANGE }}>{analytics.earlyStageStats.earlyStageCompanies}</Text>
-              <Text style={{ fontSize: 10, color: colors.appColors.grayMuted }}>{analytics.earlyStageStats.earlyStagePercentage}%</Text>
+          <View style={styles.earlyStageContainer}>
+            <View style={styles.earlyStageCol}>
+              <Text style={styles.earlyStageLabel}>early companies</Text>
+              <Text style={styles.earlyStageValue}>
+                {analytics.earlyStageStats.earlyStageCompanies}
+              </Text>
+              <Text style={styles.earlyStageSubtext}>
+                {analytics.earlyStageStats.earlyStagePercentage}%
+              </Text>
             </View>
-            <View style={{ flex: 1, alignItems: "center" }}>
-              <Text style={{ fontSize: 10, color: colors.appColors.grayMuted, fontFamily: "SpaceMono-Regular" }}>early jobs</Text>
-              <Text style={{ fontSize: 24, fontWeight: "bold", color: colors.defaults.ORANGE }}>{analytics.earlyStageStats.earlyStageJobs}</Text>
-              <Text style={{ fontSize: 10, color: colors.appColors.grayMuted }}>of {analytics.totalJobs}</Text>
+            <View style={styles.earlyStageCol}>
+              <Text style={styles.earlyStageLabel}>early jobs</Text>
+              <Text style={styles.earlyStageValue}>
+                {analytics.earlyStageStats.earlyStageJobs}
+              </Text>
+              <Text style={styles.earlyStageSubtext}>
+                of {analytics.totalJobs}
+              </Text>
             </View>
-            <View style={{ flex: 1, alignItems: "center" }}>
-              <Text style={{ fontSize: 10, color: colors.appColors.grayMuted, fontFamily: "SpaceMono-Regular" }}>growth jobs</Text>
-              <Text style={{ fontSize: 24, fontWeight: "bold", color: colors.defaults.ORANGE }}>{analytics.earlyStageStats.growthStageJobs}</Text>
-              <Text style={{ fontSize: 10, color: colors.appColors.grayMuted }}>of {analytics.totalJobs}</Text>
+            <View style={styles.earlyStageCol}>
+              <Text style={styles.earlyStageLabel}>growth jobs</Text>
+              <Text style={styles.earlyStageValue}>
+                {analytics.earlyStageStats.growthStageJobs}
+              </Text>
+              <Text style={styles.earlyStageSubtext}>
+                of {analytics.totalJobs}
+              </Text>
             </View>
           </View>
-        </View>
+        </Animated.View>
       )}
 
       {/* Top Batches by Jobs */}
-      <View style={styles.card}>
+      <Animated.View
+        style={styles.card}
+        entering={FadeInDown.delay(1000).springify()}
+      >
         <View style={styles.sectionTitleContainer}>
           <Ionicons
             name="rocket"
             size={18}
-            color={colors.appColors.brandBlue}
+            color={Colors.appColors.brandBlue}
             style={styles.sectionIcon}
           />
           <Text style={styles.sectionTitle}>Top 10 Batches by Jobs</Text>
@@ -372,40 +470,66 @@ export default function HiringAnalyticsScreen() {
         <ProgressBarChart
           data={topBatches}
           maxValue={maxTopBatches}
-          color={colors.appColors.brandBlue}
+          color={Colors.appColors.brandBlue}
         />
-      </View>
+      </Animated.View>
 
       {/* Top Hiring Companies */}
-      <View style={styles.card}>
+      <Animated.View
+        style={styles.card}
+        entering={FadeInDown.delay(1100).springify()}
+      >
         <View style={styles.sectionTitleContainer}>
           <Ionicons
             name="people"
             size={18}
-            color={colors.defaults.PURPLE}
+            color={Colors.defaults.PURPLE}
             style={styles.sectionIcon}
           />
           <Text style={styles.sectionTitle}>Top 10 Hiring Companies</Text>
         </View>
         <View style={styles.tableHeader}>
-          <Text style={[styles.tableHeaderText, { flex: 2 }]}>company</Text>
-          <Text style={[styles.tableHeaderText, { flex: 1, textAlign: "right" }]}>batch</Text>
-          <Text style={[styles.tableHeaderText, { flex: 1, textAlign: "right" }]}>jobs</Text>
+          <Text style={[styles.tableHeaderText, styles.flex2]}>company</Text>
+          <Text
+            style={[styles.tableHeaderText, styles.flex1, styles.textRight]}
+          >
+            batch
+          </Text>
+          <Text
+            style={[styles.tableHeaderText, styles.flex1, styles.textRight]}
+          >
+            jobs
+          </Text>
         </View>
         {analytics?.topHiringCompanies?.map((company: any, idx: number) => (
           <View key={idx} style={styles.tableRow}>
-            <Text style={[styles.tableRowText, { flex: 2 }]} numberOfLines={1}>
+            <Text style={[styles.tableRowText, styles.flex2]} numberOfLines={1}>
               {company.name}
             </Text>
-            <Text style={[styles.tableRowText, { flex: 1, textAlign: "right", color: colors.appColors.grayMuted }]}>
+            <Text
+              style={[
+                styles.tableRowText,
+                styles.flex1,
+                styles.textRight,
+                styles.textMuted,
+              ]}
+            >
               {company.batch}
             </Text>
-            <Text style={[styles.tableRowText, { flex: 1, textAlign: "right", fontWeight: "bold", color: colors.defaults.ORANGE }]}>
+            <Text
+              style={[
+                styles.tableRowText,
+                styles.flex1,
+                styles.textRight,
+                styles.textBold,
+                styles.textOrange,
+              ]}
+            >
               {company.jobCount}
             </Text>
           </View>
         ))}
-      </View>
+      </Animated.View>
 
       <Text
         style={[

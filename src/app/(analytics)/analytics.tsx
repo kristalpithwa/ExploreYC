@@ -15,10 +15,12 @@ import { ProgressBarChart } from "./components/ProgressBarChart";
 import { BarChart } from "./components/BarChart";
 import styles from "./styles";
 import { useRouter } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function AnalyticsScreen() {
   const router = useRouter();
   const { data: stats, isLoading, isError } = useGetStats();
+  const insets = useSafeAreaInsets();
 
   const activeCompanies = stats?.by_status?.["Active"] || 0;
   const totalBatches = stats?.by_batch ? Object.keys(stats.by_batch).length : 0;
@@ -96,210 +98,218 @@ export default function AnalyticsScreen() {
   }
 
   return (
-    <ScrollView
-      style={styles.mainContainer}
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Header */}
-      <View style={styles.headerContainer}>
-        <Text style={styles.commandText}>$ analyze --data yc-portfolio</Text>
-        <Text style={styles.title}>YC Portfolio Analytics</Text>
-        <Text style={styles.subtitle}>
-          Insights and trends across the Y Combinator portfolio
-        </Text>
+    <View style={styles.mainContainer}>
+      <View style={[styles.header, { paddingTop: insets.top }]}>
+        <Text style={styles.appTitleText}>ExploreYC</Text>
       </View>
 
-      {/* Quick Stats Grid */}
-      <View style={styles.statsGrid}>
-        <View style={styles.statCardWrapper}>
-          <StatCard
-            title="active"
-            value={activeCompanies.toLocaleString()}
-            iconName="trending-up"
-            color={colors.defaults.GREEN}
-          />
+      <ScrollView
+        style={styles.mainContainer}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Header */}
+        <View style={styles.headerContainer}>
+          <Text style={styles.title}>YC Portfolio Analytics</Text>
+          <Text style={styles.subtitle}>
+            Insights and trends across the Y Combinator portfolio
+          </Text>
         </View>
-        <View style={styles.statCardWrapper}>
-          <StatCard
-            title="industries"
-            value={totalIndustries}
-            iconName="business"
-            color={colors.defaults.ORANGE}
-          />
-        </View>
-        <View style={styles.statCardWrapper}>
-          <StatCard
-            title="countries"
-            value={totalCountries}
-            iconName="earth"
-            color={colors.defaults.PURPLE}
-          />
-        </View>
-        <View style={styles.statCardWrapper}>
-          <StatCard
-            title="batches"
-            value={totalBatches}
-            iconName="calendar"
-            color={colors.defaults.BLUE}
-          />
-        </View>
-      </View>
 
-      {/* Banners Grid */}
-      <View style={styles.bannersGrid}>
-        <TouchableOpacity
-          style={[
-            styles.bannerCard,
-            { borderColor: "rgba(251, 101, 30, 0.3)" },
-          ]}
-          onPress={() => router.push("/(analytics)/batches")}
-        >
-          <View style={styles.bannerHeader}>
-            <Text style={styles.bannerTitle}>All Batches Analytics</Text>
-            <View
-              style={[
-                styles.bannerBadge,
-                {
-                  backgroundColor: "rgba(16, 185, 129, 0.2)",
-                  borderColor: "rgba(16, 185, 129, 0.3)",
-                },
-              ]}
-            >
-              <Text style={[styles.bannerBadgeText, { color: "#34d399" }]}>
-                NEW
-              </Text>
+        {/* Quick Stats Grid */}
+        <View style={styles.statsGrid}>
+          <View style={styles.statCardWrapper}>
+            <StatCard
+              title="active"
+              value={activeCompanies.toLocaleString()}
+              iconName="trending-up"
+              color={colors.defaults.GREEN}
+            />
+          </View>
+          <View style={styles.statCardWrapper}>
+            <StatCard
+              title="industries"
+              value={totalIndustries}
+              iconName="business"
+              color={colors.defaults.ORANGE}
+            />
+          </View>
+          <View style={styles.statCardWrapper}>
+            <StatCard
+              title="countries"
+              value={totalCountries}
+              iconName="earth"
+              color={colors.defaults.PURPLE}
+            />
+          </View>
+          <View style={styles.statCardWrapper}>
+            <StatCard
+              title="batches"
+              value={totalBatches}
+              iconName="calendar"
+              color={colors.defaults.BLUE}
+            />
+          </View>
+        </View>
+
+        {/* Banners Grid */}
+        <View style={styles.bannersGrid}>
+          <TouchableOpacity
+            style={[
+              styles.bannerCard,
+              { borderColor: "rgba(251, 101, 30, 0.3)" },
+            ]}
+            onPress={() => router.push("/(analytics)/batches")}
+          >
+            <View style={styles.bannerHeader}>
+              <Text style={styles.bannerTitle}>All Batches Analytics</Text>
+              <View
+                style={[
+                  styles.bannerBadge,
+                  {
+                    backgroundColor: "rgba(16, 185, 129, 0.2)",
+                    borderColor: "rgba(16, 185, 129, 0.3)",
+                  },
+                ]}
+              >
+                <Text style={[styles.bannerBadgeText, { color: "#34d399" }]}>
+                  NEW
+                </Text>
+              </View>
             </View>
-          </View>
-          <Text style={styles.bannerDesc}>
-            Comprehensive trends and insights across all {totalBatches} YC
-            batches
-          </Text>
-          <View style={{ marginTop: 12 }}>
-            <Ionicons name="sparkles" size={20} color="#FB651E" />
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[
-            styles.bannerCard,
-            { borderColor: "rgba(59, 130, 246, 0.3)" },
-          ]}
-          onPress={() => router.push("/(analytics)/hiring")}
-        >
-          <View style={styles.bannerHeader}>
-            <Text style={styles.bannerTitle}>Hiring Board Analytics</Text>
-            <View
-              style={[
-                styles.bannerBadge,
-                {
-                  backgroundColor: "rgba(59, 130, 246, 0.2)",
-                  borderColor: "rgba(59, 130, 246, 0.3)",
-                },
-              ]}
-            >
-              <Text style={[styles.bannerBadgeText, { color: "#60a5fa" }]}>
-                LIVE
-              </Text>
+            <Text style={styles.bannerDesc}>
+              Comprehensive trends and insights across all {totalBatches} YC
+              batches
+            </Text>
+            <View style={{ marginTop: 12 }}>
+              <Ionicons name="sparkles" size={20} color="#FB651E" />
             </View>
-          </View>
-          <Text style={styles.bannerDesc}>
-            Salary insights, hiring trends, and job market intelligence
-          </Text>
-          <View style={{ marginTop: 12 }}>
-            <Ionicons name="briefcase" size={20} color="#3b82f6" />
-          </View>
-        </TouchableOpacity>
-      </View>
+          </TouchableOpacity>
 
-      {/* Detailed Analytics Section */}
-      <View style={styles.detailedAnalyticsHeader}>
-        <Text style={styles.dollarSign}>$</Text>
-        <Text style={styles.detailedAnalyticsTitle}>Detailed Analytics</Text>
-      </View>
+          <TouchableOpacity
+            style={[
+              styles.bannerCard,
+              { borderColor: "rgba(59, 130, 246, 0.3)" },
+            ]}
+            onPress={() => router.push("/(analytics)/hiring")}
+          >
+            <View style={styles.bannerHeader}>
+              <Text style={styles.bannerTitle}>Hiring Board Analytics</Text>
+              <View
+                style={[
+                  styles.bannerBadge,
+                  {
+                    backgroundColor: "rgba(59, 130, 246, 0.2)",
+                    borderColor: "rgba(59, 130, 246, 0.3)",
+                  },
+                ]}
+              >
+                <Text style={[styles.bannerBadgeText, { color: "#60a5fa" }]}>
+                  LIVE
+                </Text>
+              </View>
+            </View>
+            <Text style={styles.bannerDesc}>
+              Salary insights, hiring trends, and job market intelligence
+            </Text>
+            <View style={{ marginTop: 12 }}>
+              <Ionicons name="briefcase" size={20} color="#3b82f6" />
+            </View>
+          </TouchableOpacity>
+        </View>
 
-      {/* Batch Growth Timeline */}
-      <View style={styles.card}>
-        <View style={styles.sectionTitleContainer}>
-          <Ionicons
-            name="trending-up"
-            size={18}
+        {/* Detailed Analytics Section */}
+        <View style={styles.detailedAnalyticsHeader}>
+          <Text style={styles.dollarSign}>$</Text>
+          <Text style={styles.detailedAnalyticsTitle}>Detailed Analytics</Text>
+        </View>
+
+        {/* Batch Growth Timeline */}
+        <View style={styles.card}>
+          <View style={styles.sectionTitleContainer}>
+            <Ionicons
+              name="trending-up"
+              size={18}
+              color={colors.defaults.ORANGE}
+              style={styles.sectionIcon}
+            />
+            <Text style={styles.sectionTitle}>Batch Growth Timeline</Text>
+            <Text
+              style={[styles.subtitle, { marginLeft: "auto", fontSize: 10 }]}
+            >
+              last 20
+            </Text>
+          </View>
+          <BarChart
+            data={batchTimelineData}
+            maxValue={maxBatchValue}
             color={colors.defaults.ORANGE}
-            style={styles.sectionIcon}
+            height={150}
           />
-          <Text style={styles.sectionTitle}>Batch Growth Timeline</Text>
-          <Text style={[styles.subtitle, { marginLeft: "auto", fontSize: 10 }]}>
-            last 20
+          <Text style={[styles.commandText, { marginTop: 16 }]}>
+            &gt; Peak: {maxBatchValue} companies
           </Text>
         </View>
-        <BarChart
-          data={batchTimelineData}
-          maxValue={maxBatchValue}
-          color={colors.defaults.ORANGE}
-          height={150}
-        />
-        <Text style={[styles.commandText, { marginTop: 16 }]}>
-          &gt; Peak: {maxBatchValue} companies
-        </Text>
-      </View>
 
-
-      {/* Top Industries */}
-      <View style={styles.card}>
-        <View style={styles.sectionTitleContainer}>
-          <Ionicons
-            name="business"
-            size={18}
+        {/* Top Industries */}
+        <View style={styles.card}>
+          <View style={styles.sectionTitleContainer}>
+            <Ionicons
+              name="business"
+              size={18}
+              color={colors.appColors.brandBlue}
+              style={styles.sectionIcon}
+            />
+            <Text style={styles.sectionTitle}>Top Industries</Text>
+          </View>
+          <ProgressBarChart
+            data={industryData}
+            maxValue={maxIndustryValue}
             color={colors.appColors.brandBlue}
-            style={styles.sectionIcon}
           />
-          <Text style={styles.sectionTitle}>Top Industries</Text>
         </View>
-        <ProgressBarChart
-          data={industryData}
-          maxValue={maxIndustryValue}
-          color={colors.appColors.brandBlue}
-        />
-      </View>
 
-      {/* Company Status */}
-      <View style={styles.card}>
-        <View style={styles.sectionTitleContainer}>
-          <Ionicons
-            name="briefcase"
-            size={18}
+        {/* Company Status */}
+        <View style={styles.card}>
+          <View style={styles.sectionTitleContainer}>
+            <Ionicons
+              name="briefcase"
+              size={18}
+              color={colors.defaults.GREEN}
+              style={styles.sectionIcon}
+            />
+            <Text style={styles.sectionTitle}>Company Status</Text>
+          </View>
+          <ProgressBarChart
+            data={statusData}
+            maxValue={maxStatusValue}
             color={colors.defaults.GREEN}
-            style={styles.sectionIcon}
           />
-          <Text style={styles.sectionTitle}>Company Status</Text>
         </View>
-        <ProgressBarChart
-          data={statusData}
-          maxValue={maxStatusValue}
-          color={colors.defaults.GREEN}
-        />
-      </View>
 
-      {/* Geographic Distribution */}
-      <View style={styles.card}>
-        <View style={styles.sectionTitleContainer}>
-          <Ionicons
-            name="earth"
-            size={18}
+        {/* Geographic Distribution */}
+        <View style={styles.card}>
+          <View style={styles.sectionTitleContainer}>
+            <Ionicons
+              name="earth"
+              size={18}
+              color={colors.defaults.PURPLE}
+              style={styles.sectionIcon}
+            />
+            <Text style={styles.sectionTitle}>Geographic Distribution</Text>
+            <Text
+              style={[styles.subtitle, { marginLeft: "auto", fontSize: 10 }]}
+            >
+              top 10
+            </Text>
+          </View>
+          <ProgressBarChart
+            data={countryData}
+            maxValue={maxCountryValue}
             color={colors.defaults.PURPLE}
-            style={styles.sectionIcon}
           />
-          <Text style={styles.sectionTitle}>Geographic Distribution</Text>
-          <Text style={[styles.subtitle, { marginLeft: "auto", fontSize: 10 }]}>
-            top 10
-          </Text>
         </View>
-        <ProgressBarChart
-          data={countryData}
-          maxValue={maxCountryValue}
-          color={colors.defaults.PURPLE}
-        />
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }

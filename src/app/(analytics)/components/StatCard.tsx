@@ -27,7 +27,8 @@ export const StatCard: React.FC<StatCardProps> = ({ title, value, iconName, colo
 const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.appColors.white,
-    padding: Responsive.widthPercentageToDP(4),
+    paddingHorizontal: Responsive.widthPercentageToDP(4),
+    paddingVertical: Responsive.heightPercentageToDP(2.2), // slightly more vertical padding
     borderRadius: Responsive.widthPercentageToDP(3),
     borderWidth: 1,
     borderColor: Colors.opacityColors.blackOpacity4,
