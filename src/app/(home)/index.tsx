@@ -462,6 +462,33 @@ export default function HomeScreen() {
     );
   };
 
+  const renderRoadmap = () => {
+    return (
+      <Pressable 
+        style={styles.roadmapCard}
+        onPress={() => router.push("/(home)/roadmap")}
+      >
+        <View style={styles.roadmapHeaderRow}>
+          <View style={styles.roadmapIconContainer}>
+            <Ionicons name="rocket" size={24} color="#FFFFFF" />
+          </View>
+        </View>
+
+        <Text style={styles.roadmapTitle}>Product Roadmap</Text>
+        <Text style={styles.roadmapDesc}>
+          Vote on features you want most. Help us prioritize what to build next!
+        </Text>
+
+        <View style={styles.roadmapDivider} />
+
+        <View style={styles.predictorFooter}>
+          <Text style={styles.roadmapFooterText}>View Roadmap →</Text>
+          <Ionicons name="arrow-forward" size={16} color={Colors.defaults.ORANGE} />
+        </View>
+      </Pressable>
+    );
+  };
+
   const renderMainContent = () => {
     return (
       <>
@@ -522,6 +549,9 @@ export default function HomeScreen() {
 
         {/* Success Predictor Section */}
         {renderSuccessPredictor()}
+
+        {/* Roadmap Section */}
+        {renderRoadmap()}
 
         {/* Statistics Grid Section */}
         <View style={styles.sectionContainer}>

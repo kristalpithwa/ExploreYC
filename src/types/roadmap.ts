@@ -1,0 +1,133 @@
+export interface RoadmapFeature {
+  id: string;
+  title: string;
+  description: string;
+  category: 'viral' | 'engagement' | 'data' | 'tools';
+  status: 'shipped' | 'in-progress' | 'planned' | 'under-consideration';
+  priority: 'high' | 'medium' | 'low';
+  eta?: string;
+  impact: string;
+}
+
+export const ROADMAP_FEATURES: RoadmapFeature[] = [
+  {
+    id: 'batch-wrapped',
+    title: 'YC Batch Wrapped',
+    description: 'Spotify Wrapped-style shareable batch stats. Beautiful infographics showing your batch size, top industries, hiring %, and how you compare to other batches.',
+    category: 'viral',
+    status: 'shipped',
+    priority: 'high',
+    eta: 'March 2026',
+    impact: 'Viral social sharing, founders love to share batch stats on Twitter',
+  },
+  {
+    id: 'cofounder-match',
+    title: 'Find Your Co-Founder Match',
+    description: 'Dating app for YC founders. Match with co-founders by skills, industry, location. YC accepts 2x more teams than solo founders.',
+    category: 'tools',
+    status: 'planned',
+    priority: 'high',
+    eta: '1 month',
+    impact: 'Solves real pain point, creates network effects, YC would promote it',
+  },
+  {
+    id: 'success-predictor',
+    title: 'YC Success Predictor',
+    description: 'AI model predicting your startup success based on 5,772 YC company patterns. Upload idea + team, get similarity score and suggestions.',
+    category: 'tools',
+    status: 'under-consideration',
+    priority: 'high',
+    eta: '6 weeks',
+    impact: '20,000+ YC applicants per batch would use this, media coverage potential',
+  },
+  {
+    id: 'hiring-board',
+    title: 'Live YC Hiring Board',
+    description: 'All 1,425 hiring YC companies in one place. Filter by role, batch, location, stage. One-click apply.',
+    category: 'engagement',
+    status: 'planned',
+    priority: 'medium',
+    eta: '3 weeks',
+    impact: 'Daily engagement, monetization potential, serves job seekers',
+  },
+  {
+    id: 'founder-journeys',
+    title: 'YC Founder Journey Stories',
+    description: 'Interactive timelines: Airbnb cereal boxes → $100B. Visual stories of famous YC companies with key milestones, pivots, and lessons.',
+    category: 'engagement',
+    status: 'planned',
+    priority: 'medium',
+    eta: '4 weeks',
+    impact: 'SEO gold, inspirational content, shows YC impact',
+  },
+  {
+    id: 'fundraising-tracker',
+    title: 'Fundraising Tracker',
+    description: 'Interactive funding network: YC companies, investors, rounds by sector. Timeline by batch, funding stages, network graph.',
+    category: 'data',
+    status: 'shipped',
+    priority: 'high',
+    eta: 'March 2026',
+    impact: 'Shows YC success rate, enables funding filters, critical for investors',
+  },
+  {
+    id: 'product-hunt',
+    title: 'Product Hunt Data',
+    description: 'Add launch dates, upvotes, #1 Product badges. Show which YC companies crushed their PH launch.',
+    category: 'data',
+    status: 'planned',
+    priority: 'low',
+    eta: '1 week',
+    impact: 'Launch correlation with success, free API',
+  },
+  {
+    id: 'watchlist',
+    title: 'My YC Watchlist',
+    description: 'Save favorite companies, get alerts when they are hiring, weekly digest email, compare saved companies.',
+    category: 'engagement',
+    status: 'planned',
+    priority: 'medium',
+    eta: '2 weeks',
+    impact: 'User retention, daily active users, personalization',
+  },
+  {
+    id: 'leaderboards',
+    title: 'Batch Leaderboards',
+    description: 'Most funded this month, fastest growing, most hiring, media mentions. Real-time competition between batches.',
+    category: 'engagement',
+    status: 'under-consideration',
+    priority: 'medium',
+    eta: '3 weeks',
+    impact: 'Gamification, batch pride, daily checks',
+  },
+  {
+    id: 'ama-archive',
+    title: 'YC Founder AMA Archive',
+    description: 'Searchable index of AMAs from Reddit, Twitter, YC Blog. "What Brian Chesky said about pricing" with video timestamps.',
+    category: 'engagement',
+    status: 'under-consideration',
+    priority: 'low',
+    eta: '8 weeks',
+    impact: 'Learning resource, SEO, unique content',
+  },
+  {
+    id: 'idea-validator',
+    title: 'Startup Idea Validator',
+    description: 'Check if your idea already exists in YC portfolio, see similar companies, market size analysis, "Green light" or "Crowded" indicator.',
+    category: 'tools',
+    status: 'shipped',
+    priority: 'medium',
+    eta: 'March 2026',
+    impact: 'Helps founders validate ideas, saves time',
+  },
+  {
+    id: 'network-graph',
+    title: 'YC Network Graph',
+    description: 'Visual connections between companies: same investors, same batch, employee flow. "6 degrees of YC separation".',
+    category: 'engagement',
+    status: 'under-consideration',
+    priority: 'low',
+    eta: '10 weeks',
+    impact: 'Beautiful visualization, network insights, shareable',
+  },
+];

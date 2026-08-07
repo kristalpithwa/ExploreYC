@@ -314,3 +314,44 @@ export const usePredictSuccessMutation = () => {
   });
 };
 
+// Roadmap Hooks
+export const useGetRoadmapVotes = () => {
+  return useQuery({
+    queryKey: ["roadmap-votes"],
+    queryFn: async () => {
+      const res = await axiosInterceptor.get("roadmap/votes");
+      return res?.data?.votes as Record<string, number>;
+    },
+  });
+};
+
+export const useGetUserVotes = (userIdentifier: string) => {
+  return useQuery({
+    queryKey: ["roadmap-user-votes", userIdentifier],
+    queryFn: async () => {
+      const res = await axiosInterceptor.get(`roadmap/user-votes/${userIdentifier}`);
+      return new Set(res?.data?.feature_ids as string[]);
+    },
+    enabled: !!userIdentifier,
+  });
+};
+
+export const useVoteRoadmapFeature = () => {
+  return useMutation({
+    mutationFn: async ({ featureId, userIdentifier }: { featureId: string; userIdentifier: string }) => {
+      const res = await axiosInterceptor.post(`roadmap/vote/${featureId}`, { user_identifier: userIdentifier });
+      return res?.data;
+    },
+  });
+};
+
+export const useUnvoteRoadmapFeature = () => {
+  return useMutation({
+    mutationFn: async ({ featureId, userIdentifier }: { featureId: string; userIdentifier: string }) => {
+      const res = await axiosInterceptor.delete(`roadmap/vote/${featureId}`, {
+        data: { user_identifier: userIdentifier },
+      });
+      return res?.data;
+    },
+  });
+};

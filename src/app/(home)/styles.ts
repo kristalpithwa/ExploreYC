@@ -895,6 +895,62 @@ const styles = StyleSheet.create({
     fontSize: Responsive.convertFontScale(14),
     color: "#E11D48",
   },
+  roadmapCard: {
+    backgroundColor: "#FFF7ED", // Light orange background
+    marginHorizontal: Responsive.widthPercentageToDP(5.3),
+    marginBottom: Responsive.heightPercentageToDP(2),
+    borderRadius: Responsive.widthPercentageToDP(4),
+    padding: Responsive.widthPercentageToDP(6),
+    shadowColor: Colors.defaults.ORANGE,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.05,
+    shadowRadius: 16,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: "#FFEDD5",
+  },
+  roadmapHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: Responsive.heightPercentageToDP(3),
+  },
+  roadmapIconContainer: {
+    width: Responsive.widthPercentageToDP(14),
+    height: Responsive.widthPercentageToDP(14),
+    backgroundColor: Colors.defaults.ORANGE,
+    borderRadius: Responsive.widthPercentageToDP(4),
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: Colors.defaults.ORANGE,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  roadmapTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(24),
+    color: Colors.appColors.secondary,
+    marginBottom: Responsive.heightPercentageToDP(1.5),
+  },
+  roadmapDesc: {
+    fontFamily: Fonts.medium,
+    fontSize: Responsive.convertFontScale(13),
+    color: Colors.appColors.grayDark,
+    lineHeight: Responsive.convertFontScale(20),
+    marginBottom: Responsive.heightPercentageToDP(3),
+  },
+  roadmapDivider: {
+    height: 1,
+    backgroundColor: "#FFEDD5",
+    marginBottom: Responsive.heightPercentageToDP(2),
+  },
+  roadmapFooterText: {
+    fontFamily: Fonts.bold,
+    fontSize: Responsive.convertFontScale(14),
+    color: Colors.defaults.ORANGE,
+  },
 });
 
 export default styles;
