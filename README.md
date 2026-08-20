@@ -1,74 +1,151 @@
-# Welcome to your Expo app 👋
+# ExploreYC Mobile 🚀
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A modern, high-performance mobile application built with **React Native** and **Expo** to explore, analyze, and discover Y Combinator startups, founders, job openings, batches, and ecosystem trends.
 
-## Get started
+---
 
-1. Install dependencies
+## ✨ Features
 
-   ```bash
-   npm install
-   ```
+- 🏢 **Company Directory & Search**: Browse thousands of YC startups with real-time search, multi-factor filtering (Batch, Industry, Region, Hiring Status), and infinite scrolling.
+- 🗺️ **Interactive Startup Map**: Discover YC companies globally on an interactive map powered by **MapLibre** and **OpenFreeMap** with custom pins and clustered previews.
+- 📊 **Analytics Dashboard**: Visual charts and bento-grid metrics tracking batch distributions, funding trends, industry breakdowns, and hiring stats.
+- 👥 **Founders Directory & Leaderboard**: Explore founder profiles, metric rankings, and companies founded across YC history.
+- 💼 **Startup Job Board**: Find and filter open positions across YC-backed companies.
+- 💡 **Idea Validator & Success Predictor**: AI-assisted tools for validating startup concepts and predicting growth metrics against historical YC benchmarks.
+- 🗳️ **Interactive Feature Roadmap**: Community-driven roadmap with live voting on upcoming features.
+- 🌐 **Offline Resilience**: Built-in network monitoring with real-time connectivity status.
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## 🛠️ Tech Stack
 
-In the output, you'll find options to open the app in a
+- **Core**: [React Native 0.86](https://reactnative.dev/) • [React 19](https://react.dev/) • [Expo SDK 57](https://expo.dev/) (New Architecture & React Compiler enabled)
+- **Navigation**: [Expo Router](https://docs.expo.dev/router/introduction/) (File-based typed routing & native tabs)
+- **Data Fetching & State**: [TanStack React Query v5](https://tanstack.com/query/latest) • [Axios](https://axios-http.com/)
+- **Maps**: [@maplibre/maplibre-react-native](https://github.com/maplibre/maplibre-react-native) • [OpenFreeMap](https://openfreemap.org/)
+- **Animations & UI**: [React Native Reanimated 4](https://docs.swmansion.com/react-native-reanimated/) • [Gesture Handler](https://docs.swmansion.com/react-native-gesture-handler/) • [expo-image](https://docs.expo.dev/versions/latest/sdk/image/) • [expo-glass-effect](https://docs.expo.dev/)
+- **Network & Diagnostics**: [@react-native-community/netinfo](https://github.com/react-native-netinfo/react-native-netinfo)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 📁 Project Structure
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```text
+ExploreYCMobile/
+├── android/                 # Android native project files
+├── ios/                     # iOS native project files & workspace
+├── assets/                  # App icons, splash screens, and branding assets
+├── src/
+│   ├── app/                 # Expo Router file-based screens and routes
+│   │   ├── (home)/          # Home dashboard, company details, founders, roadmap
+│   │   ├── (discover)/      # Interactive startup map & discover view
+│   │   ├── (analytics)/     # Batch analytics, charts, and metrics
+│   │   └── (job)/           # Startup job board & job detail cards
+│   ├── assets/              # SVGs, icons, and static images
+│   ├── components/          # Reusable UI components (Modals, CustomTabBar, Cards)
+│   ├── data/                # Tab configurations and static definitions
+│   ├── hooks/               # Custom React hooks
+│   ├── network/             # Axios instance, interceptors, and environment config
+│   ├── services/            # React Query API services and mutations
+│   ├── theme/               # Colors, typography, spacing, and responsive scaling
+│   ├── types/               # TypeScript interfaces and data models
+│   └── utils/               # Formatting, styling helpers, and common utilities
+├── .env.example             # Template environment configuration
+├── app.json                 # Expo app configuration
+└── package.json             # Dependencies and build scripts
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-### Other setup steps
+## 🚀 Getting Started
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+### Prerequisites
 
-## Learn more
+- [Node.js](https://nodejs.org/) (LTS recommended)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/) / [bun](https://bun.sh/)
+- For **iOS**: macOS with [Xcode](https://developer.apple.com/xcode/) and CocoaPods installed
+- For **Android**: [Android Studio](https://developer.android.com/studio) with configured SDK and emulator
 
-To learn more about developing your project with Expo, look at the following resources:
+### 1. Clone the Repository
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+git clone https://github.com/your-username/ExploreYCMobile.git
+cd ExploreYCMobile
+```
 
-## Join the community
+### 2. Install Dependencies
 
-Join our community of developers creating universal apps.
+```bash
+npm install
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### 3. Configure Environment Variables
 
-## Map Integration
+Copy the example environment file:
 
-This app integrates a full-screen interactive map on the Discover page using:
-- **SDK:** [@maplibre/maplibre-react-native](https://github.com/maplibre/maplibre-react-native) (open-source map renderer).
-- **Map Tiles & Styles:** [OpenFreeMap](https://openfreemap.org/) (a completely free, open-source tile server).
+```bash
+cp .env.example .env
+```
 
-### OpenFreeMap Details
-OpenFreeMap provides fully open-source vector map tiles under the OpenStreetMap database license.
-- **Cost:** 100% free, with no usage limits, no API keys, and no sign-ups required.
-- **Current Style:** The app uses the **Bright** theme (`https://tiles.openfreemap.org/styles/bright`).
-- **Other Styles Available:**
-  - **Liberty (Clean & detailed):** `https://tiles.openfreemap.org/styles/liberty`
-  - **Positron (Light/Minimalist):** `https://tiles.openfreemap.org/styles/positron`
-  - **Dark Matter (Dark mode):** `https://tiles.openfreemap.org/styles/dark`
+Edit `.env` to specify your backend API endpoint:
 
-To change the map style, edit the `mapStyle` prop in the `Map` component inside [discover.tsx](file:///Users/enliven/Workspace/ExploreYC/src/app/(discover)/discover.tsx).
+```env
+EXPO_PUBLIC_API_URL=http://localhost:8000/api
+```
 
+> **Note**: In Expo, environment variables accessible in client-side code must start with the `EXPO_PUBLIC_` prefix.
+
+---
+
+## 📱 Running the App
+
+### iOS Simulator
+
+```bash
+npx expo run:ios
+```
+
+### Android Emulator
+
+```bash
+npx expo run:android
+```
+
+### Start Metro Dev Server
+
+```bash
+npx expo start
+```
+
+---
+
+## 🗺️ Map Configuration
+
+The interactive startup map on the Discover screen uses:
+- **Renderer**: [@maplibre/maplibre-react-native](https://github.com/maplibre/maplibre-react-native)
+- **Tile Server**: [OpenFreeMap](https://openfreemap.org/) (Free, open-source vector tiles under OpenStreetMap license)
+
+Default style configured in `src/app/(discover)/discover.tsx`:
+```
+https://tiles.openfreemap.org/styles/bright
+```
+
+You can alternate styles using any OpenFreeMap style (e.g., `liberty`, `positron`, `dark`).
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'feat: Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
