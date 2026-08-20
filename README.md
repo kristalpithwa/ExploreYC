@@ -146,6 +146,58 @@ Contributions, issues, and feature requests are welcome!
 
 ---
 
+## 🤖 AI Agents & Assistant Tooling
+
+This project is configured with modern agentic AI workflows, rule engines, and MCP toolsets:
+
+- **[Google Antigravity (AGY)](https://deepmind.google/)**: Advanced Agentic AI pair programmer used for architecture design, refactoring, performance optimization, and codebase management.
+- **[Software Mansion Argent](https://github.com/software-mansion/argent)**: Autonomous mobile MCP toolkit for iOS simulator and Android emulator interaction, UI testing loops, screenshot verification, and Hermes profiler analysis.
+- **[Claude Code](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview) & [Cursor](https://www.cursor.com/)**: IDE agent configurations with custom project rules and MCP servers.
+
+---
+
+### 🧠 Agent Skills Inventory
+
+The repository includes curated, version-locked skill definitions (`.agents/skills/`) to power agent workflows across engineering, mobile development, testing, and UI design:
+
+#### 📱 React Native & Expo Development
+- `react-native-best-practices` — Software Mansion best practices for production React Native & New Architecture (Fabric, TurboModules).
+- `vercel-react-native-skills` — Vercel-curated guidelines for performant mobile rendering and list optimization.
+- `expo-router` — File-based navigation, modal sheets, dynamic routes, and native tabs.
+- `expo-ui` — Native SwiftUI & Jetpack Compose component integrations via `@expo/ui`.
+- `expo-data-fetching` — Network requests, caching strategies, and offline-first React Query patterns.
+- `expo-dev-client` & `expo-upgrade` — Custom native development clients and SDK version upgrades.
+- `expo-examples` — Canonical reference implementations for integrations.
+
+#### 🧪 Autonomous Device Control & Profiling (Argent MCP)
+- `argent-device-interact` — Autonomous gesture control (tap, swipe, scroll, type) on iOS & Android targets.
+- `argent-test-ui-flow` — End-to-end interact-screenshot-verify QA loops.
+- `argent-react-native-profiler` & `argent-native-profiler` — Hermes CPU hotspot and re-render profiling.
+- `argent-react-native-optimization` — Performance bottleneck diagnosis and render sweeps.
+- `argent-metro-debugger` — Chrome DevTools Protocol (CDP) runtime inspection and React tree debugging.
+- `argent-screenshot-diff` — Visual regression and screenshot comparison testing.
+- `argent-ios-simulator-setup` & `argent-android-emulator-setup` — Automated simulator/emulator lifecycle management.
+- `argent-tv-interact` & `argent-lens` — TV remote D-pad control and visual variant proposals.
+
+#### 🎨 Design & UI/UX Systems
+- `ui-ux-pro-max` — Design intelligence covering 67 UI styles, 161 palettes, and 99 UX heuristics.
+- `design-system` — Token architecture (primitive → semantic → component) and component specs.
+- `design`, `brand`, `ui-styling` — Visual identity, theme palettes, and styling guidelines.
+- `banner-design` & `slides` — Visual asset generation and presentation systems.
+
+#### 🏗️ Architecture & Planning Workflows (gstack)
+- `plan-ceo-review`, `plan-eng-review`, `plan-design-review`, `plan-devex-review` — Multi-perspective plan reviews.
+- `codebase-design` & `domain-modeling` — Deep module boundaries and ubiquitous domain language.
+- `diagnosing-bugs` & `triage` — Structured debugging loops for hard regressions.
+- `tdd` & `prototype` — Test-driven development and throwaway prototypes.
+- `code-review` & `resolving-merge-conflicts` — Automated spec/standards review and git conflict resolution.
+- `grilling`, `grill-me`, `grill-with-docs` — Stress-testing technical decisions and plans.
+- `to-spec`, `to-tickets`, `wayfinder`, `handoff` — Spec generation, ticket decomposition, and context handoffs.
+
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+
